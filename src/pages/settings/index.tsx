@@ -5,12 +5,12 @@ import Default from '@/components/templates/Layout/Default';
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
 
-const Index: NextPageWithLayout = () => {
+const Settings: NextPageWithLayout = () => {
   return (
     <>
       <MetaInfo
-        title="Home | Nextjs Boilerplate"
-        description="This is the home page of the Nextjs Boilerplate app."
+        title="Settings | 🎵 Music Quiz 🎵"
+        description="This is the Settings page of the 🎵 Music Quiz 🎵 app."
       />
       <div style={{ display: 'flex' }}>
         <main style={{ flexGrow: 1 }}>
@@ -22,6 +22,6 @@ const Index: NextPageWithLayout = () => {
   );
 };
 
-Index.getLayout = generateGetLayout(Default);
+Settings.getLayout = generateGetLayout(Default);
 
-export default Index;
+export default Settings;

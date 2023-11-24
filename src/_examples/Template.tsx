@@ -17,8 +17,8 @@ const Template: NextPageWithLayout<ITemplateProps> = (
   return (
     <>
       <MetaInfo
-        title="Home | Nextjs Boilerplate"
-        description="This is the home page of the Nextjs Boilerplate app."
+        title="Home | 🎵 Music Quiz 🎵"
+        description="This is the home page of the 🎵 Music Quiz 🎵 app."
       />
       <Container maxWidth="lg">
         <Box

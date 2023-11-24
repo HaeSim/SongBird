@@ -23,10 +23,9 @@ export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
-const queryClient = new QueryClient();
-
 const MyApp = (props: MyAppProps) => {
   const router = useRouter();
+  const queryClient = new QueryClient();
 
   const { emotionCache = clientSideEmotionCache, pageProps } = props;
   const Component = props.Component as NextPageWithLayout;
