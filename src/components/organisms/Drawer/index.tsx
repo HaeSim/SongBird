@@ -63,10 +63,7 @@ const DrawerMenu: FC<IDrawerProps> = ({ menuItemList }) => {
             padding: '16px',
           }}
         >
-          <Profile
-            name="Dean"
-            avatar="https://avatars.githubusercontent.com/u/45196240?v=4"
-          />
+          <Profile />
         </Toolbar>
         <Divider />
         <List>
