@@ -4,6 +4,7 @@ import {
   ThemeProvider,
 } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
+import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -91,6 +92,7 @@ const MyApp = (props: MyAppProps) => {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               {getLayout(<Component {...pageProps} />)}
+              <Analytics />
             </ThemeProvider>
           </CacheProvider>
         </QueryClientProvider>
