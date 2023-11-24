@@ -4,9 +4,9 @@
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "/app",
-  "name": "nextjs-boilerplate",
-  "short_name": "nextjs-boilerplate",
+  "start_url": "/quiz",
+  "name": "music-quiz",
+  "short_name": "music-quiz",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
