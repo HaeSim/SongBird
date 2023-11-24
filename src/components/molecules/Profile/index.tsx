@@ -1,12 +1,13 @@
 import { Avatar, Toolbar, Typography } from '@mui/material';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import type { FC } from 'react';
 
-interface IProfileProps {
-  avatar: string;
-  name: string;
-}
+import LoginButton from '@/components/atoms/Login';
 
-const Profile: FC<IProfileProps> = ({ avatar, name }) => {
+interface IProfileProps {}
+
+const Profile: FC<IProfileProps> = () => {
+  const { data: session } = useSession();
   return (
     <Toolbar
       sx={{
@@ -16,14 +17,30 @@ const Profile: FC<IProfileProps> = ({ avatar, name }) => {
         padding: '16px',
       }}
     >
-      <Avatar
-        alt={`${name} Avatar`}
-        src={avatar}
-        sx={{ width: 64, height: 64, marginBottom: '8px' }}
-      />
-      <Typography variant="h6" noWrap>
-        {name}
-      </Typography>
+      {session && session.user ? (
+        <>
+          <Avatar
+            alt={`${session.user.name}의 프로필 사진`}
+            src={session.user.image as string}
+            sx={{ width: 64, height: 64, marginBottom: '8px' }}
+          />
+          <Typography variant="h6" noWrap>
+            {session.user.name}
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Avatar
+            alt="Guest의 프로필 사진"
+            src="https://avatars.githubusercontent.com/u/45196240?v=4"
+            sx={{ width: 64, height: 64, marginBottom: '8px' }}
+          />
+          <Typography variant="h6" noWrap>
+            로그인이 필요합니다.
+          </Typography>
+        </>
+      )}
+      <LoginButton isLogin={!!session} signIn={signIn} signOut={signOut} />
     </Toolbar>
   );
 };
