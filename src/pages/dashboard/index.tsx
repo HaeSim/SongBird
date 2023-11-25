@@ -10,7 +10,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import type { GetServerSideProps } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
@@ -19,8 +20,10 @@ import { useGetPlaylistItemQuery } from '@/store/server/features/youtube/queries
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
 
+import { authOptions } from '../api/auth/[...nextauth]';
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
   if (!session) {
     return {
       props: {},
@@ -31,15 +34,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   try {
-    // const response = await axios.get(
-    //   `https://youtube.googleapis.com/youtube/v3/playlists?part=snippet%2CcontentDetails&maxResults=25&mine=true&key=${process.env.YOUTUBE_API_KEY}`,
-    //   {
-    //     headers: {
-    //       Authorization: `Bearer ${session.accessToken}`,
-    //       Accept: 'application/json',
-    //     },
-    //   }
-    // );
     const response = await axios.get(
       'https://youtube.googleapis.com/youtube/v3/playlists',
       {

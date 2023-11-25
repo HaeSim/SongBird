@@ -18,9 +18,9 @@ export const authOptions = {
         params: {
           scope:
             'openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube.readonly',
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
+          // prompt: 'consent',
+          // access_type: 'offline',
+          // response_type: 'code',
         },
       },
     }),
