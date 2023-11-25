@@ -1,13 +1,4 @@
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Paper,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { Grid, Toolbar, Typography } from '@mui/material';
 import axios from 'axios';
 import type { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
@@ -15,6 +6,8 @@ import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
+import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
+import PlaylistSidebar from '@/components/molecules/PlaylistSideBar';
 import Default from '@/components/templates/Layout/Default';
 import { useGetPlaylistItemQuery } from '@/store/server/features/youtube/queries';
 import type { NextPageWithLayout } from '@/utils/common';
@@ -107,42 +100,12 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = ({
           <Typography paragraph>대시보드</Typography>
 
           <Grid container spacing={2}>
-            {/* Playlist Sidebar */}
-            <Grid item xs={3}>
-              <Paper>
-                <List>
-                  {myPlaylist.items.map((playlist) => (
-                    <ListItemButton
-                      key={playlist.id}
-                      onClick={() => handlePlaylistClick(playlist.id)}
-                    >
-                      <ListItemText primary={playlist.snippet.title} />
-                    </ListItemButton>
-                  ))}
-                </List>
-              </Paper>
-            </Grid>
-
-            {/* Main Content */}
-            <Grid item xs={9}>
-              <Paper>
-                <Typography variant="h5" align="center" gutterBottom>
-                  {selectedPlaylist
-                    ? `Playlist ${selectedPlaylist}`
-                    : 'Select a playlist'}
-                </Typography>
-
-                {playlistItems && (
-                  <List>
-                    {playlistItems.items.map((item) => (
-                      <ListItem key={item.id}>
-                        <ListItemText primary={item.snippet.title} />
-                      </ListItem>
-                    ))}
-                  </List>
-                )}
-              </Paper>
-            </Grid>
+            <PlaylistSidebar
+              myPlaylist={myPlaylist}
+              selectedPlaylist={selectedPlaylist}
+              handlePlaylistClick={handlePlaylistClick}
+            />
+            <PlaylistItemContent playlistItems={playlistItems?.items ?? []} />
           </Grid>
         </main>
       </div>

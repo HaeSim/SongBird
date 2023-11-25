@@ -34,7 +34,7 @@ interface YoutubePlaylistItem {
   snippet: YoutubeSnippet;
 }
 
-interface YoutubePlaylistItemListResponse {
+interface YoutubePlaylistItemResponse {
   kind: string;
   etag: string;
   items: YoutubePlaylistItem[];
