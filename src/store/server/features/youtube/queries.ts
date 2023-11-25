@@ -13,7 +13,7 @@ export const useGetPlaylistQuery = () => {
 };
 
 export const useGetPlaylistItemQuery = (playlistId: string) => {
-  return useQuery<YoutubePlaylistItemListResponse>(
+  return useQuery<YoutubePlaylistItemResponse>(
     ['playlist', playlistId],
     () => getPlaylistItem(playlistId),
     {
