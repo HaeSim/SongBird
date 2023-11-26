@@ -15,7 +15,7 @@ const globalStyles = css`
     -moz-user-select: none;
     -ms-user-select: none;
 
-    background-color: #f5f2e7;
+    background-color: #f5f5f5;
   }
   body #__next,
   body main {

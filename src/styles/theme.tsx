@@ -22,13 +22,16 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#aed581',
     },
     secondary: {
-      main: '#19857b',
+      main: '#81c784',
     },
     error: {
       main: red.A400,
+    },
+    background: {
+      default: '#F5F2E7',
     },
   },
   breakpoints: {

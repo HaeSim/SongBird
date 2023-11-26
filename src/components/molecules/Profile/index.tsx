@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 
 import LoginButton from '@/components/atoms/Login';
+import theme from '@/styles/theme';
 
 interface IProfileProps {}
 
@@ -39,7 +40,8 @@ const Profile: FC<IProfileProps> = () => {
               width: 64,
               height: 64,
               marginBottom: '8px',
-              border: '2px solid #f5f2e7',
+              border: '2px solid',
+              borderColor: theme.palette.background.default,
             }}
           />
           <Typography variant="h6" noWrap>

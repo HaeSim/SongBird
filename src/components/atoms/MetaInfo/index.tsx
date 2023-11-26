@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import { NextSeo } from 'next-seo';
 
+import theme from '@/styles/theme';
 import type { IMetaInfoComponent } from '@/types/common/component';
 import { AppConfig } from '@/utils/AppConfig';
 
@@ -56,7 +57,10 @@ const MetaInfo: IMetaInfoComponent = ({
           content="width=device-width,initial-scale=1, viewport-fit=cover, user-scalable=no"
           key="viewport"
         />
-        <meta name="msapplication-TileColor" content="#F5F2E7" />
+        <meta
+          name="msapplication-TileColor"
+          content={theme.palette.background.default}
+        />
         <link
           rel="apple-touch-icon-precomposed"
           href="/favicons/apple-icon-180x180.png"
