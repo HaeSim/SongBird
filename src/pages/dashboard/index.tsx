@@ -103,21 +103,15 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = ({
         title="대시보드 | 🎵 SongBird 🎵"
         description="This is the Quiz page of the 🎵 SongBird 🎵 app."
       />
-      <div style={{ display: 'flex' }}>
-        <main style={{ flexGrow: 1 }}>
-          <Toolbar />
-          <Typography paragraph>대시보드</Typography>
-
-          <Grid container spacing={2}>
-            <PlaylistSidebar
-              myPlaylist={myPlaylist?.items ?? []}
-              selectedPlaylist={selectedPlaylist}
-              handlePlaylistClick={handlePlaylistClick}
-            />
-            <PlaylistItemContent playlistItems={playlistItems?.items ?? []} />
-          </Grid>
-        </main>
-      </div>
+      <Toolbar />
+      <Grid container spacing={2}>
+        <PlaylistSidebar
+          myPlaylist={myPlaylist?.items ?? []}
+          selectedPlaylist={selectedPlaylist}
+          handlePlaylistClick={handlePlaylistClick}
+        />
+        <PlaylistItemContent playlistItems={playlistItems?.items ?? []} />
+      </Grid>
     </>
   );
 };

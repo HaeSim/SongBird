@@ -26,9 +26,12 @@ const Default: ILayoutComponent = ({ children }) => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-start',
+          justifyContent: 'center',
           alignItems: 'center',
-          paddingTop: '64px',
+
+          width: '100%',
+          height: '100vh',
+          paddingTop: '32px',
         }}
       >
         <DrawerMenu

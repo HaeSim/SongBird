@@ -54,7 +54,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
   };
 
   return (
-    <Grid item xs={9}>
+    <Grid item xs={9} sx={{ width: '100%' }}>
       <Paper style={{ height: '80vh', overflowY: 'auto' }}>
         {playlistItems && (
           <TableContainer>
