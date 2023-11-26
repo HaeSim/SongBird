@@ -1,4 +1,5 @@
 import { Grid, Toolbar, Typography } from '@mui/material';
+import type { AxiosError } from 'axios';
 import axios from 'axios';
 import type { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
@@ -21,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: {},
       redirect: {
-        destination: '/api/auth/signin',
+        destination: '/',
         permanent: false,
       },
     };
@@ -48,6 +49,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   } catch (e) {
+    if (axios.isAxiosError(e)) {
+      const error: AxiosError = e;
+      // eslint-disable-next-line no-console
+      console.error(error.response?.data);
+    } else {
+      // eslint-disable-next-line no-console
+      console.error(e);
+    }
     return {
       props: {},
     };
@@ -101,7 +110,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = ({
 
           <Grid container spacing={2}>
             <PlaylistSidebar
-              myPlaylist={myPlaylist}
+              myPlaylist={myPlaylist?.items ?? []}
               selectedPlaylist={selectedPlaylist}
               handlePlaylistClick={handlePlaylistClick}
             />

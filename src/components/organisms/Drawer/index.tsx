@@ -44,6 +44,7 @@ const DrawerMenu: FC<IDrawerProps> = ({ menuItemList }) => {
         sx={{
           width: 240,
           flexShrink: 0,
+          zIndex: 1199,
           '& .MuiDrawer-paper': {
             width: 240,
             boxSizing: 'border-box',
