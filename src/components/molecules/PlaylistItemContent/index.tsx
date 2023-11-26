@@ -23,6 +23,8 @@ interface IMainContentProps {
 const PlaylistItemContent: React.FC<IMainContentProps> = ({
   playlistItems,
 }) => {
+  const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
+
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
@@ -44,11 +46,16 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>No</TableCell>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Channel</TableCell>
-                  <TableCell>Published Date</TableCell>
-                  <TableCell>Play</TableCell>
+                  {COLUMN_NAMES.map((column) => (
+                    <TableCell
+                      key={column}
+                      sx={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      {column}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -62,8 +69,18 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                       {index + 1}
                     </TableCell>
                     <TableCell>{item.snippet.title}</TableCell>
-                    <TableCell>{item.snippet.videoOwnerChannelTitle}</TableCell>
-                    <TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: 'center',
+                      }}
+                    >
+                      {item.snippet.videoOwnerChannelTitle}
+                    </TableCell>
+                    <TableCell
+                      sx={{
+                        textAlign: 'center',
+                      }}
+                    >
                       {new Date(item.snippet.publishedAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
