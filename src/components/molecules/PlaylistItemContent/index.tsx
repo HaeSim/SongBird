@@ -15,6 +15,8 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 
+import YoutubePlayer from '@/components/organisms/YoutubePlayer';
+
 interface IMainContentProps {
   playlistItems: YoutubePlaylistItem[];
 }
@@ -33,7 +35,6 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
       setSelectedItems(playlistItems.map((item) => item.id));
     }
   };
-
   const handleCheckboxClick = (itemId: string) => {
     setSelectedItems((prevSelected) => {
       if (prevSelected.includes(itemId)) {
@@ -117,13 +118,14 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
           }
         </Typography>
         {/* Embedded video player (you can replace the iframe with your video player component) */}
-        <iframe
+        {/* <iframe
           title="Embedded Video"
           width="560"
           height="315"
           src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1`}
           allowFullScreen
-        />
+        /> */}
+        <YoutubePlayer videoId={selectedVideo || ''} controller={false} />
       </Dialog>
     </Grid>
   );
