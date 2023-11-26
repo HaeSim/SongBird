@@ -1,5 +1,6 @@
 import { Button } from '@mui/material';
 
+import SignInModal from '@/components/molecules/SignInModal';
 import useClientStore from '@/store/client';
 
 interface ILoginButtonProps {
@@ -7,23 +8,9 @@ interface ILoginButtonProps {
 }
 
 const LoginButton = ({ isLogin }: ILoginButtonProps) => {
-  const { openMessageModal, closeModal } = useClientStore((state) => state);
+  const { openComponentModal, closeModal } = useClientStore((state) => state);
   const handleLoginClick = () => {
-    // confirm modal
-    openMessageModal(
-      '삭제 확인',
-      ['이미지를 삭제하시겠습니까?'],
-      [
-        { label: '취소', callback: closeModal, variant: 'outlined' },
-        {
-          label: '확인',
-          callback: () => {
-            closeModal();
-          },
-          variant: 'contained',
-        },
-      ]
-    );
+    openComponentModal(<SignInModal onClose={closeModal} />);
   };
 
   if (isLogin) {
