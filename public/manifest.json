@@ -1,28 +1,18 @@
 {
-  "theme_color": "#556cd6",
-  "background_color": "#556cd6",
+  "theme_color": "#F5F2E7",
+  "background_color": "#F5F2E7",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/quiz",
-  "name": "music-quiz",
-  "short_name": "music-quiz",
+  "name": "SongBird",
+  "short_name": "SongBird",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/favicons/android-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "density": "4.0"
     }
   ]
 }

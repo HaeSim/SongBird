@@ -17,8 +17,8 @@ const Template: NextPageWithLayout<ITemplateProps> = (
   return (
     <>
       <MetaInfo
-        title="Home | 🎵 Music Quiz 🎵"
-        description="This is the home page of the 🎵 Music Quiz 🎵 app."
+        title="Home | 🎵 SongBird 🎵"
+        description="This is the home page of the 🎵 SongBird 🎵 app."
       />
       <Container maxWidth="lg">
         <Box

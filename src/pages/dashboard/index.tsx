@@ -100,8 +100,8 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = ({
   return (
     <>
       <MetaInfo
-        title="대시보드 | 🎵 Music Quiz 🎵"
-        description="This is the Quiz page of the 🎵 Music Quiz 🎵 app."
+        title="대시보드 | 🎵 SongBird 🎵"
+        description="This is the Quiz page of the 🎵 SongBird 🎵 app."
       />
       <div style={{ display: 'flex' }}>
         <main style={{ flexGrow: 1 }}>

@@ -8,15 +8,15 @@ const GoogleLoginButton: React.FC<{ onClick: () => void }> = ({ ...props }) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         gap: '12px',
         width: '100%',
         height: '48px',
-        padding: '0 16px',
+        padding: '0 32px',
         backgroundColor: '#fff',
         color: '#000',
         '&:hover': {
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backgroundColor: 'rgba(225, 225, 225, 0.5)6)',
         },
         boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.2)',
       }}

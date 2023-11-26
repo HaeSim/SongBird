@@ -11,11 +11,11 @@ const GithubLoginButton: React.FC<{ onClick: () => void }> = ({ ...props }) => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         gap: '12px',
         width: '100%',
         height: '48px',
-        padding: '0 16px',
+        padding: '0 32px',
         backgroundColor: '#24292f',
         color: '#fff',
         '&:hover': {

@@ -9,8 +9,8 @@ const Settings: NextPageWithLayout = () => {
   return (
     <>
       <MetaInfo
-        title="Settings | 🎵 Music Quiz 🎵"
-        description="This is the Settings page of the 🎵 Music Quiz 🎵 app."
+        title="Settings | 🎵 SongBird 🎵"
+        description="This is the Settings page of the 🎵 SongBird 🎵 app."
       />
       <div style={{ display: 'flex' }}>
         <main style={{ flexGrow: 1 }}>
