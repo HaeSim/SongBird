@@ -18,6 +18,7 @@ export const useGetPlaylistItemQuery = (playlistId: string) => {
     () => getPlaylistItem(playlistId),
     {
       keepPreviousData: true,
+      enabled: !!playlistId,
     }
   );
 };
