@@ -3,13 +3,9 @@ import { useQuery } from 'react-query';
 import { getPlaylist, getPlaylistItem } from './services';
 
 export const useGetPlaylistQuery = () => {
-  return useQuery<Promise<YoutubePlaylistResponse>>(
-    ['playlist'],
-    () => getPlaylist(),
-    {
-      keepPreviousData: true,
-    }
-  );
+  return useQuery<YoutubePlaylistResponse>(['playlist'], () => getPlaylist(), {
+    keepPreviousData: true,
+  });
 };
 
 export const useGetPlaylistItemQuery = (playlistId: string) => {

@@ -2,6 +2,7 @@
 import Head from 'next/head';
 import { NextSeo } from 'next-seo';
 
+import theme from '@/styles/theme';
 import type { IMetaInfoComponent } from '@/types/common/component';
 import { AppConfig } from '@/utils/AppConfig';
 
@@ -56,29 +57,20 @@ const MetaInfo: IMetaInfoComponent = ({
           content="width=device-width,initial-scale=1, viewport-fit=cover, user-scalable=no"
           key="viewport"
         />
-        {/* <link
-          rel="apple-touch-icon-precomposed"
-          href="/icons/icon-192x192.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicons/favicon-32x32.png"
-          key="icon32"
-        />
         <meta
           name="msapplication-TileColor"
-          content={theme.palette.primary.main}
+          content={theme.palette.background.default}
         />
         <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicons/favicon-16x16.png"
-          key="icon16"
-        /> */}
-        {/* <link rel="icon" href="/favicons/favicon.ico" key="favicon" /> */}
+          rel="apple-touch-icon-precomposed"
+          href="/favicons/apple-icon-180x180.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicons/apple-icon-180x180.png"
+        />
+        <link rel="manifest" href="/manifest.json" />
         {generateSplashscreenLinks()}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />

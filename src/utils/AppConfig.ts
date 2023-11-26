@@ -9,9 +9,9 @@ type AppConfigType = {
 };
 
 export const AppConfig: AppConfigType = {
-  site_name: 'music-quiz-app-v2',
-  title: '뮤직 퀴즈',
-  description: '노래를 맞춰보세요.',
+  site_name: 'song-brid',
+  title: 'Song Brid',
+  description: 'Song Bird, 노래를 맞춰 보세요!',
   locale: 'ko',
   base_url: process.env.NODE_ENV === 'production' ? '/api/v1' : '/api/mock',
 };

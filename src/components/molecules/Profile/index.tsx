@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 
 import LoginButton from '@/components/atoms/Login';
+import theme from '@/styles/theme';
 
 interface IProfileProps {}
 
@@ -33,8 +34,15 @@ const Profile: FC<IProfileProps> = () => {
         <>
           <Avatar
             alt="Guest의 프로필 사진"
-            src="https://avatars.githubusercontent.com/u/45196240?v=4"
-            sx={{ width: 64, height: 64, marginBottom: '8px' }}
+            src="/images/song-bird_image.webp"
+            // outline or box-shadow
+            sx={{
+              width: 64,
+              height: 64,
+              marginBottom: '8px',
+              border: '2px solid',
+              borderColor: theme.palette.background.default,
+            }}
           />
           <Typography variant="h6" noWrap>
             로그인이 필요합니다.

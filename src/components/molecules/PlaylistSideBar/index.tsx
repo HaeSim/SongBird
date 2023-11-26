@@ -16,7 +16,7 @@ const PlaylistSidebar: React.FC<PlaylistSidebarProps> = ({
   handlePlaylistClick,
 }) => {
   return (
-    <Grid item xs={3}>
+    <Grid item xs={3} sx={{ minWidth: '276px' }}>
       <Paper style={{ height: '80vh', overflowY: 'auto' }}>
         {myPlaylist?.length === 0 ? (
           <Typography

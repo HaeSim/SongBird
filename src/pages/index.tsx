@@ -9,15 +9,12 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <MetaInfo
-        title="Home | 🎵 Music Quiz 🎵"
-        description="This is the home page of the 🎵 Music Quiz 🎵 app."
+        title="Home | 🎵 SongBird 🎵"
+        description="This is the home page of the 🎵 SongBird 🎵 app."
       />
-      <div style={{ display: 'flex' }}>
-        <main style={{ flexGrow: 1 }}>
-          <Toolbar />
-          <Typography paragraph>홈</Typography>
-        </main>
-      </div>
+
+      <Toolbar />
+      <Typography paragraph>홈</Typography>
     </>
   );
 };

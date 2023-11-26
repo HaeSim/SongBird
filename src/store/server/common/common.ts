@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { signOut } from 'next-auth/react';
 
 import { AppConfig } from '@/utils/AppConfig';
 
@@ -19,15 +20,15 @@ ApiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ApiClient.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     if (error.response.status === 401) {
-//       localStorage.removeItem('token');
-//       window.location.href = '/login';
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+ApiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      localStorage.removeItem('token');
+      signOut();
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default ApiClient;
