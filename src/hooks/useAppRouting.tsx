@@ -31,7 +31,28 @@ export function useAppRouting() {
     }
   }, [router.pathname]);
 
-  // 컴포넌트에서 현재 메뉴와 라우팅 함수를 사용하려면 다음과 같이 반환합니다.
+  // router events 중 routeChangeComplete 이벤트를 감지하여
+  // redirect 시 currentMenu를 업데이트합니다.
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      const targetMenu = Object.values(PAGES).find((page) => page.path === url);
+
+      if (!targetMenu) {
+        return;
+      }
+
+      if (targetMenu?.value !== currentMenu.value) {
+        navigateToMenu(targetMenu.value);
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   return {
     currentMenu,
     navigateToMenu,

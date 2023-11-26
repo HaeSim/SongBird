@@ -1,14 +1,13 @@
 import ApiClient from '../../common/common';
 
 const getPlaylist = async (): Promise<YoutubePlaylistResponse> => {
-  const response = await ApiClient.get('/playlist');
+  const response = await ApiClient.get('/playlist/my');
   return response.data;
 };
 
 const getPlaylistItem = async (
   playlistId: string
 ): Promise<YoutubePlaylistItemResponse> => {
-  // return ApiClient.get(`/playlist/${playlistId}`);
   const response = await ApiClient.get(`/playlist/${playlistId}`);
   return response.data;
 };

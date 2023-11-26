@@ -117,14 +117,6 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
             )?.snippet.title
           }
         </Typography>
-        {/* Embedded video player (you can replace the iframe with your video player component) */}
-        {/* <iframe
-          title="Embedded Video"
-          width="560"
-          height="315"
-          src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1`}
-          allowFullScreen
-        /> */}
         <YoutubePlayer videoId={selectedVideo || ''} controller={false} />
       </Dialog>
     </Grid>
