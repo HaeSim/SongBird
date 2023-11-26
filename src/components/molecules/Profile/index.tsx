@@ -1,5 +1,5 @@
 import { Avatar, Toolbar, Typography } from '@mui/material';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 
 import LoginButton from '@/components/atoms/Login';
@@ -8,6 +8,7 @@ interface IProfileProps {}
 
 const Profile: FC<IProfileProps> = () => {
   const { data: session } = useSession();
+
   return (
     <Toolbar
       sx={{
@@ -40,7 +41,7 @@ const Profile: FC<IProfileProps> = () => {
           </Typography>
         </>
       )}
-      <LoginButton isLogin={!!session} signIn={signIn} signOut={signOut} />
+      <LoginButton isLogin={!!session} />
     </Toolbar>
   );
 };

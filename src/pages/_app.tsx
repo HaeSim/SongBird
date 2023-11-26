@@ -13,6 +13,8 @@ import { type ReactElement, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import type { URL } from 'url';
 
+import ComponentModal from '@/components/organisms/ComponentModal';
+import MessageModal from '@/components/organisms/MessageModal';
 import * as gtag from '@/lib/gtag';
 import createEmotionCache from '@/styles/createEmotionCache';
 import theme from '@/styles/theme';
@@ -92,6 +94,8 @@ const MyApp = (props: MyAppProps) => {
             <ThemeProvider theme={theme}>
               <CssBaseline />
               {getLayout(<Component {...pageProps} />)}
+              <ComponentModal />
+              <MessageModal />
               <Analytics />
             </ThemeProvider>
           </CacheProvider>

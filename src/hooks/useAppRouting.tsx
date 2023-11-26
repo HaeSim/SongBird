@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import useStore from '@/store/client';
+import useClientStore from '@/store/client';
 import { PAGES } from '@/utils/AppConfig';
 
 export function useAppRouting() {
-  const { currentMenu, navigateMenu } = useStore((state) => state);
+  const { currentMenu, navigateMenu } = useClientStore((state) => state);
   const router = useRouter();
 
   const navigateToMenu = (menuValue: string) => {
