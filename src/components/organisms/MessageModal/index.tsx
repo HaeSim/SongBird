@@ -138,7 +138,6 @@ const MessageModal = () => {
       PaperProps={{
         sx: {
           width: '560px',
-          heightL: '360px',
           borderRadius: '8px',
           padding: '20px',
         },

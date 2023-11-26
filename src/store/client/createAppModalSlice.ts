@@ -13,24 +13,44 @@ interface MessageModal {
     label: string;
     callback: () => void;
     variant?: 'text' | 'outlined' | 'contained';
+    color?:
+      | 'inherit'
+      | 'primary'
+      | 'secondary'
+      | 'default'
+      | 'error'
+      | 'info'
+      | 'success'
+      | 'warning';
   }[];
 }
 
 type ModalState = ComponentModal | MessageModal | null;
 
+interface IOpenMessageModal {
+  title: string;
+  message: string[];
+  options: {
+    label: string;
+    callback: () => void;
+    variant?: 'text' | 'outlined' | 'contained';
+    color?:
+      | 'inherit'
+      | 'primary'
+      | 'secondary'
+      | 'default'
+      | 'error'
+      | 'info'
+      | 'success'
+      | 'warning';
+  }[];
+}
+
 export interface AppModalSlice {
   modal: ModalState;
   modalVisible: boolean;
   openComponentModal: (component?: React.ReactNode) => void;
-  openMessageModal: (
-    title: string,
-    message: string[],
-    options: {
-      label: string;
-      callback: () => void;
-      variant?: 'text' | 'outlined' | 'contained';
-    }[]
-  ) => void;
+  openMessageModal: ({ title, message, options }: IOpenMessageModal) => void;
   closeModal: () => void;
 }
 
@@ -53,15 +73,7 @@ const createAppModalSlice: StateCreator<AppModalSlice> = (set) => ({
       }));
     }, 0);
   },
-  openMessageModal: (
-    title: string,
-    message: string[],
-    options: {
-      label: string;
-      callback: () => void;
-      variant?: 'text' | 'outlined' | 'contained';
-    }[]
-  ) => {
+  openMessageModal: ({ title, message, options }: IOpenMessageModal) => {
     // 1. 메시지 내용 적용
     set(() => ({
       modal: { type: 'message', title, message, options },
