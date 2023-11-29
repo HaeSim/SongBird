@@ -21,6 +21,7 @@ import type { URL } from 'url';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
+import { YoutubeProvider } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
@@ -106,9 +107,11 @@ const MyApp = (props: MyAppProps) => {
           <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-              <ComponentModal />
-              <MessageModal />
+              <YoutubeProvider>
+                {getLayout(<Component {...pageProps} />)}
+                <ComponentModal />
+                <MessageModal />
+              </YoutubeProvider>
               <Backdrop
                 sx={{
                   color: '#fff',

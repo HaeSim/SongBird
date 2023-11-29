@@ -1,6 +1,5 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
-  Dialog,
   Grid,
   IconButton,
   Paper,
@@ -10,11 +9,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 
-import YoutubePlayer from '@/components/organisms/YoutubePlayer';
+import { useYoutube } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
+import useClientStore from '@/store/client';
+
+import MusicPlayer from '../MusicPlayer';
 
 interface IMainContentProps {
   playlistItems: YoutubePlaylistItem[];
@@ -25,17 +26,20 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
 }) => {
   const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const { openComponentModal } = useClientStore((state) => state);
+  const { setVideo } = useYoutube();
 
-  const handlePlayClick = (videoId: string) => {
-    setSelectedVideo(videoId);
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-    setSelectedVideo(null);
+  const handlePlayClick = (newVideoId: string) => {
+    setVideo(newVideoId);
+    openComponentModal(
+      <MusicPlayer
+        title={
+          playlistItems.find(
+            (item) => item.snippet.resourceId.videoId === newVideoId
+          )?.snippet.title ?? ''
+        }
+      />
+    );
   };
 
   return (
@@ -99,17 +103,6 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
           </TableContainer>
         )}
       </Paper>
-
-      <Dialog open={openModal} onClose={handleCloseModal}>
-        <Typography variant="h6" align="center" sx={{ marginTop: 2 }}>
-          {
-            playlistItems.find(
-              (item) => item.snippet.resourceId.videoId === selectedVideo
-            )?.snippet.title
-          }
-        </Typography>
-        <YoutubePlayer videoId={selectedVideo || ''} controller={false} />
-      </Dialog>
     </Grid>
   );
 };

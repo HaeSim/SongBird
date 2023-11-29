@@ -11,17 +11,27 @@ import {
 import React, { useEffect, useState } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
-import YoutubePlayer from '@/components/organisms/YoutubePlayer';
+import { useYoutube } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import Default from '@/components/templates/Layout/Default';
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
 import { getQuizFromDB } from '@/utils/indexDB';
 
 const Quiz: NextPageWithLayout = () => {
+  const { setVideo, player } = useYoutube();
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz | null>(null);
   const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
   const [answerMode, setAnswerMode] = useState<boolean>(false);
+
+  const handlePlay = () => {
+    setVideo(selectedQuiz?.quizItems[currentQuizIndex]?.id);
+    player?.playVideo();
+  };
+
+  const handlePause = () => {
+    player?.pauseVideo();
+  };
 
   useEffect(() => {
     async function fetchQuizzes() {
@@ -45,9 +55,15 @@ const Quiz: NextPageWithLayout = () => {
     if (!selectedQuiz) {
       return;
     }
-
     setCurrentQuizIndex(0);
   }, [selectedQuiz]);
+
+  useEffect(() => {
+    if (!selectedQuiz) {
+      return;
+    }
+    setVideo(selectedQuiz.quizItems[currentQuizIndex]?.id);
+  }, [currentQuizIndex]);
 
   return (
     <>
@@ -121,10 +137,6 @@ const Quiz: NextPageWithLayout = () => {
           onClose={() => setSelectedQuiz(null)}
         >
           <>
-            <YoutubePlayer
-              videoId={selectedQuiz?.quizItems[currentQuizIndex]?.id ?? ''}
-              controller={false}
-            />
             {/* Quiz Controller  이전, 다음, 재생 */}
             <Box
               sx={{
@@ -197,6 +209,8 @@ const Quiz: NextPageWithLayout = () => {
                 >
                   다음
                 </Button>
+                <Button onClick={handlePlay}>재생</Button>
+                <Button onClick={handlePause}>정지</Button>
               </Box>
             </Box>
           </>
