@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
 import { type ReactElement, useEffect, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import type { URL } from 'url';
 
@@ -73,6 +74,7 @@ const MyApp = (props: MyAppProps) => {
       });
     };
   }, []);
+
   return (
     <>
       <Script
@@ -111,6 +113,7 @@ const MyApp = (props: MyAppProps) => {
               >
                 <CircularProgress color="inherit" />
               </Backdrop>
+              <Toaster />
               <Analytics />
             </ThemeProvider>
           </CacheProvider>

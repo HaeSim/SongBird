@@ -7,10 +7,10 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import type { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
+import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
 import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
@@ -24,29 +24,11 @@ import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
 import { saveQuizToDB } from '@/utils/indexDB';
 
-import { authOptions } from '../api/auth/[...nextauth]';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) {
-    return {
-      props: {},
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
-};
-
 interface IDashboardProps {}
 
 const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
 
   const { data: playlistItems } = useGetPlaylistItemQuery(selectedPlaylist);
@@ -89,6 +71,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
     await saveQuizToDB(quiz).then(() => {
       setTimeout(() => {
         setIsMakingQuiz(false);
+        toast.success('퀴즈 생성 완료!');
       }, 1000);
     });
   };
@@ -98,6 +81,23 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       setSelectedPlaylist(myPlaylist?.items[0]?.id ?? '');
     }
   }, [myPlaylist]);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (status === 'loading') return;
+
+    if (!session) {
+      toast.error('로그인이 필요합니다.');
+      router.push('/');
+      return;
+    }
+
+    if (session?.provider !== 'google') {
+      toast('구글 계정으로 로그인 해주세요.', {
+        icon: '🔑',
+      });
+    }
+  }, [session]);
 
   if (session?.provider !== 'google') {
     return (
@@ -153,7 +153,6 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           zIndex: (tm) => tm.zIndex.drawer + 1,
         }}
         open={isMakingQuiz}
-        onClick={() => setIsMakingQuiz(false)}
       >
         <CircularProgress color="inherit" />
         <Typography variant="h6" align="center" fontWeight="bold" marginTop={2}>
