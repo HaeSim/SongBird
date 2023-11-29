@@ -23,9 +23,13 @@ interface IDashboardProps {}
 const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { backdropVisible, openBackdrop, closeBackdrop } = useClientStore(
-    (state) => state
-  );
+  const {
+    backdropVisible,
+    openBackdrop,
+    closeBackdrop,
+    openMessageModal,
+    closeModal,
+  } = useClientStore((state) => state);
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
 
   const { data: playlistItems } = useGetPlaylistItemQuery(selectedPlaylist);
@@ -34,7 +38,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
   const handlePlaylistClick = async (playlistId: string) => {
     setSelectedPlaylist(playlistId);
   };
-  const handleMakeQuiz = async () => {
+  const makeQuiz = async () => {
     if (!playlistItems?.items) {
       return;
     }
@@ -70,6 +74,31 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         closeBackdrop();
         toast.success('퀴즈 생성 완료!');
       }, 1000);
+    });
+  };
+
+  const handleMakeQuiz = () => {
+    openMessageModal({
+      title: '퀴즈 생성',
+      message: [
+        `${
+          myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
+            ?.snippet.title
+        } 재생목록을 가지고`,
+        '퀴즈를 생성하시겠습니까?',
+      ],
+      options: [
+        { label: '취소', callback: closeModal, variant: 'outlined' },
+        {
+          label: '퀴즈 생성',
+          callback: () => {
+            closeModal();
+            makeQuiz();
+          },
+          variant: 'contained',
+          color: 'error',
+        },
+      ],
     });
   };
 

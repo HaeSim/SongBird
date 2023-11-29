@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useYoutube } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import useClientStore from '@/store/client';
@@ -26,7 +26,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
 }) => {
   const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
 
-  const { openComponentModal } = useClientStore((state) => state);
+  const { openComponentModal, modalVisible } = useClientStore((state) => state);
   const { setVideo } = useYoutube();
 
   const handlePlayClick = (newVideoId: string) => {
@@ -42,8 +42,15 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
     );
   };
 
+  useEffect(() => {
+    // modal닫히면 videoId 초기화
+    if (!modalVisible) {
+      setVideo('');
+    }
+  }, [modalVisible]);
+
   return (
-    <Grid item xs={9} sx={{ width: '100%' }}>
+    <Grid item xs={3} sx={{ minWidth: '100%' }}>
       <Paper style={{ height: '80vh', overflowY: 'auto' }}>
         {playlistItems && (
           <TableContainer>

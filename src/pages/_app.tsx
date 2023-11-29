@@ -114,6 +114,8 @@ const MyApp = (props: MyAppProps) => {
               </YoutubeProvider>
               <Backdrop
                 sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
                   color: '#fff',
                   zIndex: (tm) => tm.zIndex.drawer + 1,
                 }}

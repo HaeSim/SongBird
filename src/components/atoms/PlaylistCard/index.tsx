@@ -16,7 +16,12 @@ const PlaylistCard: React.FC<PlaylistCardProps> = ({
   publishedAt,
 }) => {
   return (
-    <Card>
+    <Card
+      sx={{
+        width: 275,
+        height: 275,
+      }}
+    >
       <CardMedia
         component="img"
         alt="Playlist Thumbnail"
