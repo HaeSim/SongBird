@@ -19,6 +19,7 @@ export default async function handler(
       },
     };
   }
+
   try {
     const response = await axios.get(
       'https://youtube.googleapis.com/youtube/v3/playlists',
@@ -40,7 +41,13 @@ export default async function handler(
   } catch (e) {
     if (axios.isAxiosError(e)) {
       // eslint-disable-next-line no-console
+      console.info('path: ', req.url);
+      // eslint-disable-next-line no-console
       console.error(e?.response?.data);
+
+      if (e?.response?.status === 401) {
+        return res.status(401).json(e?.response?.data);
+      }
     }
     return res.status(500).json({ error: 'Unable to fetch data' });
   }

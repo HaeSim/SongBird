@@ -9,7 +9,7 @@ interface MyDB extends DBSchema {
 }
 
 export const openDatabase = async () => {
-  return openDB<MyDB>('my-database', 1, {
+  return openDB<MyDB>('songbird', 1, {
     upgrade(db) {
       if (!db.objectStoreNames.contains('quizList')) {
         db.createObjectStore('quizList', { keyPath: 'id' });
