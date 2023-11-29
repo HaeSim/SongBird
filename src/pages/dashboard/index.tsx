@@ -1,12 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import {
-  Backdrop,
-  CircularProgress,
-  Fab,
-  Grid,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { Fab, Grid, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -16,6 +9,7 @@ import MetaInfo from '@/components/atoms/MetaInfo';
 import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
 import PlaylistSidebar from '@/components/molecules/PlaylistSideBar';
 import Default from '@/components/templates/Layout/Default';
+import useClientStore from '@/store/client';
 import {
   useGetPlaylistItemQuery,
   useGetPlaylistQuery,
@@ -29,12 +23,13 @@ interface IDashboardProps {}
 const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { backdropVisible, openBackdrop, closeBackdrop } = useClientStore(
+    (state) => state
+  );
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
 
   const { data: playlistItems } = useGetPlaylistItemQuery(selectedPlaylist);
   const { data: myPlaylist } = useGetPlaylistQuery();
-
-  const [isMakingQuiz, setIsMakingQuiz] = useState<boolean>(false);
 
   const handlePlaylistClick = async (playlistId: string) => {
     setSelectedPlaylist(playlistId);
@@ -44,7 +39,9 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       return;
     }
 
-    setIsMakingQuiz(true);
+    openBackdrop({
+      message: '퀴즈 생성 중...',
+    });
 
     const quizItems: QuizItem[] = playlistItems.items.map((item) => ({
       id: item.snippet.resourceId.videoId,
@@ -70,7 +67,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
 
     await saveQuizToDB(quiz).then(() => {
       setTimeout(() => {
-        setIsMakingQuiz(false);
+        closeBackdrop();
         toast.success('퀴즈 생성 완료!');
       }, 1000);
     });
@@ -142,23 +139,10 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           right: 32,
         }}
         onClick={handleMakeQuiz}
-        disabled={isMakingQuiz}
+        disabled={backdropVisible}
       >
         <AddIcon />
       </Fab>
-      <Backdrop
-        sx={{
-          flexDirection: 'column',
-          color: '#fff',
-          zIndex: (tm) => tm.zIndex.drawer + 1,
-        }}
-        open={isMakingQuiz}
-      >
-        <CircularProgress color="inherit" />
-        <Typography variant="h6" align="center" fontWeight="bold" marginTop={2}>
-          퀴즈 생성 중...
-        </Typography>
-      </Backdrop>
     </>
   );
 };
@@ -166,10 +150,3 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
 Dashboard.getLayout = generateGetLayout(Default);
 
 export default Dashboard;
-
-/*
-how to get playlist item
-const {data}:{data:YoutubePlaylistItemListResponse}: = await axios.get(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
-    );
-*/

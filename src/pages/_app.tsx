@@ -3,13 +3,18 @@ import {
   type EmotionCache,
   ThemeProvider,
 } from '@emotion/react';
-import { Backdrop, CircularProgress, CssBaseline } from '@mui/material';
+import {
+  Backdrop,
+  CircularProgress,
+  CssBaseline,
+  Typography,
+} from '@mui/material';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
-import { type ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import type { URL } from 'url';
@@ -17,6 +22,7 @@ import type { URL } from 'url';
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
 import * as gtag from '@/lib/gtag';
+import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
 import theme from '@/styles/theme';
 import type { NextPageWithLayout } from '@/utils/common';
@@ -30,6 +36,8 @@ export interface MyAppProps extends AppProps {
 
 const MyApp = (props: MyAppProps) => {
   const router = useRouter();
+  const { backdropVisible, backdropMessage, openBackdrop, closeBackdrop } =
+    useClientStore((state) => state);
   const queryClient = new QueryClient();
 
   const { emotionCache = clientSideEmotionCache, pageProps } = props;
@@ -37,15 +45,13 @@ const MyApp = (props: MyAppProps) => {
 
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
-  const [open, setOpen] = useState<boolean>(false);
-
   // router 이동 간 Backdrop 출력
   useEffect(() => {
     const handleStart = () => {
-      setOpen(true);
+      openBackdrop();
     };
     const handleComplete = (url: URL) => {
-      setOpen(false);
+      closeBackdrop();
       gtag.pageview(url);
     };
     router.events.on('routeChangeStart', handleStart);
@@ -108,10 +114,17 @@ const MyApp = (props: MyAppProps) => {
                   color: '#fff',
                   zIndex: (tm) => tm.zIndex.drawer + 1,
                 }}
-                open={open}
-                onClick={() => setOpen(false)}
+                open={backdropVisible}
               >
                 <CircularProgress color="inherit" />
+                <Typography
+                  variant="h6"
+                  align="center"
+                  fontWeight="bold"
+                  marginTop={2}
+                >
+                  {backdropMessage}
+                </Typography>
               </Backdrop>
               <Toaster />
               <Analytics />
