@@ -20,7 +20,6 @@ const SignInModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       <Typography variant="h5" sx={{ textAlign: 'center' }} fontWeight="bold">
         로그인
       </Typography>
-      <GoogleLoginButton onClick={handleGoogleLogin} />
       <GithubLoginButton onClick={handleGithubLogin} />
       <GoogleLoginButton onClick={handleGoogleLogin} />
     </Container>

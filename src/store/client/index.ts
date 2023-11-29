@@ -1,18 +1,18 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
+import type { AppBackdropSlice } from './createAppBackdropSlice';
+import createAppBackdropSlice from './createAppBackdropSlice';
 import type { AppMenuSlice } from './createAppMenuSlice';
 import createAppMenuSlice from './createAppMenuSlice';
 import type { AppModalSlice } from './createAppModalSlice';
 import createAppModalSlice from './createAppModalSlice';
-import type { CounterSlice } from './createCounterSlice';
-import createCounterSlice from './createCounterSlice';
 
-export type MyState = CounterSlice & AppMenuSlice & AppModalSlice;
+export type MyState = AppMenuSlice & AppModalSlice & AppBackdropSlice;
 
 const useClientStore = create<MyState>()(
   devtools((...a) => ({
-    ...createCounterSlice(...a),
+    ...createAppBackdropSlice(...a),
     ...createAppMenuSlice(...a),
     ...createAppModalSlice(...a),
   }))

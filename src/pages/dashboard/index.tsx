@@ -1,12 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import {
-  Backdrop,
-  CircularProgress,
-  Fab,
-  Grid,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { Fab, Grid, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -16,6 +9,7 @@ import MetaInfo from '@/components/atoms/MetaInfo';
 import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
 import PlaylistSidebar from '@/components/molecules/PlaylistSideBar';
 import Default from '@/components/templates/Layout/Default';
+import useClientStore from '@/store/client';
 import {
   useGetPlaylistItemQuery,
   useGetPlaylistQuery,
@@ -29,22 +23,31 @@ interface IDashboardProps {}
 const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const {
+    backdropVisible,
+    openBackdrop,
+    closeBackdrop,
+    openMessageModal,
+    closeModal,
+  } = useClientStore((state) => state);
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
 
-  const { data: playlistItems } = useGetPlaylistItemQuery(selectedPlaylist);
-  const { data: myPlaylist } = useGetPlaylistQuery();
-
-  const [isMakingQuiz, setIsMakingQuiz] = useState<boolean>(false);
+  const { data: playlistItems, isFetching: isPlaylistItemsFetching } =
+    useGetPlaylistItemQuery(selectedPlaylist);
+  const { data: myPlaylist, isFetching: isMyPlaylistFetching } =
+    useGetPlaylistQuery();
 
   const handlePlaylistClick = async (playlistId: string) => {
     setSelectedPlaylist(playlistId);
   };
-  const handleMakeQuiz = async () => {
+  const makeQuiz = async () => {
     if (!playlistItems?.items) {
       return;
     }
 
-    setIsMakingQuiz(true);
+    openBackdrop({
+      message: '퀴즈 생성 중...',
+    });
 
     const quizItems: QuizItem[] = playlistItems.items.map((item) => ({
       id: item.snippet.resourceId.videoId,
@@ -70,9 +73,34 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
 
     await saveQuizToDB(quiz).then(() => {
       setTimeout(() => {
-        setIsMakingQuiz(false);
+        closeBackdrop();
         toast.success('퀴즈 생성 완료!');
       }, 1000);
+    });
+  };
+
+  const handleMakeQuiz = () => {
+    openMessageModal({
+      title: '퀴즈 생성',
+      message: [
+        `${
+          myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
+            ?.snippet.title
+        } 재생목록을 가지고`,
+        '퀴즈를 생성하시겠습니까?',
+      ],
+      options: [
+        { label: '취소', callback: closeModal, variant: 'outlined' },
+        {
+          label: '퀴즈 생성',
+          callback: () => {
+            closeModal();
+            makeQuiz();
+          },
+          variant: 'contained',
+          color: 'error',
+        },
+      ],
     });
   };
 
@@ -126,12 +154,35 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       />
       <Toolbar />
       <Grid container spacing={2}>
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          fontWeight={700}
+          marginLeft={2}
+        >
+          재생 목록
+        </Typography>
         <PlaylistSidebar
           myPlaylist={myPlaylist?.items ?? []}
           selectedPlaylist={selectedPlaylist}
           handlePlaylistClick={handlePlaylistClick}
+          isLoading={isMyPlaylistFetching}
         />
-        <PlaylistItemContent playlistItems={playlistItems?.items ?? []} />
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          fontWeight={700}
+          marginTop={2}
+          marginLeft={2}
+        >
+          노래 목록
+        </Typography>
+        <PlaylistItemContent
+          playlistItems={playlistItems?.items ?? []}
+          isLoading={isPlaylistItemsFetching}
+        />
       </Grid>
 
       <Fab
@@ -142,23 +193,10 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           right: 32,
         }}
         onClick={handleMakeQuiz}
-        disabled={isMakingQuiz}
+        disabled={backdropVisible}
       >
         <AddIcon />
       </Fab>
-      <Backdrop
-        sx={{
-          flexDirection: 'column',
-          color: '#fff',
-          zIndex: (tm) => tm.zIndex.drawer + 1,
-        }}
-        open={isMakingQuiz}
-      >
-        <CircularProgress color="inherit" />
-        <Typography variant="h6" align="center" fontWeight="bold" marginTop={2}>
-          퀴즈 생성 중...
-        </Typography>
-      </Backdrop>
     </>
   );
 };
@@ -166,10 +204,3 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
 Dashboard.getLayout = generateGetLayout(Default);
 
 export default Dashboard;
-
-/*
-how to get playlist item
-const {data}:{data:YoutubePlaylistItemListResponse}: = await axios.get(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${process.env.YOUTUBE_API_KEY}`
-    );
-*/
