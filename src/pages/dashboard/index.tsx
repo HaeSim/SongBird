@@ -32,8 +32,10 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
   } = useClientStore((state) => state);
   const [selectedPlaylist, setSelectedPlaylist] = useState<string>('');
 
-  const { data: playlistItems } = useGetPlaylistItemQuery(selectedPlaylist);
-  const { data: myPlaylist } = useGetPlaylistQuery();
+  const { data: playlistItems, isFetching: isPlaylistItemsFetching } =
+    useGetPlaylistItemQuery(selectedPlaylist);
+  const { data: myPlaylist, isFetching: isMyPlaylistFetching } =
+    useGetPlaylistQuery();
 
   const handlePlaylistClick = async (playlistId: string) => {
     setSelectedPlaylist(playlistId);
@@ -152,12 +154,35 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       />
       <Toolbar />
       <Grid container spacing={2}>
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          fontWeight={700}
+          marginLeft={2}
+        >
+          재생 목록
+        </Typography>
         <PlaylistSidebar
           myPlaylist={myPlaylist?.items ?? []}
           selectedPlaylist={selectedPlaylist}
           handlePlaylistClick={handlePlaylistClick}
+          isLoading={isMyPlaylistFetching}
         />
-        <PlaylistItemContent playlistItems={playlistItems?.items ?? []} />
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          fontWeight={700}
+          marginTop={2}
+          marginLeft={2}
+        >
+          노래 목록
+        </Typography>
+        <PlaylistItemContent
+          playlistItems={playlistItems?.items ?? []}
+          isLoading={isPlaylistItemsFetching}
+        />
       </Grid>
 
       <Fab

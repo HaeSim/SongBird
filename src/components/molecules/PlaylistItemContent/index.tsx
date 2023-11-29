@@ -1,5 +1,6 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
+  CircularProgress,
   Grid,
   IconButton,
   Paper,
@@ -19,10 +20,12 @@ import MusicPlayer from '../MusicPlayer';
 
 interface IMainContentProps {
   playlistItems: YoutubePlaylistItem[];
+  isLoading: boolean;
 }
 
 const PlaylistItemContent: React.FC<IMainContentProps> = ({
   playlistItems,
+  isLoading,
 }) => {
   const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
 
@@ -51,7 +54,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
 
   return (
     <Grid item xs={3} sx={{ minWidth: '100%' }}>
-      <Paper style={{ height: '80vh', overflowY: 'auto' }}>
+      <Paper style={{ minHeight: '100%', overflowY: 'auto' }}>
         {playlistItems && (
           <TableContainer>
             <Table>
@@ -70,41 +73,56 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {playlistItems.map((item, index) => (
-                  <TableRow key={item.id}>
+                {isLoading ? (
+                  <TableRow>
                     <TableCell
+                      colSpan={5}
                       sx={{
                         textAlign: 'center',
                       }}
                     >
-                      {index + 1}
-                    </TableCell>
-                    <TableCell>{item.snippet.title}</TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: 'center',
-                      }}
-                    >
-                      {item.snippet.videoOwnerChannelTitle}
-                    </TableCell>
-                    <TableCell
-                      sx={{
-                        textAlign: 'center',
-                      }}
-                    >
-                      {new Date(item.snippet.publishedAt).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        onClick={() =>
-                          handlePlayClick(item.snippet.resourceId.videoId)
-                        }
-                      >
-                        <PlayArrowIcon />
-                      </IconButton>
+                      <CircularProgress />
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  playlistItems.map((item, index) => (
+                    <TableRow key={item.id}>
+                      <TableCell
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                      >
+                        {index + 1}
+                      </TableCell>
+                      <TableCell>{item.snippet.title}</TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                      >
+                        {item.snippet.videoOwnerChannelTitle}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                      >
+                        {new Date(
+                          item.snippet.publishedAt
+                        ).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={() =>
+                            handlePlayClick(item.snippet.resourceId.videoId)
+                          }
+                        >
+                          <PlayArrowIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>
