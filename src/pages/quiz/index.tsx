@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -37,10 +37,14 @@ const Quiz: NextPageWithLayout = () => {
         title="Quiz | 🎵 SongBird 🎵"
         description="This is the Quiz page of the 🎵 SongBird 🎵 app."
       />
-      <Box
-        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-      >
-        <Typography variant="h3" paragraph fontWeight={700}>
+      <Grid container spacing={2}>
+        <Typography
+          variant="h5"
+          align="center"
+          gutterBottom
+          fontWeight={700}
+          marginLeft={2}
+        >
           퀴즈 목록
         </Typography>
 
@@ -51,7 +55,7 @@ const Quiz: NextPageWithLayout = () => {
             router.push(`/quiz/${quiz.id}`);
           }}
         />
-      </Box>
+      </Grid>
     </>
   );
 };

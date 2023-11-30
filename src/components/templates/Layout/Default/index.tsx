@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 
 import DrawerMenu from '@/components/organisms/Drawer';
 import { useAppRouting } from '@/hooks/useAppRouting';
+import theme from '@/styles/theme';
 import type { ILayoutComponent } from '@/types/common/component';
 import { PAGES } from '@/utils/AppConfig';
 
@@ -31,9 +32,9 @@ const Default: ILayoutComponent = ({ children }) => {
         position="static"
         sx={{
           height: '64px',
-          backgroundColor: '#fff',
-          color: '#000',
-          boxShadow: 'none',
+          backgroundColor: theme.palette.background.default,
+          color: '#fff',
+          boxShadow: '0 1px 2px 0 rgb(0 0 0 / 10%)',
         }}
       >
         <Toolbar>

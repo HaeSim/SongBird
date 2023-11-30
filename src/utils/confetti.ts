@@ -2,10 +2,18 @@
 /* eslint-disable func-names */
 import confetti from 'canvas-confetti';
 
-export const fireworks = () => {
-  const duration = 6_500;
+interface IConfettiOptions {
+  duration?: number;
+}
+
+/**
+ * @description - fireworks animation
+ * @param {number} duration - duration of the animation in milliseconds
+ * @returns {void}
+ */
+export const fireworks = ({ duration = 6_500 }: IConfettiOptions) => {
   const animationEnd = Date.now() + duration;
-  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+  const defaults = { startVelocity: 30, spread: 360, ticks: 160, zIndex: 0 };
 
   function randomInRange(min: number, max: number) {
     return Math.random() * (max - min) + min;
@@ -35,9 +43,13 @@ export const fireworks = () => {
     });
   }, 250);
 };
-
-export const schoolPride = () => {
-  const end = Date.now() + 15_000;
+/**
+ * @description - school pride animation
+ * @param duration - duration of the animation in milliseconds
+ * @returns {void}
+ */
+export const schoolPride = ({ duration = 6_500 }: IConfettiOptions) => {
+  const animationEnd = Date.now() + duration;
 
   // go Buckeyes!
   const colors = ['#bb0000', '#ffffff'];
@@ -58,7 +70,47 @@ export const schoolPride = () => {
       colors,
     });
 
-    if (Date.now() < end) {
+    if (Date.now() < animationEnd) {
+      requestAnimationFrame(frame);
+    }
+  })();
+};
+
+/**
+ * @description - snow animation
+ * @param duration - duration of the animation in milliseconds
+ * @returns {void}
+ */
+export const snow = ({ duration = 6_500 }: IConfettiOptions) => {
+  const animationEnd = Date.now() + duration;
+  let skew = 1;
+
+  function randomInRange(min: number, max: number) {
+    return Math.random() * (max - min) + min;
+  }
+
+  (function frame() {
+    const timeLeft = animationEnd - Date.now();
+    const ticks = Math.max(200, 500 * (timeLeft / duration));
+    skew = Math.max(0.8, skew - 0.001);
+
+    confetti({
+      particleCount: 1,
+      startVelocity: 0,
+      ticks,
+      origin: {
+        x: Math.random(),
+        // since particles fall down, skew start toward the top
+        y: Math.random() * skew - 0.2,
+      },
+      colors: ['#ffffff'],
+      shapes: ['circle'],
+      gravity: randomInRange(0.4, 0.6),
+      scalar: randomInRange(0.4, 1),
+      drift: randomInRange(-0.4, 0.4),
+    });
+
+    if (timeLeft > 0) {
       requestAnimationFrame(frame);
     }
   })();
