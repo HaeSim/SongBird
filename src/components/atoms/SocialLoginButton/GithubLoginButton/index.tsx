@@ -14,7 +14,7 @@ const GithubLoginButton: React.FC<{ onClick: () => void }> = ({ ...props }) => {
         height="24"
         width="24"
         id="provider-logo"
-        src="https://authjs.dev/img/providers/github.svg"
+        src="/icons/github.svg"
         alt="github logo"
       />
       <span>Sign in with GitHub</span>

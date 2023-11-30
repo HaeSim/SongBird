@@ -14,7 +14,7 @@ const GoogleLoginButton: React.FC<{ onClick: () => void }> = ({ ...props }) => {
         height="24"
         width="24"
         id="provider-logo"
-        src="https://authjs.dev/img/providers/google.svg"
+        src="/icons/google.svg"
         alt="google logo"
       />
       <span>Sign in with Google</span>
