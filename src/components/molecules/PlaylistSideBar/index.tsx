@@ -17,61 +17,7 @@ interface PlaylistSidebarProps {
   handlePlaylistClick(playlistId: string): void;
   isLoading: boolean;
 }
-/*
-myPlaylist?.length === 0 ? (
-          <Typography
-            variant="h6"
-            align="center"
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '90%',
-            }}
-          >
-            No playlist found
-          </Typography>
-        ) : (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'nowrap',
-              overflowX: 'auto',
-            }}
-          >
-            {myPlaylist?.map((playlist) => (
-              <div
-                key={playlist.id}
-                style={{
-                  marginRight: '16px', // Adjust margin as needed
-                }}
-              >
-                <ListItemButton
-                  style={{
-                    cursor: 'pointer',
-                    marginBottom: '8px',
-                    padding: '8px',
-                    border:
-                      playlist.id === selectedPlaylist
-                        ? '2px solid #007bff'
-                        : 'none', // Add border for selected playlist
-                  }}
-                  onClick={() => handlePlaylistClick(playlist.id)}
-                  selected={playlist.id === selectedPlaylist}
-                >
-                  <PlaylistCard
-                    image={playlist.snippet.thumbnails.medium.url}
-                    title={playlist.snippet.title}
-                    channelTitle={playlist.snippet.channelTitle}
-                    publishedAt={playlist.snippet.publishedAt}
-                  />
-                </ListItemButton>
-              </div>
-            ))}
-          </div>
-        )}
-*/
+
 const PlaylistSidebar: React.FC<PlaylistSidebarProps> = ({
   myPlaylist,
   selectedPlaylist,

@@ -21,7 +21,8 @@ interface IMusicPlayerProps {
 }
 
 const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title }) => {
-  const { status, currentTime, duration, pause, play, seekTo } = useYoutube();
+  const { status, currentTime, duration, pause, play, seekTo, VideoComponent } =
+    useYoutube();
 
   return (
     <Box
@@ -50,11 +51,20 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title }) => {
             width: '100%',
           }}
         >
+          {VideoComponent}
           {status !== PlayerStates?.PLAYING &&
           status !== PlayerStates?.PAUSED ? (
             <CircularProgress color="inherit" />
           ) : (
-            <>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '1rem',
+                width: '100%',
+              }}
+            >
               <IconButton onClick={() => seekTo(currentTime - 10)}>
                 <Replay10Icon />
               </IconButton>
@@ -70,7 +80,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title }) => {
               <IconButton onClick={() => seekTo(currentTime + 10)}>
                 <Forward10Icon />
               </IconButton>
-            </>
+            </Box>
           )}
         </Box>
 
