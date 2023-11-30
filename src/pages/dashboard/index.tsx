@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Fab, Grid, Toolbar, Typography } from '@mui/material';
+import { Fab, Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -152,7 +152,6 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         title="대시보드 | 🎵 SongBird 🎵"
         description="This is the Quiz page of the 🎵 SongBird 🎵 app."
       />
-      <Toolbar />
       <Grid container spacing={2}>
         <Typography
           variant="h5"

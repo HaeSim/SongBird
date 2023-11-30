@@ -1,4 +1,4 @@
-// YoutubeProvider.tsx
+import { useMediaQuery } from '@mui/material';
 import React, {
   createContext,
   useContext,
@@ -9,6 +9,8 @@ import React, {
 import type { YouTubePlayer } from 'react-youtube';
 import YouTube from 'react-youtube';
 
+import theme from '@/styles/theme';
+
 export enum PlayerStates {
   BUFFERING = 3,
   ENDED = 0,
@@ -18,7 +20,6 @@ export enum PlayerStates {
   VIDEO_CUED = 5,
 }
 
-// Create a YoutubeContext
 interface IYoutubeContext {
   play: () => void;
   pause: () => void;
@@ -29,11 +30,11 @@ interface IYoutubeContext {
   videoId?: string;
   currentTime: number;
   duration: number;
+  VideoComponent: React.ReactNode;
 }
 
 const YoutubeContext = createContext<IYoutubeContext | undefined>(undefined);
 
-// Create a custom hook to use the YoutubeContext
 export const useYoutube = () => {
   const context = useContext(YoutubeContext);
   if (!context) {
@@ -42,13 +43,15 @@ export const useYoutube = () => {
   return context;
 };
 
-// Create a YoutubeProvider to wrap your app and provide the YoutubeContext
 interface IYoutubeProviderProps {
   children: React.ReactNode;
 }
-export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
+
+const YoutubeProvider: React.FC<IYoutubeProviderProps> = ({ children }) => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>(undefined);
-  const [playerState, setPlayerState] = useState<PlayerStates>(-1);
+  const [playerState, setPlayerState] = useState<PlayerStates>(
+    PlayerStates.UNSTARTED
+  );
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [videoId, setVideoId] = useState<string | undefined>(undefined);
@@ -86,6 +89,31 @@ export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
     setVideoId(newVideoId);
   };
 
+  const VideoComponent = (
+    <YouTube
+      style={{
+        display: useMediaQuery(theme.breakpoints.down('sm')) ? 'block' : 'none',
+        position: 'fixed',
+        width: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
+        height: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
+        zIndex: 3,
+      }}
+      videoId={videoId}
+      opts={{
+        width: '100%',
+        height: '100%',
+        playerVars: {
+          disablekb: 1,
+          controls: 0,
+          rel: 0,
+        },
+      }}
+      onReady={(event) => setPlayer(event.target)}
+      onStateChange={handlePlayerStateChange}
+      onPlay={handlePlayerReady}
+    />
+  );
+
   const contextValue: IYoutubeContext = useMemo(() => {
     return {
       play,
@@ -97,6 +125,7 @@ export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
       videoId,
       currentTime,
       duration,
+      VideoComponent,
     };
   }, [playerState, videoId, currentTime, duration]);
 
@@ -126,22 +155,8 @@ export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
   return (
     <YoutubeContext.Provider value={contextValue}>
       {children}
-      <YouTube
-        style={{
-          display: 'none',
-        }}
-        videoId={videoId}
-        opts={{
-          width: '100%',
-          height: '100%',
-          playerVars: {
-            autoplay: 1,
-          },
-        }}
-        onReady={(event) => setPlayer(event.target)}
-        onStateChange={handlePlayerStateChange}
-        onPlay={handlePlayerReady}
-      />
     </YoutubeContext.Provider>
   );
 };
+
+export default YoutubeProvider;
