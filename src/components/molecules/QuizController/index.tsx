@@ -118,6 +118,28 @@ const QuizController = ({
 
   return (
     <>
+      <YouTube
+        style={{
+          display: useMediaQuery(theme.breakpoints.down('sm'))
+            ? 'block'
+            : 'none',
+          width: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
+          height: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
+          zIndex: 3,
+        }}
+        videoId={quiz?.quizItems[currentQuizIndex]?.id ?? ''}
+        opts={{
+          width: '100%',
+          height: '100%',
+          playerVars: {
+            disablekb: 1,
+            controls: 0,
+            rel: 0,
+          },
+        }}
+        onStateChange={handleStateChange}
+        onReady={(event) => setPlayer(event.target)}
+      />
       <Box
         style={{
           width: '100%',
@@ -172,28 +194,6 @@ const QuizController = ({
           일시정지
         </Button>
       </Box>
-      <YouTube
-        style={{
-          display: useMediaQuery(theme.breakpoints.down('sm'))
-            ? 'block'
-            : 'none',
-          width: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
-          height: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
-          zIndex: 3,
-        }}
-        videoId={quiz?.quizItems[currentQuizIndex]?.id ?? ''}
-        opts={{
-          width: '100%',
-          height: '100%',
-          playerVars: {
-            disablekb: 1,
-            controls: 0,
-            rel: 0,
-          },
-        }}
-        onStateChange={handleStateChange}
-        onReady={(event) => setPlayer(event.target)}
-      />
     </>
   );
 };
