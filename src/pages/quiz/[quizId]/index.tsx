@@ -5,14 +5,12 @@ import React, { useEffect, useState } from 'react';
 
 import QuizController from '@/components/molecules/QuizController';
 import QuizDetail from '@/components/organisms/QuizDetail';
-import { useYoutube } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import Default from '@/components/templates/Layout/Default';
 import { generateGetLayout } from '@/utils/common';
 import { getQuizFromDB } from '@/utils/indexDB';
 
 const QuizDetailPage = () => {
   const router = useRouter();
-  const { setVideo } = useYoutube();
   const { quizId } = router.query;
 
   // 내부 상태로 선택된 퀴즈를 관리
@@ -40,11 +38,6 @@ const QuizDetailPage = () => {
     }
 
     fetchQuizzes();
-
-    // Set the video to the first quiz item
-    if ((quiz?.quizItems.length ?? 0) > 0) {
-      setVideo(quiz?.quizItems[0]?.id);
-    }
   }, [quizId, quiz?.quizItems.length]);
 
   return (

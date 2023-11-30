@@ -1,5 +1,7 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import React from 'react';
+
+import theme from '@/styles/theme';
 
 interface IQuizDetailProps {
   totalQuizCount: number;
@@ -25,12 +27,18 @@ const QuizDetail = ({
       }}
     >
       <Typography variant="h6" align="center" color="primary">
-        {totalQuizCount}개 중 {currentQuizIndex + 1}번째 문제
+        {totalQuizCount}개 중 &nbsp;
+        <Typography variant="h6" component="span" color="secondary">
+          {currentQuizIndex + 1}번째
+        </Typography>
+        &nbsp; 문제
       </Typography>
       <Box
         sx={{
-          width: '40vw',
-          height: '50vh',
+          // width: '40vw',
+          // height: '50vh',
+          width: useMediaQuery(theme.breakpoints.down('sm')) ? '80vw' : '40vw',
+          height: useMediaQuery(theme.breakpoints.down('sm')) ? '50vh' : '50vh',
           background: 'black',
         }}
       >

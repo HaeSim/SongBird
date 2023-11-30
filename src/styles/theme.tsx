@@ -22,16 +22,17 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#aed581',
+      main: '#aa2e25',
     },
     secondary: {
-      main: '#81c784',
+      main: '#00a152',
     },
     error: {
       main: red.A400,
     },
     background: {
-      default: '#F5F2E7',
+      // 밤하늘 색상
+      default: '#11233d',
     },
   },
   breakpoints: {

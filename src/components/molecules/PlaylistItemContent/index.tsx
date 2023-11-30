@@ -11,9 +11,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useYoutube } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import useClientStore from '@/store/client';
 
 import MusicPlayer from '../MusicPlayer';
@@ -29,11 +28,9 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
 }) => {
   const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
 
-  const { openComponentModal, modalVisible } = useClientStore((state) => state);
-  const { setVideo } = useYoutube();
+  const { openComponentModal } = useClientStore((state) => state);
 
   const handlePlayClick = (newVideoId: string) => {
-    setVideo(newVideoId);
     openComponentModal(
       <MusicPlayer
         title={
@@ -41,16 +38,10 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
             (item) => item.snippet.resourceId.videoId === newVideoId
           )?.snippet.title ?? ''
         }
+        videoId={newVideoId}
       />
     );
   };
-
-  useEffect(() => {
-    // modal닫히면 videoId 초기화
-    if (!modalVisible) {
-      setVideo('');
-    }
-  }, [modalVisible]);
 
   return (
     <Grid item xs={3} sx={{ minWidth: '100%' }}>

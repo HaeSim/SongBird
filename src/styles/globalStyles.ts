@@ -14,8 +14,10 @@ const globalStyles = css`
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-
-    background-color: #f5f5f5;
+    // no repeat background image
+    background: linear-gradient(#11233d 0%, #11233d 50%, #3a4d68 100%) no-repeat
+      center center fixed;
+    color: #fff;
   }
   body #__next,
   body main {

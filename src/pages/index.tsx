@@ -1,11 +1,18 @@
-import { Toolbar, Typography } from '@mui/material';
+import { Toolbar } from '@mui/material';
+import { useEffect } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
 import Default from '@/components/templates/Layout/Default';
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
+import { snow } from '@/utils/confetti';
 
 const Home: NextPageWithLayout = () => {
+  useEffect(() => {
+    snow({
+      duration: 10000,
+    });
+  }, []);
   return (
     <>
       <MetaInfo
@@ -14,7 +21,6 @@ const Home: NextPageWithLayout = () => {
       />
 
       <Toolbar />
-      <Typography paragraph>홈</Typography>
     </>
   );
 };

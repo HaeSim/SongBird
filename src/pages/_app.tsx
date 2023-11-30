@@ -21,7 +21,6 @@ import type { URL } from 'url';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
-import YoutubeProvider from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
@@ -47,14 +46,15 @@ const MyApp = (props: MyAppProps) => {
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
   // router 이동 간 Backdrop 출력
+  const handleStart = () => {
+    openBackdrop();
+  };
+  const handleComplete = (url: URL) => {
+    closeBackdrop();
+    gtag.pageview(url);
+  };
+
   useEffect(() => {
-    const handleStart = () => {
-      openBackdrop();
-    };
-    const handleComplete = (url: URL) => {
-      closeBackdrop();
-      gtag.pageview(url);
-    };
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
     router.events.on('routeChangeError', handleComplete);
@@ -63,7 +63,7 @@ const MyApp = (props: MyAppProps) => {
       router.events.off('routeChangeComplete', handleComplete);
       router.events.off('routeChangeError', handleComplete);
     };
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     let vh = window.innerHeight * 0.01;
@@ -107,11 +107,9 @@ const MyApp = (props: MyAppProps) => {
           <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <YoutubeProvider>
-                {getLayout(<Component {...pageProps} />)}
-                <ComponentModal />
-                <MessageModal />
-              </YoutubeProvider>
+              {getLayout(<Component {...pageProps} />)}
+              <ComponentModal />
+              <MessageModal />
               <Backdrop
                 sx={{
                   display: 'flex',

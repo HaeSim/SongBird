@@ -8,6 +8,14 @@ const withPWA = require('next-pwa')({
   swSrc: 'public/service-worker.js',
 });
 
+const headers = [
+  {
+    key: 'Content-Security-Policy',
+    value:
+      "default-src 'self'; script-src 'self' youtube.com; style-src 'self'; img-src 'self'; font-src 'self'; object-src 'none'",
+  },
+];
+
 module.exports = withBundleAnalyzer(
   withPWA({
     eslint: {
@@ -25,5 +33,6 @@ module.exports = withBundleAnalyzer(
       NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
     },
     swcMinify: true,
+    headers,
   })
 );
