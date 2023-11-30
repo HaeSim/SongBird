@@ -5,6 +5,7 @@ import type { YouTubePlayer } from 'react-youtube';
 import YouTube from 'react-youtube';
 
 import theme from '@/styles/theme';
+import { schoolPride } from '@/utils/confetti';
 
 interface IQuizControllerProps {
   quiz: Quiz | undefined;
@@ -62,9 +63,15 @@ const QuizController = ({
   useEffect(() => {
     if (!player) return;
 
+    async function playAnswer() {
+      player?.seekTo(quiz?.quizItems[currentQuizIndex]?.answerTime ?? 40, true);
+      player?.playVideo();
+    }
+
     if (answerMode) {
-      player.playVideo();
-      player.seekTo(quiz?.quizItems[currentQuizIndex]?.answerTime ?? 40, true);
+      playAnswer();
+      // fireworks();
+      schoolPride();
       return;
     }
     player.pauseVideo();
