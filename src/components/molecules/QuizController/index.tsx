@@ -149,11 +149,24 @@ const QuizController = ({
       >
         <Button
           onClick={handlePrev}
-          style={{ width: '48%', marginRight: '2%' }}
+          style={{
+            width: '48%',
+            marginRight: '2%',
+            fontSize: '1.2rem',
+            fontWeight: 'bold',
+          }}
         >
           이전
         </Button>
-        <Button onClick={handleNext} style={{ width: '48%', marginLeft: '2%' }}>
+        <Button
+          onClick={handleNext}
+          style={{
+            width: '48%',
+            marginLeft: '2%',
+            fontSize: '1.2rem',
+            fontWeight: 'bold',
+          }}
+        >
           다음
         </Button>
       </Box>

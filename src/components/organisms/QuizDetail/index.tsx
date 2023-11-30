@@ -27,7 +27,11 @@ const QuizDetail = ({
       }}
     >
       <Typography variant="h6" align="center" color="primary">
-        {totalQuizCount}개 중 {currentQuizIndex + 1}번째 문제
+        {totalQuizCount}개 중 &nbsp;
+        <Typography variant="h6" component="span" color="secondary">
+          {currentQuizIndex + 1}번째
+        </Typography>
+        &nbsp; 문제
       </Typography>
       <Box
         sx={{

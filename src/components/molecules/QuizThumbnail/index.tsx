@@ -9,7 +9,13 @@ interface IQuizThumbnailProps {
 
 const QuizThumbnail = ({ quiz, onClick }: IQuizThumbnailProps) => {
   return (
-    <List>
+    <List
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <ListItemButton
         sx={{
           display: 'flex',
