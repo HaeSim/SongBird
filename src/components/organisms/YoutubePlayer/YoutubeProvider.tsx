@@ -1,4 +1,3 @@
-// YoutubeProvider.tsx
 import { useMediaQuery } from '@mui/material';
 import React, {
   createContext,
@@ -21,7 +20,6 @@ export enum PlayerStates {
   VIDEO_CUED = 5,
 }
 
-// Create a YoutubeContext
 interface IYoutubeContext {
   play: () => void;
   pause: () => void;
@@ -37,7 +35,6 @@ interface IYoutubeContext {
 
 const YoutubeContext = createContext<IYoutubeContext | undefined>(undefined);
 
-// Create a custom hook to use the YoutubeContext
 export const useYoutube = () => {
   const context = useContext(YoutubeContext);
   if (!context) {
@@ -46,13 +43,15 @@ export const useYoutube = () => {
   return context;
 };
 
-// Create a YoutubeProvider to wrap your app and provide the YoutubeContext
 interface IYoutubeProviderProps {
   children: React.ReactNode;
 }
-export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
+
+const YoutubeProvider: React.FC<IYoutubeProviderProps> = ({ children }) => {
   const [player, setPlayer] = useState<YouTubePlayer | undefined>(undefined);
-  const [playerState, setPlayerState] = useState<PlayerStates>(-1);
+  const [playerState, setPlayerState] = useState<PlayerStates>(
+    PlayerStates.UNSTARTED
+  );
   const [currentTime, setCurrentTime] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [videoId, setVideoId] = useState<string | undefined>(undefined);
@@ -104,7 +103,9 @@ export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
         width: '100%',
         height: '100%',
         playerVars: {
-          autoplay: 1,
+          disablekb: 1,
+          controls: 0,
+          rel: 0,
         },
       }}
       onReady={(event) => setPlayer(event.target)}
@@ -154,7 +155,8 @@ export const YoutubeProvider = ({ children }: IYoutubeProviderProps) => {
   return (
     <YoutubeContext.Provider value={contextValue}>
       {children}
-      {useMediaQuery(theme.breakpoints.down('sm')) ? null : VideoComponent}
     </YoutubeContext.Provider>
   );
 };
+
+export default YoutubeProvider;

@@ -2,15 +2,17 @@ import { Box, Typography } from '@mui/material';
 import React from 'react';
 
 interface IQuizDetailProps {
-  selectedQuiz: Quiz | null;
+  totalQuizCount: number;
   currentQuizIndex: number;
   answerMode: boolean;
+  ImageUrl: string;
 }
 
 const QuizDetail = ({
-  selectedQuiz,
+  totalQuizCount,
   currentQuizIndex,
   answerMode,
+  ImageUrl,
 }: IQuizDetailProps) => {
   return (
     <Box
@@ -23,22 +25,19 @@ const QuizDetail = ({
       }}
     >
       <Typography variant="h6" align="center" color="primary">
-        {selectedQuiz?.quizItems.length} 개 중 {currentQuizIndex + 1}
+        {totalQuizCount}개 중 {currentQuizIndex + 1}번째 문제
       </Typography>
       <Box
         sx={{
-          width: '600px',
-          height: '400px',
+          width: '40vw',
+          height: '50vh',
           background: 'black',
         }}
       >
         {answerMode ? (
           <img
-            src={
-              selectedQuiz?.quizItems[currentQuizIndex]?.snippet.thumbnails.high
-                .url
-            }
-            alt={selectedQuiz?.quizItems[currentQuizIndex]?.snippet.title}
+            src={ImageUrl}
+            alt="quiz album"
             style={{ width: '100%', height: '100%' }}
           />
         ) : null}

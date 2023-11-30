@@ -21,7 +21,7 @@ import type { URL } from 'url';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
-import { YoutubeProvider } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
+import YoutubeProvider from '@/components/organisms/YoutubePlayer/YoutubeProvider';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';

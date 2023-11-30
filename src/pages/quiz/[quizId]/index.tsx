@@ -20,27 +20,6 @@ const QuizDetailPage = () => {
   const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
   const [answerMode, setAnswerMode] = useState<boolean>(false);
 
-  // 제어함수
-  // 이전 문제
-  const handlePrev = () => {
-    setCurrentQuizIndex((prev) => {
-      if (prev === 0) {
-        return prev;
-      }
-      return prev - 1;
-    });
-  };
-
-  // 다음 문제
-  const handleNext = () => {
-    setCurrentQuizIndex((prev) => {
-      if (prev === (quiz?.quizItems.length ?? 0) - 1) {
-        return prev;
-      }
-      return prev + 1;
-    });
-  };
-
   // Get the selected quiz from the DB
   useEffect(() => {
     if (!quizId) {
@@ -66,27 +45,33 @@ const QuizDetailPage = () => {
     if ((quiz?.quizItems.length ?? 0) > 0) {
       setVideo(quiz?.quizItems[0]?.id);
     }
-  }, [quizId]);
+  }, [quizId, quiz?.quizItems.length]);
 
   return (
     <Box
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
       <Typography variant="h2" paragraph fontWeight={700}>
-        {quiz?.title}
+        {answerMode
+          ? quiz?.quizItems[currentQuizIndex]?.snippet.title
+          : quiz?.title}
       </Typography>
 
       <QuizDetail
-        selectedQuiz={quiz ?? null}
+        totalQuizCount={quiz?.quizItems.length ?? 0}
         currentQuizIndex={currentQuizIndex}
+        ImageUrl={
+          quiz?.quizItems[currentQuizIndex]?.snippet.thumbnails.high.url ?? ''
+        }
         answerMode={answerMode}
       />
 
       <QuizController
+        quiz={quiz}
         answerMode={answerMode}
-        onPrev={handlePrev}
-        onToggleMode={() => setAnswerMode((prev) => !prev)}
-        onNext={handleNext}
+        setAnswerMode={setAnswerMode}
+        currentQuizIndex={currentQuizIndex}
+        setCurrentQuizIndex={setCurrentQuizIndex}
       />
     </Box>
   );

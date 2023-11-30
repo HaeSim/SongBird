@@ -15,8 +15,8 @@ const QuizThumbnail = ({ quiz, onClick }: IQuizThumbnailProps) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: '100%',
-          height: '100%',
+          width: '240px',
+          height: '180px',
           ':hover': {
             transform: 'scale(1.1)',
             transition: 'all 0.5s ease-in-out',
