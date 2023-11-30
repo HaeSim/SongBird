@@ -17,8 +17,15 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
     <Html lang={AppConfig.locale}>
       <Head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="google-site-verification" content="" />
-        <meta name="naver-site-verification" content="" />
+        <meta
+          name="google-site-verification"
+          content="D_33eP4BLfaRtfbiJn9c_B-TVqwSYKltFjw49oQNhUs"
+        />
+        <meta
+          name="naver-site-verification"
+          content="90102d4558aaa1d7ad23e58b1bdadbb6d7923673"
+        />
+
         <meta name="emotion-insertion-point" content="" />
         {emotionStyleTags}
         {/* font */}
