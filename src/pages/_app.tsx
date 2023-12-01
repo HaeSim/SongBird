@@ -19,6 +19,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
+import { useAppRouting } from '@/hooks/useAppRouting';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
@@ -34,6 +35,7 @@ export interface MyAppProps extends AppProps {
 
 const MyApp = (props: MyAppProps) => {
   const { backdropVisible, backdropMessage } = useClientStore((state) => state);
+  useAppRouting();
   const queryClient = new QueryClient();
 
   const { emotionCache = clientSideEmotionCache, pageProps } = props;
