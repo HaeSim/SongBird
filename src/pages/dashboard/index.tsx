@@ -125,7 +125,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         icon: '🔑',
       });
     }
-  }, [session]);
+  }, []);
 
   if (session?.provider !== 'google') {
     return (

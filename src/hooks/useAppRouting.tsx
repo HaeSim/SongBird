@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
+import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import { PAGES } from '@/utils/AppConfig';
 
@@ -34,8 +35,11 @@ export function useAppRouting() {
   // router events 중 routeChangeComplete 이벤트를 감지하여
   // redirect 시 currentMenu를 업데이트합니다.
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      const targetMenu = Object.values(PAGES).find((page) => page.path === url);
+    const handleRouteChange = (url: URL) => {
+      gtag.pageview(url);
+      const targetMenu = Object.values(PAGES).find(
+        (page) => page.path === (String(url) || '/')
+      );
 
       if (!targetMenu) {
         return;
