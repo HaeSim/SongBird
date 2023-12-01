@@ -25,7 +25,7 @@ const SignInModal: React.FC = () => {
   return (
     <Container sx={{ display: 'grid', gap: '16px', padding: '16px' }}>
       <Typography variant="h5" sx={{ textAlign: 'center' }} fontWeight="bold">
-        로그인 {isLoading.toString()}
+        로그인
       </Typography>
       <GithubLoginButton onClick={handleGithubLogin} isLoading={isLoading} />
       <GoogleLoginButton onClick={handleGoogleLogin} isLoading={isLoading} />

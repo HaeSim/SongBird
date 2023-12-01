@@ -77,6 +77,7 @@ const MetaInfo: IMetaInfoComponent = ({ title, description }: IMetaProps) => {
         description={description ?? AppConfig.description}
         canonical={AppConfig.canonical}
         openGraph={{
+          type: 'website',
           url: process.env.NEXT_PUBLIC_BASE_URL + router.asPath,
           title: makePageTitle(title),
           description: description ?? AppConfig.description,
