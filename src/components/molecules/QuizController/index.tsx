@@ -120,9 +120,7 @@ const QuizController = ({
     <>
       <YouTube
         style={{
-          display: useMediaQuery(theme.breakpoints.down('sm'))
-            ? 'block'
-            : 'none',
+          display: 'none',
           width: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
           height: useMediaQuery(theme.breakpoints.down('sm')) ? '60px' : '0%',
           zIndex: 3,
@@ -171,11 +169,6 @@ const QuizController = ({
         </Button>
       </Box>
       <Box>
-        <Button onClick={handlePrev}>이전</Button>
-        <Button onClick={handleToggleMode}>
-          {answerMode ? '퀴즈 모드' : '정답 모드'}
-        </Button>
-        <Button onClick={handleNext}>다음</Button>
         <Button
           onClick={() => handlePlayWithSeconds(1)}
           disabled={player === undefined}
@@ -188,6 +181,15 @@ const QuizController = ({
         >
           3초
         </Button>
+        <Button onClick={handleToggleMode}>
+          {answerMode ? '퀴즈 모드' : '정답 모드'}
+        </Button>
+        <Button
+          onClick={() => player?.pauseVideo()}
+          disabled={player === undefined}
+        >
+          일시정지
+        </Button>
         <Button
           onClick={() => handlePlayWithSeconds(5)}
           disabled={player === undefined}
@@ -199,12 +201,6 @@ const QuizController = ({
           disabled={player === undefined}
         >
           10초
-        </Button>
-        <Button
-          onClick={() => player?.pauseVideo()}
-          disabled={player === undefined}
-        >
-          일시정지
         </Button>
       </Box>
     </>

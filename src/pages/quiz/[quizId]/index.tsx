@@ -1,11 +1,12 @@
 // pages/quiz/[quizId].jsx
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import QuizController from '@/components/molecules/QuizController';
 import QuizDetail from '@/components/organisms/QuizDetail';
 import Default from '@/components/templates/Layout/Default';
+import theme from '@/styles/theme';
 import { generateGetLayout } from '@/utils/common';
 import { getQuizFromDB } from '@/utils/indexDB';
 
@@ -44,7 +45,16 @@ const QuizDetailPage = () => {
     <Box
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
-      <Typography variant="h2" paragraph fontWeight={700}>
+      <Typography
+        variant="h2"
+        paragraph
+        fontWeight={700}
+        sx={
+          useMediaQuery(theme.breakpoints.down('sm'))
+            ? { fontSize: '2rem' }
+            : {}
+        }
+      >
         {answerMode
           ? quiz?.quizItems[currentQuizIndex]?.snippet.title
           : quiz?.title}

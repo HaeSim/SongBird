@@ -37,3 +37,19 @@ export const getQuizFromDB = async (quizId?: string) => {
 
   return store.get(quizId);
 };
+
+export const deleteAllQuizzesFromDB = async () => {
+  const db = await openDatabase();
+  const tx = db.transaction('quizList', 'readwrite');
+  const store = tx.objectStore('quizList');
+  await store.clear();
+  await tx.done;
+};
+
+export const deleteQuizFromDB = async (quizId: string) => {
+  const db = await openDatabase();
+  const tx = db.transaction('quizList', 'readwrite');
+  const store = tx.objectStore('quizList');
+  await store.delete(quizId);
+  await tx.done;
+};
