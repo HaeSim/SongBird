@@ -58,8 +58,8 @@ const Settings: NextPageWithLayout = () => {
   return (
     <>
       <MetaInfo
-        title="Settings | 🎵 SongBird 🎵"
-        description="This is the Settings page of the 🎵 SongBird 🎵 app."
+        title="설정"
+        description="송버드 서비스의 설정을 변경할 수 있습니다."
       />
       <Grid container spacing={2}>
         <Typography

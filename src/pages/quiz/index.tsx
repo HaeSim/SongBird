@@ -33,10 +33,7 @@ const Quiz: NextPageWithLayout = () => {
 
   return (
     <>
-      <MetaInfo
-        title="Quiz | 🎵 SongBird 🎵"
-        description="This is the Quiz page of the 🎵 SongBird 🎵 app."
-      />
+      <MetaInfo title="퀴즈" description="퀴즈를 선택하고, 풀어보세요!" />
       <Grid container spacing={2}>
         <Typography
           variant="h5"

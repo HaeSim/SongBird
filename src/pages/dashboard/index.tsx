@@ -125,7 +125,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         icon: '🔑',
       });
     }
-  }, [session]);
+  }, []);
 
   if (session?.provider !== 'google') {
     return (
@@ -149,8 +149,8 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
   return (
     <>
       <MetaInfo
-        title="대시보드 | 🎵 SongBird 🎵"
-        description="This is the Quiz page of the 🎵 SongBird 🎵 app."
+        title="대시보드"
+        description="유투브 재생목록을 선택하고, 퀴즈를 생성해보세요!"
       />
       <Grid container spacing={2}>
         <Typography

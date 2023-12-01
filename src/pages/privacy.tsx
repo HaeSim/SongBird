@@ -17,8 +17,8 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <MetaInfo
-        title="개인정보처리방침 | 🎵 SongBird 🎵"
-        description="This is the privacy page of the 🎵 SongBird 🎵 app."
+        title="개인정보처리방침"
+        description="송버드 서비스의 개인정보처리방침을 안내합니다."
       />
 
       <Toolbar />

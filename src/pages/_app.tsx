@@ -11,13 +11,11 @@ import {
 } from '@mui/material';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
 import { type ReactElement, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import type { URL } from 'url';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
@@ -35,35 +33,13 @@ export interface MyAppProps extends AppProps {
 }
 
 const MyApp = (props: MyAppProps) => {
-  const router = useRouter();
-  const { backdropVisible, backdropMessage, openBackdrop, closeBackdrop } =
-    useClientStore((state) => state);
+  const { backdropVisible, backdropMessage } = useClientStore((state) => state);
   const queryClient = new QueryClient();
 
   const { emotionCache = clientSideEmotionCache, pageProps } = props;
   const Component = props.Component as NextPageWithLayout;
 
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
-
-  // router 이동 간 Backdrop 출력
-  const handleStart = () => {
-    openBackdrop();
-  };
-  const handleComplete = (url: URL) => {
-    closeBackdrop();
-    gtag.pageview(url);
-  };
-
-  useEffect(() => {
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
-    return () => {
-      router.events.off('routeChangeStart', handleStart);
-      router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
-    };
-  }, []);
 
   useEffect(() => {
     let vh = window.innerHeight * 0.01;
