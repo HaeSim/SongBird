@@ -1,5 +1,6 @@
 /* eslint-disable react/no-invalid-html-attribute */
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 
 import theme from '@/styles/theme';
@@ -9,14 +10,10 @@ import { AppConfig } from '@/utils/AppConfig';
 type IMetaProps = {
   title: string;
   description: string;
-  canonical?: string;
 };
 
-const MetaInfo: IMetaInfoComponent = ({
-  title,
-  description,
-  canonical,
-}: IMetaProps) => {
+const MetaInfo: IMetaInfoComponent = ({ title, description }: IMetaProps) => {
+  const router = useRouter();
   const getAppleTouchStartupImageLink = (width: number, height: number) => {
     return `/splashscreens/splash_${width}x${height}.png`;
   };
@@ -78,13 +75,19 @@ const MetaInfo: IMetaInfoComponent = ({
       <NextSeo
         title={title}
         description={description}
-        canonical={canonical}
+        canonical={AppConfig.canonical}
         openGraph={{
+          url: process.env.NEXT_PUBLIC_BASE_URL + router.asPath,
           title,
           description,
-          url: canonical,
           locale: AppConfig.locale,
           site_name: AppConfig.site_name,
+          images: [
+            {
+              url: AppConfig.imageUrl,
+              alt: AppConfig.site_name,
+            },
+          ],
         }}
       />
     </>
