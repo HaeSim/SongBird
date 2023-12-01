@@ -116,9 +116,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
 
     if (!session) {
       toast.error('로그인이 필요합니다.');
-      console.log('Before router.push');
       router.push('/');
-      console.log('After router.push');
       return;
     }
 
