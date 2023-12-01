@@ -25,3 +25,12 @@ export const formatTime = (time: number): string => {
   const seconds = Math.floor(time % 60);
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+
+export const detectInAppBrowser = (): boolean => {
+  const { userAgent } = navigator;
+
+  const inAppRegex =
+    /KAKAOTALK|Instagram|NAVER|zumapp|whale|Snapchat|Line|everytimeApp|WhatsApp|Electron|wadiz|AliApp|FB_IAB|FB4A|FBAN|FBIOS|FBSS|SamsungBrowser/i;
+
+  return inAppRegex.test(userAgent);
+};

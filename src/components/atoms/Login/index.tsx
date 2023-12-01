@@ -13,7 +13,7 @@ const LoginButton = ({ isLogin }: ILoginButtonProps) => {
     (state) => state
   );
   const handleLoginClick = () => {
-    openComponentModal(<SignInModal onClose={closeModal} />);
+    openComponentModal(<SignInModal />);
   };
 
   const handleLogoutClick = () => {

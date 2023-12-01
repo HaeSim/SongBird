@@ -1,13 +1,22 @@
+import { detectInAppBrowser } from '@/utils/common';
+
 import { SocialLoginButton, SocialLoginIcon } from '../index.styled';
 
-const GoogleLoginButton: React.FC<{ onClick: () => void }> = ({ ...props }) => {
+const GoogleLoginButton: React.FC<{
+  onClick: () => void;
+  isLoading: boolean;
+}> = ({ ...props }) => {
+  const { isLoading, ...rest } = props;
+
   return (
     <SocialLoginButton
       type="button"
       backgroundColor="#fff"
       backgroundColorHover="rgba(225, 225, 225, 0.5)"
       fontColor="#000"
-      {...props}
+      disabled={isLoading || detectInAppBrowser()}
+      isLoading={isLoading}
+      {...rest}
     >
       <SocialLoginIcon
         loading="lazy"
@@ -17,7 +26,11 @@ const GoogleLoginButton: React.FC<{ onClick: () => void }> = ({ ...props }) => {
         src="/icons/google.svg"
         alt="google logo"
       />
-      <span>Sign in with Google</span>
+      {detectInAppBrowser() ? (
+        <span>disallow in app browser</span>
+      ) : (
+        <span>Sign in with Google</span>
+      )}
     </SocialLoginButton>
   );
 };
