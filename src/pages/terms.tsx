@@ -11,8 +11,8 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <MetaInfo
-        title="이용약관 | 🎵 SongBird 🎵"
-        description="This is the terms page of the 🎵 SongBird 🎵 app."
+        title="이용약관"
+        description="송버드 서비스의 이용약관을 안내합니다."
       />
 
       <Toolbar />

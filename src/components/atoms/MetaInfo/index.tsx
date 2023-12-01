@@ -5,11 +5,11 @@ import { NextSeo } from 'next-seo';
 
 import theme from '@/styles/theme';
 import type { IMetaInfoComponent } from '@/types/common/component';
-import { AppConfig } from '@/utils/AppConfig';
+import { AppConfig, makePageTitle } from '@/utils/AppConfig';
 
 type IMetaProps = {
   title: string;
-  description: string;
+  description?: string;
 };
 
 const MetaInfo: IMetaInfoComponent = ({ title, description }: IMetaProps) => {
@@ -73,13 +73,13 @@ const MetaInfo: IMetaInfoComponent = ({ title, description }: IMetaProps) => {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </Head>
       <NextSeo
-        title={title}
-        description={description}
+        title={makePageTitle(title)}
+        description={description ?? AppConfig.description}
         canonical={AppConfig.canonical}
         openGraph={{
           url: process.env.NEXT_PUBLIC_BASE_URL + router.asPath,
-          title,
-          description,
+          title: makePageTitle(title),
+          description: description ?? AppConfig.description,
           locale: AppConfig.locale,
           site_name: AppConfig.site_name,
           images: [

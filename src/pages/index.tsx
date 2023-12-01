@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
 import Default from '@/components/templates/Layout/Default';
+import { AppConfig } from '@/utils/AppConfig';
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
 import { snow } from '@/utils/confetti';
@@ -15,11 +16,7 @@ const Home: NextPageWithLayout = () => {
   }, []);
   return (
     <>
-      <MetaInfo
-        title="Home | 🎵 SongBird 🎵"
-        description="This is the home page of the 🎵 SongBird 🎵 app."
-      />
-
+      <MetaInfo title="홈" description={AppConfig.description} />
       <Toolbar />
     </>
   );
