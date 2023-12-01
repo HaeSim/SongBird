@@ -44,6 +44,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
 
   const handleOnReady = (event: any) => {
     setPlayer(event.target);
+    setDuration(event.target.getDuration());
   };
 
   const handleStateChange = (event: any) => {
@@ -134,9 +135,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
         >
           <YouTube
             style={{
-              display: useMediaQuery(theme.breakpoints.down('sm'))
-                ? 'block'
-                : 'none',
+              display: 'none',
               width: useMediaQuery(theme.breakpoints.down('sm'))
                 ? '60px'
                 : '0%',
@@ -150,7 +149,6 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
               width: '100%',
               height: '100%',
               playerVars: {
-                autoplay: 1,
                 disablekb: 1,
                 controls: 0,
                 rel: 0,
@@ -160,8 +158,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
             onStateChange={handleStateChange}
             onPlay={handleOnplay}
           />
-          {status !== PlayerStates?.PLAYING &&
-          status !== PlayerStates?.PAUSED ? (
+          {player === undefined ? (
             <CircularProgress color="inherit" />
           ) : (
             <Box
