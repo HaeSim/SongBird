@@ -49,6 +49,13 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: globalStyles.styles,
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+        },
+      },
+    },
   },
 });
 
