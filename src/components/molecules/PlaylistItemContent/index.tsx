@@ -45,9 +45,16 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
 
   return (
     <Grid item xs={3} sx={{ minWidth: '100%' }}>
-      <Paper style={{ minHeight: '100%', overflowY: 'auto' }}>
+      <Paper
+        style={{
+          minHeight: '100%',
+          overflowY: 'auto',
+          backgroundColor: '#3a4d68',
+        }}
+      >
         {playlistItems && (
           <TableContainer>
+            {/*  */}
             <Table>
               <TableHead>
                 <TableRow>
@@ -108,7 +115,11 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                             handlePlayClick(item.snippet.resourceId.videoId)
                           }
                         >
-                          <PlayArrowIcon />
+                          <PlayArrowIcon
+                            sx={{
+                              color: '#fff',
+                            }}
+                          />
                         </IconButton>
                       </TableCell>
                     </TableRow>

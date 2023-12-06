@@ -54,7 +54,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       snippet: item.snippet,
     }));
 
-    const quiz: Quiz = {
+    const quiz: QuizList = {
       id: selectedPlaylist,
       title:
         myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)

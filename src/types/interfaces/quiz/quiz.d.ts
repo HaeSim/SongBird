@@ -5,7 +5,7 @@ interface QuizItem {
 }
 
 // Quiz 인터페이스
-interface Quiz {
+interface QuizList {
   id: string;
   title: string;
   description: string;
