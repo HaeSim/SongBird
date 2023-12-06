@@ -6,7 +6,7 @@ import { fireworks, schoolPride } from '@/utils/confetti';
 import { getQuizFromDB } from '@/utils/indexDB';
 
 export enum PlayerStates {
-  PLAYER_READY = 4,
+  READY = 4,
   BUFFERING = 3,
   ENDED = 0,
   PAUSED = 2,
@@ -132,7 +132,7 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
 
   const handleReady = (event: any) => {
     setPlayer(event.target);
-    setPlayerState(PlayerStates.PLAYER_READY);
+    setPlayerState(PlayerStates.READY);
   };
 
   const handleStateChange = (event: any) => {

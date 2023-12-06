@@ -1,9 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Typography, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import YouTube from 'react-youtube';
@@ -72,8 +67,8 @@ const QuizDetail = () => {
               ? '80vw'
               : '60vw',
             height: useMediaQuery(theme.breakpoints.down('sm'))
-              ? '50vh'
-              : '50vh',
+              ? '34vh'
+              : '54vh',
             background: 'black',
           }}
         >
@@ -120,26 +115,12 @@ const QuizDetail = () => {
                   textShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
                 }}
               >
-                {playerState === PlayerStates.PLAYER_READY ? (
-                  '준비'
-                ) : (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '1rem',
-                    }}
-                  >
-                    <CircularProgress
-                      size={50}
-                      sx={{
-                        color: '#fff',
-                      }}
-                    />
-                    Loading...
-                  </Box>
-                )}
+                {/* PlayerState를 가지고, PlayerStates의 값과 일치하는 키의 이름을 가져옴 */}
+                {Object.keys(PlayerStates).find(
+                  (key) =>
+                    PlayerStates[key as keyof typeof PlayerStates] ===
+                    playerState
+                ) ?? ''}
               </Typography>
             </Box>
           )}
