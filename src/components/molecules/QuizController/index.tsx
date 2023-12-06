@@ -1,6 +1,6 @@
 // components/molecules/QuizController.jsx
 import { Box, Button, useMediaQuery } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import type { YouTubePlayer } from 'react-youtube';
 import YouTube from 'react-youtube';
 
@@ -27,8 +27,9 @@ const QuizController = ({
 
   // 제어함수
   // 이전 문제
-  const handlePrev = () => {
+  const handlePrev = async () => {
     if (!player) return;
+    await player.pauseVideo();
     setAnswerMode(false);
     setCurrentQuizIndex((prev) => {
       if (prev === 0) {
@@ -39,8 +40,9 @@ const QuizController = ({
   };
 
   // 다음 문제
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!player) return;
+    await player.pauseVideo();
     setAnswerMode(false);
     setCurrentQuizIndex((prev) => {
       if (prev === (quiz?.quizItems.length ?? 0) - 1) {
@@ -51,16 +53,30 @@ const QuizController = ({
   };
 
   // 1. N초 재생
-  const handlePlayWithSeconds = (seconds: number) => {
+  const handlePlayWithSeconds = async (seconds: number) => {
     if (!player) return;
-    player?.seekTo(0, true);
-    player?.playVideo();
-    setTimeout(() => {
-      player?.pauseVideo();
-    }, (seconds + 0.5) * 1000); // 로딩 지연을 위해 0.5초 추가
+    await player.loadVideoById({
+      videoId: quiz?.quizItems[currentQuizIndex]?.id ?? '',
+      startSeconds: 0,
+      endSeconds: seconds,
+    });
   };
 
-  const handleToggleMode = () => {
+  const handleToggleMode = async () => {
+    if (!player) return;
+    // 정답 재생
+    if (!answerMode) {
+      await player.loadVideoById({
+        videoId: quiz?.quizItems[currentQuizIndex]?.id ?? '',
+        startSeconds: quiz?.quizItems[currentQuizIndex]?.answerTime ?? 40,
+        endSeconds: 40 + 30, // 30초 재생
+      });
+      fireworks({ duration: 5000 });
+      schoolPride({ duration: 5000 });
+    } else {
+      await player.pauseVideo();
+    }
+
     setAnswerMode((prev) => !prev);
   };
   const handleStateChange = (event: any) => {
@@ -88,33 +104,6 @@ const QuizController = ({
         break;
     }
   };
-
-  // 2. 정답 재생
-  useEffect(() => {
-    if (!player) return;
-
-    async function playAnswer() {
-      player?.seekTo(quiz?.quizItems[currentQuizIndex]?.answerTime ?? 40, true);
-      player?.playVideo();
-    }
-
-    if (answerMode) {
-      playAnswer();
-      fireworks({ duration: 5000 });
-      schoolPride({ duration: 5000 });
-      return;
-    }
-    player?.pauseVideo();
-  }, [answerMode]);
-
-  // 3. 현재문제 바꼈을 때 setVideo
-  useEffect(() => {
-    if (!quiz) return;
-    if (!player) return;
-
-    player.loadVideoById(quiz?.quizItems[currentQuizIndex]?.id ?? '');
-    player.pauseVideo();
-  }, [currentQuizIndex]);
 
   return (
     <>
