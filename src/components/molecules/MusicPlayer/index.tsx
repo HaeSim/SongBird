@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 import type { YouTubePlayer } from 'react-youtube';
 import YouTube from 'react-youtube';
 
-import { PlayerStates } from '@/components/organisms/YoutubePlayer/YoutubeProvider';
+import { PlayerStates } from '@/components/organisms/QuizPlayer/QuizPlayerProvider';
 import theme from '@/styles/theme';
 import { formatTime } from '@/utils/common';
 

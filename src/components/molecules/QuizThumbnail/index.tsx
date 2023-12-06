@@ -3,7 +3,7 @@ import { List, ListItemButton, Typography } from '@mui/material';
 import React from 'react';
 
 interface IQuizThumbnailProps {
-  quiz: Quiz;
+  quiz: QuizList;
   onClick?: () => void;
 }
 
