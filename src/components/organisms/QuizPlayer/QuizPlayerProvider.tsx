@@ -105,10 +105,12 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
   // 1. N초 재생
   const handlePlayWithSeconds = async (seconds: number) => {
     if (!player) return;
+
     await player.loadVideoById({
       videoId: quiz?.id ?? '',
       startSeconds: 0,
       endSeconds: seconds,
+      suggestedQuality: 'small',
     });
   };
 
@@ -120,6 +122,7 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
         videoId: quiz?.id ?? '',
         startSeconds: quiz?.answerTime ?? 40,
         // 끝까지
+        suggestedQuality: 'small',
       });
       fireworks({ duration: 5000 });
       schoolPride({ duration: 5000 });

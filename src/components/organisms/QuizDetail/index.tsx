@@ -63,6 +63,7 @@ const QuizDetail = () => {
         </Typography>
         <Box
           sx={{
+            position: 'relative',
             width: useMediaQuery(theme.breakpoints.down('sm'))
               ? '80vw'
               : '60vw',
@@ -74,9 +75,10 @@ const QuizDetail = () => {
         >
           <YouTube
             style={{
-              display: answerMode ? 'block' : 'none',
+              position: 'absolute',
               width: '100%',
               height: '100%',
+              opacity: answerMode ? 1 : 0,
               zIndex: 3,
             }}
             videoId={quizList?.quizItems[currentQuizIndex]?.id ?? ''}
@@ -87,6 +89,8 @@ const QuizDetail = () => {
                 disablekb: 1,
                 controls: 0,
                 rel: 0,
+                modestbranding: 1,
+                origin: process.env.NEXT_PUBLIC_BASE_URL,
               },
             }}
             onStateChange={handleStateChange}
