@@ -26,3 +26,68 @@ export const Grow = (size?: number) => {
       }
      `;
 };
+
+export const FadeIn = keyframes`
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+`;
+
+export const FadeOut = keyframes`
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+`;
+
+export const SlideIn = keyframes`
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+`;
+
+export const SlideOut = keyframes`
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(100%);
+    }
+`;
+
+export const SlideUp = keyframes`
+    from {
+        transform: translateY(10%);
+    }
+    to {
+        transform: translateY(0%);
+    }
+`;
+
+export const SlideDown = keyframes`
+    from {
+        transform: translateY(0%);
+    }
+    to {
+        transform: translateY(100%);
+    }
+`;
+
+export const SlideUpFadeIn = keyframes`
+    from {
+        transform: translateY(5%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+`;
