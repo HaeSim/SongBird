@@ -47,6 +47,10 @@ export default async function handler(
       if (e?.response?.status === 401) {
         return res.status(401).json(e?.response?.data);
       }
+
+      if (e?.response?.status === 404) {
+        return res.status(404).json(e?.response?.data);
+      }
     }
     return res.status(500).json({ error: 'Unable to fetch data' });
   }

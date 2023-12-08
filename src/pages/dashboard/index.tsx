@@ -53,9 +53,11 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
     const quizItems: QuizItem[] = playlistItems.items.map((item) => ({
       id: item.snippet.resourceId.videoId,
       snippet: item.snippet,
+      startTime: 0,
+      answerTime: 40,
     }));
 
-    const quiz: QuizList = {
+    const quiz: Quiz = {
       id: selectedPlaylist,
       title:
         myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)

@@ -4,7 +4,7 @@ import { openDB } from 'idb';
 interface MyDB extends DBSchema {
   quizList: {
     key: string;
-    value: QuizList;
+    value: Quiz;
   };
 }
 
@@ -18,7 +18,7 @@ export const openDatabase = async () => {
   });
 };
 
-export const saveQuizToDB = async (quiz: QuizList) => {
+export const saveQuizToDB = async (quiz: Quiz) => {
   const db = await openDatabase();
   const tx = db.transaction('quizList', 'readwrite');
   const store = tx.objectStore('quizList');

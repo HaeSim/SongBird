@@ -5,8 +5,8 @@ import React from 'react';
 import QuizThumbnail from '@/components/molecules/QuizThumbnail';
 
 interface IQuizListProps {
-  quizzes: QuizList[];
-  onQuizSelect: (quiz: QuizList) => void;
+  quizzes: Quiz[];
+  onQuizSelect: (quiz: Quiz) => void;
 }
 
 const QuizList = ({ quizzes, onQuizSelect }: IQuizListProps) => {

@@ -17,7 +17,7 @@ export enum PlayerStates {
 
 interface IQuizPlayerContext {
   // 퀴즈 상태
-  quizList?: QuizList;
+  quizList?: Quiz;
   currentQuizIndex: number;
   answerMode: boolean;
   // 퀴즈 상태를 관리하는 메소드
@@ -52,7 +52,7 @@ interface IQuizPlayerProviderProps {
 const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
   children,
 }) => {
-  const [quizList, setQuizList] = useState<QuizList>();
+  const [quizList, setQuizList] = useState<Quiz>();
   const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
   const [answerMode, setAnswerMode] = useState<boolean>(false);
 
