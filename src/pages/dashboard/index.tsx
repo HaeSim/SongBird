@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Fab, Grid, Typography } from '@mui/material';
+import HelpIcon from '@mui/icons-material/Help';
+import { Fab, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
@@ -161,6 +162,26 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           marginLeft={2}
         >
           재생 목록
+          <Tooltip
+            title={`
+              공개 상태가 '비공개'인 재생목록은 퀴즈 생성이 불가능합니다.
+              '비공개'인 재생목록은 '공개'로 변경해주세요.
+            `}
+            placement="top"
+            arrow
+          >
+            <IconButton>
+              <HelpIcon
+                sx={{
+                  marginLeft: 1,
+                  verticalAlign: 'middle',
+                  color: '#ffffff',
+                }}
+                fontSize="small"
+                titleAccess="youtube 재생목록을 선택하고, 퀴즈를 생성해보세요!"
+              />
+            </IconButton>
+          </Tooltip>
         </Typography>
         <PlaylistSidebar
           myPlaylist={myPlaylist?.items ?? []}

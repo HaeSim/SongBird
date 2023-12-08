@@ -5,6 +5,7 @@ import {
   Grid,
   ListItemButton,
   Paper,
+  Typography,
 } from '@mui/material';
 import React from 'react';
 
@@ -49,10 +50,25 @@ const PlaylistSidebar: React.FC<PlaylistSidebarProps> = ({
           <div
             style={{
               display: 'flex',
+              alignItems: 'center',
               flexWrap: 'nowrap',
               overflowX: 'auto',
+              height: '334px',
             }}
           >
+            {myPlaylist?.length === 0 && (
+              <Typography
+                variant="h6"
+                align="center"
+                sx={{
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  margin: 'auto',
+                }}
+              >
+                재생목록이 없습니다.
+              </Typography>
+            )}
             {myPlaylist?.map((playlist) => (
               <div
                 key={playlist.id}
@@ -76,6 +92,7 @@ const PlaylistSidebar: React.FC<PlaylistSidebarProps> = ({
                   <PlaylistCard
                     image={playlist.snippet.thumbnails.medium.url}
                     title={playlist.snippet.title}
+                    itemCount={playlist.contentDetails.itemCount}
                     channelTitle={playlist.snippet.channelTitle}
                     publishedAt={playlist.snippet.publishedAt}
                   />
