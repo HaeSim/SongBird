@@ -125,7 +125,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         icon: '🔑',
       });
     }
-  }, [router, session, status]);
+  }, [router.isReady, session]);
 
   if (session?.provider !== 'google') {
     return (
@@ -192,7 +192,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           right: 32,
         }}
         onClick={handleMakeQuiz}
-        disabled={backdropVisible}
+        disabled={backdropVisible || !selectedPlaylist}
       >
         <AddIcon />
       </Fab>

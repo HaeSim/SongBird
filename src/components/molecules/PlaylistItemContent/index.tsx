@@ -44,7 +44,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
   };
 
   return (
-    <Grid item xs={3} sx={{ minWidth: '100%' }}>
+    <Grid item xs={3} sx={{ minWidth: '100%', marginBottom: '64px' }}>
       <Paper
         style={{
           minHeight: '100%',

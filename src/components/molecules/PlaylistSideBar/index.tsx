@@ -27,7 +27,12 @@ const PlaylistSidebar: React.FC<PlaylistSidebarProps> = ({
   return (
     <Grid item xs={3} sx={{ minWidth: '100%' }}>
       <Paper
-        style={{ width: '100%', padding: '8px', backgroundColor: '#3a4d68' }}
+        style={{
+          width: '100%',
+          minHeight: '334px',
+          padding: '8px',
+          backgroundColor: '#3a4d68',
+        }}
       >
         {isLoading ? (
           <Box
