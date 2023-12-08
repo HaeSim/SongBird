@@ -11,7 +11,7 @@ import { getQuizFromDB } from '@/utils/indexDB';
 
 const Quiz: NextPageWithLayout = () => {
   const router = useRouter();
-  const [quizzes, setQuizzes] = useState<QuizList[]>([]);
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
 
   useEffect(() => {
     async function fetchQuizzes() {

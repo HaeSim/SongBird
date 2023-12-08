@@ -29,12 +29,17 @@ interface YoutubeContentDetails {
   itemCount: number;
 }
 
+interface YoutubePlaylistItemStatus {
+  privacyStatus: 'public' | 'private' | 'unlisted';
+}
+
 interface YoutubePlaylistItem {
   kind: string;
   etag: string;
   id: string;
   snippet: YoutubeSnippet;
   contentDetails: YoutubeContentDetails;
+  status: YoutubePlaylistItemStatus;
 }
 
 interface YoutubePlaylistResponse {

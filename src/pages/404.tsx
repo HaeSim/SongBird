@@ -83,7 +83,6 @@ export default function Fallback() {
           placeholder="blur"
           width={240}
           height={240}
-          objectFit="contain"
         />
         <br />
         <h1>

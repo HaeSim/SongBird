@@ -1,11 +1,12 @@
 interface QuizItem {
   id: string;
   snippet: YoutubeSnippet;
+  startTime?: number;
   answerTime?: number;
 }
 
 // Quiz 인터페이스
-interface QuizList {
+interface Quiz {
   id: string;
   title: string;
   description: string;
