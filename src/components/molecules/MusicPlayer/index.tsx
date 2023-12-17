@@ -8,14 +8,10 @@ import {
   IconButton,
   Slider,
   Typography,
-  useMediaQuery,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import type { YouTubePlayer } from 'react-youtube';
-import YouTube from 'react-youtube';
 
-import { PlayerStates } from '@/components/organisms/QuizPlayer/QuizPlayerProvider';
-import theme from '@/styles/theme';
+import useAudioControls from '@/hooks/useAudioControls';
+import useAudioSource from '@/hooks/useAudioSource';
 import { formatTime } from '@/utils/common';
 
 interface IMusicPlayerProps {
@@ -24,87 +20,24 @@ interface IMusicPlayerProps {
 }
 
 const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
-  const [player, setPlayer] = useState<YouTubePlayer | undefined>(undefined);
-  const [status, setStatus] = useState<PlayerStates | undefined>(undefined);
-  const [currentTime, setCurrentTime] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
+  const source = useAudioSource(videoId);
+  const controls = useAudioControls({
+    src: source.data.url,
+    // eslint-disable-next-line no-console
+    setError: (error: string) => console.log(error),
+    // @TODO: add audio formats (video formats are not supported)
+    // const audioFormats = Object.keys(audio.data.formats || {}).map((key) => ({
+    //   mimeType: key,
+    //   src: (audio.data.formats && audio.data.formats[key]) ?? '',
+    // }));
+    // formats: audioFormats,
+  });
 
-  const pause = () => {
-    player?.pauseVideo();
-  };
-
-  const play = () => {
-    player?.playVideo();
-  };
-
-  const seekTo = (seconds: number) => {
-    player?.seekTo(seconds, true);
-    setCurrentTime(seconds);
-  };
-
-  const handleOnReady = (event: any) => {
-    setPlayer(event.target);
-    setDuration(event.target.getDuration());
-  };
-
-  const handleStateChange = (event: any) => {
-    const newPlayerState = event.data;
-    setStatus(newPlayerState);
-    switch (newPlayerState) {
-      case PlayerStates?.PLAYING:
-        console.log('PLAYING');
-        break;
-      case PlayerStates?.PAUSED:
-        console.log('PAUSED');
-        break;
-      case PlayerStates?.ENDED:
-        console.log('ENDED');
-        break;
-      case PlayerStates?.BUFFERING:
-        console.log('BUFFERING');
-        break;
-      case PlayerStates?.UNSTARTED:
-        console.log('UNSTARTED');
-        break;
-      case PlayerStates?.VIDEO_CUED:
-        console.log('VIDEO_CUED');
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleOnplay = async (event: any) => {
-    const newDuration = await event.target.getDuration();
-    setDuration(newDuration);
-  };
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-
-    if (status === PlayerStates?.PLAYING) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => prev + 1);
-      }, 1000);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [status]);
-
-  useEffect(() => {
-    const updateCurrentTime = async () => {
-      const newCurrentTime = await player?.getCurrentTime();
-      setCurrentTime(newCurrentTime as number);
-    };
-
-    if (player) {
-      updateCurrentTime();
-    }
-  }, [player]);
+  const { state: sourceState } = source;
+  const {
+    controls: { play, pause, seek: seekTo },
+    state: controlsState,
+  } = controls;
 
   return (
     <Box
@@ -125,6 +58,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
           height: '100%',
         }}
       >
+        {controls.elementNode}
         <Box
           sx={{
             display: 'flex',
@@ -133,32 +67,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
             width: '100%',
           }}
         >
-          <YouTube
-            style={{
-              display: 'none',
-              width: useMediaQuery(theme.breakpoints.down('sm'))
-                ? '60px'
-                : '0%',
-              height: useMediaQuery(theme.breakpoints.down('sm'))
-                ? '60px'
-                : '0%',
-              zIndex: 3,
-            }}
-            videoId={videoId}
-            opts={{
-              width: '100%',
-              height: '100%',
-              playerVars: {
-                disablekb: 1,
-                controls: 0,
-                rel: 0,
-              },
-            }}
-            onReady={handleOnReady}
-            onStateChange={handleStateChange}
-            onPlay={handleOnplay}
-          />
-          {player === undefined ? (
+          {sourceState === 'loading' ? (
             <CircularProgress color="inherit" />
           ) : (
             <Box
@@ -170,19 +79,13 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
                 width: '100%',
               }}
             >
-              <IconButton onClick={() => seekTo(currentTime - 10)}>
+              <IconButton onClick={() => seekTo(controlsState.time - 10)}>
                 <Replay10Icon />
               </IconButton>
-              <IconButton
-                onClick={status === PlayerStates?.PLAYING ? pause : play}
-              >
-                {status === PlayerStates?.PLAYING ? (
-                  <PauseIcon />
-                ) : (
-                  <PlayArrowIcon />
-                )}
+              <IconButton onClick={controlsState.paused ? play : pause}>
+                {controlsState.paused ? <PlayArrowIcon /> : <PauseIcon />}
               </IconButton>
-              <IconButton onClick={() => seekTo(currentTime + 10)}>
+              <IconButton onClick={() => seekTo(controlsState.time + 10)}>
                 <Forward10Icon />
               </IconButton>
             </Box>
@@ -195,12 +98,12 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
               justifyContent: 'space-between',
             }}
           >
-            <Typography>{formatTime(currentTime)}</Typography>
-            <Typography>{formatTime(duration)}</Typography>
+            <Typography>{formatTime(controlsState.time)}</Typography>
+            <Typography>{formatTime(controlsState.duration)}</Typography>
           </Box>
           <Slider
-            value={currentTime}
-            max={duration}
+            value={controlsState.time}
+            max={controlsState.duration}
             onChange={(_, value) => seekTo(value as number)}
             valueLabelDisplay="auto"
             valueLabelFormat={(value) => formatTime(value as number)}

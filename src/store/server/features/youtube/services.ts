@@ -1,4 +1,11 @@
+import type { Audio } from '@/types/interfaces/youtube/ytdl';
+
 import ApiClient from '../../common/common';
+
+const getAudioSource = async (videoId: string): Promise<Audio> => {
+  const response = await ApiClient.get(`/audio/${videoId}`);
+  return response.data;
+};
 
 const getPlaylist = async (): Promise<YoutubePlaylistResponse> => {
   const response = await ApiClient.get('/playlist/my');
@@ -12,4 +19,4 @@ const getPlaylistItem = async (
   return response.data;
 };
 
-export { getPlaylist, getPlaylistItem };
+export { getAudioSource, getPlaylist, getPlaylistItem };
