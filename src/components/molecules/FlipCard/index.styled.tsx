@@ -3,7 +3,10 @@ import styled from '@emotion/styled';
 import { Card } from '@mui/material';
 
 // StyledCard component
-const StyledCard = styled(Card)<{
+// shouldForwardProp : isFlipped, width, height
+const StyledCard = styled(Card, {
+  shouldForwardProp: (prop) => prop !== 'isFlipped',
+})<{
   isFlipped: boolean;
   width: string;
   height: string;

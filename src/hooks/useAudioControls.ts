@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, SyntheticEvent } from 'react';
 import React, { useState } from 'react';
 
 export interface HTMLAudioState {
@@ -124,13 +124,22 @@ const useAudioControls = ({
         }
         setState({ playbackRate: el.playbackRate });
       },
-      onError: () => setError('There was an error playing the audio file'),
+      onError: (event: SyntheticEvent<HTMLAudioElement, Event>) => {
+        // SyntheticBaseEvent
+        if (event.nativeEvent) {
+          const { error } = event.target as HTMLAudioElement;
+          if (error) {
+            setError(error.message);
+          }
+        }
+      },
     } as any,
     formats.map(({ mimeType, src: srcProp }) => [
       React.createElement('source', {
         type: mimeType,
         src: srcProp,
-        onError: () => setError('There was an error loading the audio file'),
+        onError: () =>
+          setError('There was an error loading the audio source file'),
         key: mimeType,
       }),
     ])

@@ -9,6 +9,7 @@ import {
   Slider,
   Typography,
 } from '@mui/material';
+import { useEffect, useRef } from 'react';
 
 import useAudioControls from '@/hooks/useAudioControls';
 import useAudioSource from '@/hooks/useAudioSource';
@@ -32,12 +33,95 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
     // }));
     // formats: audioFormats,
   });
-
   const { state: sourceState } = source;
   const {
     controls: { play, pause, seek: seekTo },
     state: controlsState,
+    element,
+    elementNode,
   } = controls;
+
+  const visualizationRef = useRef<HTMLCanvasElement>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
+
+  // eslint-disable-next-line consistent-return
+  const visualizeData = () => {
+    const animationController = window.requestAnimationFrame(visualizeData);
+    if (element?.paused) {
+      return cancelAnimationFrame(animationController);
+    }
+    const songData = new Uint8Array(140);
+
+    if (!analyserRef.current) {
+      // eslint-disable-next-line consistent-return
+      return;
+    }
+
+    analyserRef.current.getByteFrequencyData(songData);
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const bar_width = 3;
+    let start = 0;
+
+    if (!visualizationRef.current) {
+      // eslint-disable-next-line consistent-return
+      return;
+    }
+
+    const ctx = visualizationRef.current.getContext('2d');
+
+    if (!ctx) {
+      // eslint-disable-next-line consistent-return
+      return;
+    }
+
+    ctx.clearRect(
+      0,
+      0,
+      visualizationRef.current.width,
+      visualizationRef.current.height
+    );
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < songData.length; i++) {
+      // compute x coordinate where we would draw
+      start = i * 4;
+      // create a gradient for the  whole canvas
+      const gradient = ctx.createLinearGradient(
+        0,
+        0,
+        visualizationRef.current.width,
+        visualizationRef.current.height
+      );
+      gradient.addColorStop(0.2, '#2392f5');
+      gradient.addColorStop(0.5, '#fe0095');
+      gradient.addColorStop(1.0, 'purple');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(
+        start,
+        visualizationRef.current.height,
+        bar_width,
+        -(songData[i] ?? 0)
+      );
+    }
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line no-useless-return
+    if (!visualizationRef.current) return;
+
+    if (!controlsState.paused) {
+      const audioContext = new AudioContext();
+      if (!sourceNodeRef.current) {
+        sourceNodeRef.current = audioContext.createMediaElementSource(
+          element as HTMLAudioElement
+        );
+        analyserRef.current = audioContext.createAnalyser();
+        sourceNodeRef.current.connect(analyserRef.current);
+        analyserRef.current.connect(audioContext.destination);
+      }
+      visualizeData();
+    }
+  }, [controlsState.paused]);
 
   return (
     <Box
@@ -58,7 +142,14 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ title, videoId }) => {
           height: '100%',
         }}
       >
-        {controls.elementNode}
+        {/* Visualization Canvas */}
+        <canvas
+          ref={visualizationRef}
+          width={300}
+          height={100}
+          style={{ marginTop: '16px' }}
+        />
+        {elementNode}
         <Box
           sx={{
             display: 'flex',
