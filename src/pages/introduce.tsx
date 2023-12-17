@@ -45,20 +45,20 @@ const Home: NextPageWithLayout = () => {
           <svg width="600" height="120" viewBox="0 0 600 120">
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#FFFFFF" />
-                <stop offset="50%" stop-color="#FFFFFF" />
-                <stop offset="100%" stop-color={theme.palette.primary.main} />
+                <stop offset="0%" stopColor="#FFFFFF" />
+                <stop offset="50%" stopColor="#FFFFFF" />
+                <stop offset="100%" stopColor={theme.palette.primary.main} />
               </linearGradient>
             </defs>
             <text
               x="50%"
               y="50%"
-              font-size="100"
-              font-family="Arial"
+              fontSize="100"
+              fontFamily="Arial"
               fill="url(#gradient)"
-              text-anchor="middle"
-              alignment-baseline="middle"
-              font-weight="bold"
+              textAnchor="middle"
+              alignmentBaseline="middle"
+              fontWeight="bold"
             >
               SongBird
             </text>
