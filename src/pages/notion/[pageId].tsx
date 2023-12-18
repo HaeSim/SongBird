@@ -1,4 +1,3 @@
-import { styled } from '@mui/material';
 import type { GetStaticProps } from 'next';
 import { getAllPagesInSpace } from 'notion-utils';
 import * as React from 'react';
@@ -6,28 +5,8 @@ import { defaultMapPageUrl } from 'react-notion-x';
 import notionClient, { DEFAULT_ROOT_PAGE_ID } from 'src/lib/notion';
 
 import { NotionPage } from '@/components/organisms/NotionPage';
-import Default from '@/components/templates/Layout/Default';
+import Pure from '@/components/templates/Layout/Pure';
 import { generateGetLayout, type NextPageWithLayout } from '@/utils/common';
-
-const StyleReset = styled('div')`
-  * {
-    padding: unset;
-    -webkit-text-size-adjust: unset;
-    -moz-text-size-adjust: unset;
-    -ms-text-size-adjust: unset;
-    box-sizing: unset;
-    -ms-box-sizing: unset;
-    -moz-box-sizing: unset;
-    -webkit-box-sizing: unset;
-    font-family: unset;
-    font-size: unset;
-    font-weight: unset;
-    line-height: unset;
-    color: unset;
-    word-wrap: unset;
-    text-align: unset;
-  }
-`;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const pageId = context?.params?.pageId as string;
@@ -105,13 +84,9 @@ interface INotionProps {
 }
 
 const Notion: NextPageWithLayout<INotionProps> = ({ recordMap }) => {
-  return (
-    <StyleReset>
-      <NotionPage recordMap={recordMap} />
-    </StyleReset>
-  );
+  return <NotionPage recordMap={recordMap} />;
 };
 
-Notion.getLayout = generateGetLayout(Default);
+Notion.getLayout = generateGetLayout(Pure);
 
 export default Notion;

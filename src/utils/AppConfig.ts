@@ -11,9 +11,9 @@ type AppConfigType = {
 };
 
 export const AppConfig: AppConfigType = {
-  site_name: '송버드(SongBrid)',
+  site_name: '송버드(SongBird)',
   title: '🎵 SongBird 🐦',
-  description: '나의 유투브 재생목록으로 노래퀴즈를 만들어보세요!',
+  description: '나의 유튜브 재생목록으로 노래퀴즈를 만들어보세요!',
   imageUrl: '/images/og_songbird.png',
   locale: 'ko',
   canonical: 'https://songbird.hae-sim.com',

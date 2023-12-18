@@ -1,7 +1,6 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-extraneous-dependencies */
 // @ts-nocheck
-
 import 'react-notion-x/src/styles.css';
 
 import dynamic from 'next/dynamic';
@@ -14,7 +13,7 @@ import * as React from 'react';
 import { NotionRenderer } from 'react-notion-x';
 
 import { Loading } from '@/components/atoms/Loading';
-import { makePageTitle } from '@/utils/AppConfig';
+import { AppConfig, makePageTitle } from '@/utils/AppConfig';
 
 const Code = dynamic(() =>
   import('react-notion-x/build/third-party/code').then(async (m) => {
@@ -78,14 +77,14 @@ const Modal = dynamic(
 
 export const NotionPage = ({
   recordMap,
-  previewImagesEnabled,
-  rootPageId,
   rootDomain,
+  rootPageId,
+  previewImagesEnabled,
 }: {
   recordMap: ExtendedRecordMap;
-  previewImagesEnabled?: boolean;
-  rootPageId?: string;
   rootDomain?: string;
+  rootPageId?: string;
+  previewImagesEnabled?: boolean;
 }) => {
   const router = useRouter();
 
@@ -108,9 +107,8 @@ export const NotionPage = ({
     g.block = block;
   }
 
-  const socialDescription = 'React Notion X Demo';
-  const socialImage =
-    'https://react-notion-x-demo.transitivebullsh.it/social.jpg';
+  const socialDescription = AppConfig.description;
+  const socialImage = AppConfig.imageUrl;
 
   return (
     <>
