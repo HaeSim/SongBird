@@ -17,7 +17,7 @@ const Home: NextPageWithLayout = () => {
 
       <Toolbar />
       <Box sx={{ p: 2 }}>
-        <Typography variant="h4" paragraph>
+        <Typography variant="h4" paragraph fontWeight={700}>
           송버드 이용약관
         </Typography>
         <Typography variant="body1" paragraph>

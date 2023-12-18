@@ -3,7 +3,7 @@ import type { GetStaticProps } from 'next';
 export const getServerSideProps: GetStaticProps = async () => {
   return {
     redirect: {
-      destination: '/notion/introduce',
+      destination: '/notion/notice',
       permanent: false,
     },
   };

@@ -3,7 +3,10 @@ import {
   Box,
   Paper,
   Table,
+  TableBody,
+  TableCell,
   TableContainer,
+  TableRow,
   Toolbar,
   Typography,
 } from '@mui/material';
@@ -23,7 +26,7 @@ const Home: NextPageWithLayout = () => {
 
       <Toolbar />
       <Box sx={{ p: 2 }}>
-        <Typography variant="h5" paragraph fontWeight={700}>
+        <Typography variant="h4" paragraph fontWeight={700}>
           개인정보처리방침
         </Typography>
         <Typography variant="body1" paragraph>
@@ -59,22 +62,70 @@ const Home: NextPageWithLayout = () => {
           수 있도록 하고 있습니다. OAuth 서비스 제공자의 OAuth 서비스를
           이용하고자 할 경우 다음의 필수 정보를 입력하여야 합니다. <br />
         </Typography>
-        <TableContainer component={Paper}>
+        <TableContainer
+          sx={{
+            maxWidth: '70%',
+            margin: '20px auto',
+          }}
+          component={Paper}
+        >
           <Table>
-            <tr>
-              <th>이용자 ID</th>
-              <td>OAuth를 제공하는 서비스의 사용자ID</td>
-            </tr>
-            <tr>
-              <th>이메일</th>
-              <td>
-                OAuth를 제공하는 서비스에 등록되고 접근이 허락된 사용자 이메일
-              </td>
-            </tr>
-            <tr>
-              <th>이름</th>
-              <td>OAuth를 제공하는 서비스에 등록된 사용자명, 별칭</td>
-            </tr>
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    fontWeight: 700,
+                    color: '#000',
+                    textAlign: 'center',
+                  }}
+                >
+                  이용자 ID
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: '#000',
+                  }}
+                >
+                  OAuth를 제공하는 서비스의 사용자ID
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    fontWeight: 700,
+                    color: '#000',
+                    textAlign: 'center',
+                  }}
+                >
+                  이메일
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: '#000',
+                  }}
+                >
+                  OAuth를 제공하는 서비스에 등록되고 접근이 허락된 사용자 이메일
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    fontWeight: 700,
+                    color: '#000',
+                    textAlign: 'center',
+                  }}
+                >
+                  이름
+                </TableCell>
+                <TableCell
+                  sx={{
+                    color: '#000',
+                  }}
+                >
+                  OAuth를 제공하는 서비스에 등록된 사용자명, 별칭
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
         </TableContainer>
 

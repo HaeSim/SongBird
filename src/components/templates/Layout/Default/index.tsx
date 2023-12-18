@@ -1,3 +1,4 @@
+import CampaignIcon from '@mui/icons-material/Campaign';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -81,18 +82,28 @@ const Default: ILayoutComponent = ({ children }) => {
               value: PAGES.HOME.value,
             },
             {
+              // NOTICE
+              name: PAGES.NOTICE.label,
+              icon: <CampaignIcon />,
+              path: PAGES.NOTICE.path,
+              value: PAGES.NOTICE.value,
+            },
+            {
+              // QUIZ
               name: PAGES.QUIZ.label,
               icon: <QuizIcon />,
               path: PAGES.QUIZ.path,
               value: PAGES.QUIZ.value,
             },
             {
+              // DASHBOARD
               name: PAGES.DASHBOARD.label,
               icon: <DashboardIcon />,
               path: PAGES.DASHBOARD.path,
               value: PAGES.DASHBOARD.value,
             },
             {
+              // SETTINGS
               name: PAGES.SETTINGS.label,
               icon: <SettingsIcon />,
               path: PAGES.SETTINGS.path,

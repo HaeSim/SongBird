@@ -32,7 +32,7 @@ const StyleReset = styled('div')`
 export const getStaticProps: GetStaticProps = async (context) => {
   const pageId = context?.params?.pageId as string;
 
-  const pageParam = pageId === 'introduce' ? DEFAULT_ROOT_PAGE_ID : pageId;
+  const pageParam = pageId === 'notice' ? DEFAULT_ROOT_PAGE_ID : pageId;
 
   try {
     const recordMap = await notionClient.getPage(pageParam);
@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       // 이렇게 하면, 루트 페이지를 /notion으로 설정할 수 있습니다.
       redirect:
         pageId.replace(/-/g, '') === DEFAULT_ROOT_PAGE_ID
-          ? { destination: '/notion/introduce' }
+          ? { destination: '/notion/notice' }
           : undefined,
     };
   } catch (e) {
@@ -55,6 +55,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
     return {
       props: {
         recordMap: null,
+      },
+      redirect: {
+        destination: '/notion/notice',
+        permanent: false,
       },
       revalidate: 10,
     };
