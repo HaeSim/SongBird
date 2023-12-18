@@ -16,7 +16,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import useAudioControls from '@/hooks/useAudioControls';
 import useAudioSource from '@/hooks/useAudioSource';
@@ -60,6 +60,9 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
   });
   const { play, pause, seek: seekTo } = controls;
 
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isSliderDragging, setSliderDragging] = useState(false);
+
   const formatDuration = (durationValue: number) => {
     const minute = Math.floor(durationValue / 60);
     const secondLeft = durationValue - minute * 60;
@@ -85,6 +88,27 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
     },
     controls,
   });
+
+  // 타임라인 제어 (재생 중일 때만)
+  useEffect(() => {
+    if (!controlsState.paused) {
+      const interval = setInterval(() => {
+        setCurrentTime((prev) => prev + 0.1);
+      }, 100);
+      return () => clearInterval(interval);
+    }
+    return () => {};
+  }, [controlsState.paused]);
+
+  // 주기적으로 currentTime을 체크해서, controlsState.time과 동기화
+  useEffect(() => {
+    // slider를 조작하고 있지 않을 때만
+    if (isSliderDragging) return;
+
+    if (controlsState.time !== currentTime) {
+      setCurrentTime(controlsState.time);
+    }
+  }, [controlsState.time]);
 
   // duration이 2배로 나오는 문제가 있어서
   // IOS 이거나 safari 브라우저일 경우 duration을 2로 나눠줌
@@ -150,9 +174,22 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
             <Slider
               aria-label="time-indicator"
               size="small"
-              value={controlsState.time}
+              value={currentTime}
+              valueLabelDisplay="auto"
+              valueLabelFormat={formatDuration}
+              onMouseDown={() => {
+                setSliderDragging(true);
+              }}
+              onMouseUp={() => {
+                setSliderDragging(false);
+              }}
+              onChange={(_, value) => {
+                setSliderDragging(true);
+                setCurrentTime(value as number);
+              }}
               onChangeCommitted={(_, value) => {
                 seekTo(value as number);
+                setSliderDragging(false);
               }}
               min={0}
               step={1}
@@ -193,7 +230,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
                 mt: -2,
               }}
             >
-              <TinyText>{formatDuration(controlsState.time)}</TinyText>
+              <TinyText>{formatDuration(currentTime)}</TinyText>
               <TinyText>
                 -{formatDuration(duration - controlsState.time)}
               </TinyText>
@@ -266,6 +303,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
               <VolumeDownRounded htmlColor={lightIconColor} />
               <Slider
                 aria-label="Volume"
+                valueLabelDisplay="auto"
                 defaultValue={100}
                 sx={{
                   color:
@@ -290,6 +328,8 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
                     audioRefCurrent.volume = (value as number) / 100;
                   }
                 }}
+                // IOS 이거나 safari 브라우저일 경우 volume slider를 비활성화
+                disabled={getOSTypeByUserAgent() === 'IOS'}
               />
               <VolumeUpRounded htmlColor={lightIconColor} />
             </Stack>
