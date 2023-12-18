@@ -266,7 +266,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
               <VolumeDownRounded htmlColor={lightIconColor} />
               <Slider
                 aria-label="Volume"
-                defaultValue={30}
+                defaultValue={100}
                 sx={{
                   color:
                     theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
