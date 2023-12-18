@@ -15,9 +15,10 @@ const StyledCard = styled(Card, {
   margin: 0.5rem;
   text-align: center;
   color: #ecf0f1;
-  background-color: inherit;
+  background-color: transparent;
   border-radius: 0.8rem;
   transform-style: preserve-3d;
+  box-shadow: none;
   height: ${({ height }) => height}; /* Set the desired height */
   width: ${({ width }) => width}; /* Set the desired width */
 
