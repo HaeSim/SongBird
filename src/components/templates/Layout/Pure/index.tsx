@@ -7,7 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import {
   AppBar,
   Container,
-  IconButton, // Added IconButton
+  IconButton,
   Toolbar,
   Typography,
 } from '@mui/material';
@@ -19,13 +19,9 @@ import theme from '@/styles/theme';
 import type { ILayoutComponent } from '@/types/common/component';
 import { PAGES } from '@/utils/AppConfig';
 
-const Default: ILayoutComponent = ({ children }) => {
+const Pure: ILayoutComponent = ({ children }) => {
   const { currentMenu } = useAppRouting();
   const [isDrawerOpen, setDrawerOpen] = useState(false); // State to manage drawer open/close
-
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!isDrawerOpen);
-  };
 
   return (
     <>
@@ -45,7 +41,7 @@ const Default: ILayoutComponent = ({ children }) => {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={handleDrawerToggle} // Toggle drawer when the button is clicked
+            onClick={() => setDrawerOpen(!isDrawerOpen)} // Toggle drawer when the button is clicked
           >
             <MenuIcon />
           </IconButton>
@@ -59,19 +55,7 @@ const Default: ILayoutComponent = ({ children }) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container
-        component="main"
-        maxWidth="lg"
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100vh',
-          padding: '32px 0',
-        }}
-      >
+      <Container component="main" maxWidth={false} disableGutters>
         <DrawerMenu
           menuItemList={[
             {
@@ -111,7 +95,7 @@ const Default: ILayoutComponent = ({ children }) => {
             },
           ]}
           open={isDrawerOpen}
-          onClose={handleDrawerToggle}
+          onClose={() => setDrawerOpen(false)} // Close drawer when the menu item is clicked
         />
         {children}
       </Container>
@@ -119,4 +103,4 @@ const Default: ILayoutComponent = ({ children }) => {
   );
 };
 
-export default Default;
+export default Pure;

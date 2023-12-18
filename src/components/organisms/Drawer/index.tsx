@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   Drawer,
   List,
@@ -72,6 +73,38 @@ const DrawerMenu: FC<IDrawerProps> = ({ menuItemList, open, onClose }) => {
           </ListItemButton>
         ))}
       </List>
+      {/* New List for additional hyperlinks */}
+      <Box
+        sx={{
+          marginTop: 'auto',
+        }}
+      >
+        <List>
+          {/* Privacy Policy Link */}
+          <ListItemButton
+            component="a"
+            href="/privacy"
+            onClick={onClose}
+            sx={{}}
+          >
+            <ListItemText
+              primary="개인정보처리방침"
+              primaryTypographyProps={{
+                fontSize: '0.8rem',
+              }}
+            />
+          </ListItemButton>
+          {/* Terms of Service Link */}
+          <ListItemButton component="a" href="/terms" onClick={onClose}>
+            <ListItemText
+              primary="서비스이용약관"
+              primaryTypographyProps={{
+                fontSize: '0.8rem',
+              }}
+            />
+          </ListItemButton>
+        </List>
+      </Box>
     </Drawer>
   );
 };

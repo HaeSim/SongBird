@@ -231,9 +231,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
               }}
             >
               <TinyText>{formatDuration(currentTime)}</TinyText>
-              <TinyText>
-                -{formatDuration(duration - controlsState.time)}
-              </TinyText>
+              <TinyText>-{formatDuration(duration - currentTime)}</TinyText>
             </Box>
             <Box
               sx={{

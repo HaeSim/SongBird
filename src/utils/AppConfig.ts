@@ -11,18 +11,18 @@ type AppConfigType = {
 };
 
 export const AppConfig: AppConfigType = {
-  site_name: '송버드(SongBrid)',
+  site_name: '송버드(SongBird)',
   title: '🎵 SongBird 🐦',
-  description: '나의 유투브 재생목록으로 노래퀴즈를 만들어보세요!',
+  description: '나의 유튜브 재생목록으로 노래퀴즈를 만들어보세요!',
   imageUrl: '/images/og_songbird.png',
   locale: 'ko',
   canonical: 'https://songbird.hae-sim.com',
-  base_url: process.env.NODE_ENV === 'production' ? '/api/v1' : '/api/mock',
+  base_url: '/api/v1',
 };
 
 export const makePageTitle = (title: string) => `${title} | ${AppConfig.title}`;
 
-type MenuConfigType = 'HOME' | 'QUIZ' | 'DASHBOARD' | 'SETTINGS';
+type MenuConfigType = 'HOME' | 'NOTICE' | 'QUIZ' | 'DASHBOARD' | 'SETTINGS';
 
 export type MenuItem = {
   label: string;
@@ -42,6 +42,7 @@ const createMenuItem = (
 
 export const PAGES: Record<MenuConfigType, MenuItem> = {
   HOME: createMenuItem('홈', 'home', '/'),
+  NOTICE: createMenuItem('공지사항', 'notice', '/notion/notice'),
   QUIZ: createMenuItem('퀴즈', 'quiz', '/quiz'),
   DASHBOARD: createMenuItem('대시보드', 'dashboard', '/dashboard'),
   SETTINGS: createMenuItem('세팅', 'settings', '/settings'),
