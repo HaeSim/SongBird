@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
 import { type ReactElement, useEffect } from 'react';
@@ -24,6 +25,7 @@ import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
 import theme from '@/styles/theme';
+import { PAGES } from '@/utils/AppConfig';
 import type { NextPageWithLayout } from '@/utils/common';
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -34,9 +36,12 @@ export interface MyAppProps extends AppProps {
 }
 
 const MyApp = (props: MyAppProps) => {
-  const { backdropVisible, backdropMessage } = useClientStore((state) => state);
-  useAppRouting();
   const queryClient = new QueryClient();
+  const router = useRouter();
+
+  const { backdropVisible, backdropMessage } = useClientStore((state) => state);
+
+  const { currentMenu, navigateToMenu } = useAppRouting();
 
   const { emotionCache = clientSideEmotionCache, pageProps } = props;
   const Component = props.Component as NextPageWithLayout;
@@ -59,6 +64,43 @@ const MyApp = (props: MyAppProps) => {
       });
     };
   }, []);
+
+  useEffect(() => {
+    // 주소 변경 시 현재 메뉴를 업데이트하고 라우팅합니다.
+    const currentPath = router.pathname;
+    const targetMenu = Object.values(PAGES).find(
+      (page) => page.path === currentPath
+    );
+
+    if (targetMenu) {
+      navigateToMenu(targetMenu.value);
+    }
+  }, [router.pathname]);
+
+  // router events 중 routeChangeComplete 이벤트를 감지하여
+  // redirect 시 currentMenu를 업데이트합니다.
+  useEffect(() => {
+    const handleRouteChange = (url: URL) => {
+      gtag.pageview(url);
+      const targetMenu = Object.values(PAGES).find(
+        (page) => page.path === (String(url) || '/')
+      );
+
+      if (!targetMenu) {
+        return;
+      }
+
+      if (targetMenu?.value !== currentMenu.value) {
+        navigateToMenu(targetMenu.value);
+      }
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
     <>

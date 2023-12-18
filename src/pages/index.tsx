@@ -26,7 +26,7 @@ const Home: NextPageWithLayout = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '80vh',
+          height: '50vh',
           animation: `${SlideUpFadeIn} 1s ease-in-out`,
         }}
       >
