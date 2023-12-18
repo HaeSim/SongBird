@@ -10,10 +10,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useMediaQuery,
 } from '@mui/material';
 import React from 'react';
 
 import useClientStore from '@/store/client';
+import theme from '@/styles/theme';
 
 import MusicPlayer from '../MusicPlayer';
 
@@ -26,21 +28,13 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
   playlistItems,
   isLoading,
 }) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
 
   const { openComponentModal } = useClientStore((state) => state);
 
   const handlePlayClick = (newVideoId: string) => {
-    openComponentModal(
-      <MusicPlayer
-        title={
-          playlistItems.find(
-            (item) => item.snippet.resourceId.videoId === newVideoId
-          )?.snippet.title ?? ''
-        }
-        videoId={newVideoId}
-      />
-    );
+    openComponentModal(<MusicPlayer videoId={newVideoId} />);
   };
 
   return (
@@ -58,16 +52,23 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  {COLUMN_NAMES.map((column) => (
-                    <TableCell
-                      key={column}
-                      sx={{
-                        textAlign: 'center',
-                      }}
-                    >
-                      {column}
-                    </TableCell>
-                  ))}
+                  {COLUMN_NAMES.map((column) =>
+                    // isMobile 이 true 일때, channel, published date 는 안보이게 처리
+                    // isMobile 이 false 일때, 모든 column 을 보이게 처리
+                    (isMobile &&
+                      column !== 'Channel' &&
+                      column !== 'Published Date') ||
+                    !isMobile ? (
+                      <TableCell
+                        key={column}
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                      >
+                        {column}
+                      </TableCell>
+                    ) : null
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -84,6 +85,8 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                   </TableRow>
                 ) : (
                   playlistItems.map((item, index) => (
+                    // isMobile 이 true 일때, channel, published date 는 안보이게 처리
+                    // isMobile 이 false 일때, 모든 column 을 보이게 처리
                     <TableRow key={item.id}>
                       <TableCell
                         sx={{
@@ -93,22 +96,27 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                         {index + 1}
                       </TableCell>
                       <TableCell>{item.snippet.title}</TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: 'center',
-                        }}
-                      >
-                        {item.snippet.videoOwnerChannelTitle}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          textAlign: 'center',
-                        }}
-                      >
-                        {new Date(
-                          item.snippet.publishedAt
-                        ).toLocaleDateString()}
-                      </TableCell>
+                      {isMobile ? null : (
+                        <>
+                          <TableCell
+                            sx={{
+                              textAlign: 'center',
+                            }}
+                          >
+                            {item.snippet.videoOwnerChannelTitle}
+                          </TableCell>
+
+                          <TableCell
+                            sx={{
+                              textAlign: 'center',
+                            }}
+                          >
+                            {new Date(
+                              item.snippet.publishedAt
+                            ).toLocaleDateString()}
+                          </TableCell>
+                        </>
+                      )}
                       <TableCell>
                         <IconButton
                           onClick={() =>

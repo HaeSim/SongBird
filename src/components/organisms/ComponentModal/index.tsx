@@ -58,9 +58,9 @@ const ComponentModal: React.FC = () => {
       onClose={closeModal}
       PaperProps={{
         sx: {
-          maxWidth: 'md',
+          maxWidth: 'lg',
           borderRadius: '8px',
-          padding: '20px',
+          padding: '30px',
         },
       }}
     >
