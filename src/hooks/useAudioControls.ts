@@ -62,7 +62,7 @@ const useAudioControls = ({
   setError = (error: string) => console.error(error),
 }: HTMLAudioProps): {
   state: HTMLAudioState;
-  element: HTMLAudioElement | HTMLVideoElement | null;
+  element: HTMLAudioElement | null;
   controls: HTMLAudioControls;
   elementNode: ReactElement;
 } => {

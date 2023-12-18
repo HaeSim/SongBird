@@ -20,7 +20,9 @@ import React from 'react';
 
 import useAudioControls from '@/hooks/useAudioControls';
 import useAudioSource from '@/hooks/useAudioSource';
+import useMediaSession from '@/hooks/useMediaSession';
 import theme from '@/styles/theme';
+import { AppConfig } from '@/utils/AppConfig';
 import {
   getBrowserTypeByUserAgent,
   getOSTypeByUserAgent,
@@ -41,7 +43,7 @@ interface IMusicPlayerProps {
 const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
   const { state: sourceState, data: sourceData } = useAudioSource(videoId);
   const {
-    controls: { play, pause, seek: seekTo },
+    controls,
     state: controlsState,
     element: audioRefCurrent,
     elementNode: audioElementNode,
@@ -56,6 +58,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
     // }));
     // formats: audioFormats,
   });
+  const { play, pause, seek: seekTo } = controls;
 
   const formatDuration = (durationValue: number) => {
     const minute = Math.floor(durationValue / 60);
@@ -67,6 +70,21 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
         : secondLeft.toFixed(0)
     }`;
   };
+
+  useMediaSession({
+    element: audioRefCurrent as HTMLAudioElement,
+    mediaMetadata: {
+      title: sourceData.title,
+      artist: sourceData.author,
+      album: `${AppConfig.site_name}`,
+      artwork:
+        sourceData?.images?.map((image) => ({
+          src: image.url,
+          sizes: `${image.width}x${image.height}`,
+        })) ?? [],
+    },
+    controls,
+  });
 
   // duration이 2배로 나오는 문제가 있어서
   // IOS 이거나 safari 브라우저일 경우 duration을 2로 나눠줌
