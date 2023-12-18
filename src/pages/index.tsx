@@ -33,8 +33,8 @@ const Home: NextPageWithLayout = () => {
               justifyContent: 'center',
               alignItems: 'center',
 
-              width: 600,
-              height: 300,
+              width: 440,
+              height: 240,
               backgroundImage:
                 'linear-gradient(45deg, #2b394e 30%, #354459 60%, #3d4e5f 90%, #3d4e5f 100%)',
             }}
@@ -51,7 +51,7 @@ const Home: NextPageWithLayout = () => {
               <text
                 x="50%"
                 y="50%"
-                fontSize="100"
+                fontSize="80"
                 fontFamily="Arial"
                 fill="url(#gradient)"
                 textAnchor="middle"
@@ -70,8 +70,8 @@ const Home: NextPageWithLayout = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              width: 600,
-              height: 300,
+              width: 440,
+              height: 240,
               backgroundImage:
                 'linear-gradient(135deg, #3d4e5f 30%, #354459 60%, #2b394e 90%, #2b394e 100%)',
             }}
@@ -81,8 +81,8 @@ const Home: NextPageWithLayout = () => {
             </Typography>
           </Box>
         }
-        width="600px"
-        height="300px"
+        width="440px"
+        height="240px"
       />
     </>
   );

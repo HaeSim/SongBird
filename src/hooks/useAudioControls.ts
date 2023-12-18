@@ -1,5 +1,5 @@
 import type { ReactElement, SyntheticEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export interface HTMLAudioState {
   buffered: {
@@ -18,6 +18,7 @@ export interface HTMLAudioControls {
   play: () => Promise<void> | void;
   pause: () => void;
   seek: (time: number) => void;
+  playFromTo: (startTime: number, endTime: number) => Promise<void> | void;
   setPlaybackRate: (rate: number) => void;
   setEndedCallback: (callback: Function) => void;
 }
@@ -61,7 +62,7 @@ const useAudioControls = ({
   setError = (error: string) => console.error(error),
 }: HTMLAudioProps): {
   state: HTMLAudioState;
-  element: HTMLAudioElement | HTMLVideoElement | null;
+  element: HTMLAudioElement | null;
   controls: HTMLAudioControls;
   elementNode: ReactElement;
 } => {
@@ -129,7 +130,27 @@ const useAudioControls = ({
         if (event.nativeEvent) {
           const { error } = event.target as HTMLAudioElement;
           if (error) {
-            setError(error.message);
+            switch (error.code) {
+              case error.MEDIA_ERR_ABORTED:
+                setError('You aborted the audio playback.');
+                break;
+              case error.MEDIA_ERR_NETWORK:
+                setError('A network error caused the audio download to fail.');
+                break;
+              case error.MEDIA_ERR_DECODE:
+                setError(
+                  'The audio playback was aborted due to a corruption problem or because the video used features your browser did not support.'
+                );
+                break;
+              case error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                setError(
+                  'The audio could not be loaded, either because the server or network failed or because the format is not supported.'
+                );
+                break;
+              default:
+                setError('An unknown error occurred.');
+                break;
+            }
           }
         }
       },
@@ -185,7 +206,38 @@ const useAudioControls = ({
       if (!el || state.duration === undefined) {
         return;
       }
-      el.currentTime = Math.min(state.duration, Math.max(0, time)) || 0;
+      el.currentTime = time;
+    },
+    playFromTo: async (startTime: number, endTime: number) => {
+      const el = ref.current;
+      if (!el || state.duration === undefined) {
+        return undefined;
+      }
+
+      // 재생 구간 설정
+      controls.seek(startTime);
+
+      // 재생 중인 경우 현재 재생 중인 구간에서부터 재생
+      if (!el.paused) {
+        const playPromise = controls.play();
+        if (playPromise) {
+          // `play` 메서드가 Promise를 반환하는 경우에 대비하여 Promise가 완료될 때까지 대기
+          await playPromise;
+        }
+      } else {
+        // 일시 정지 상태인 경우 재생 시작
+        await el.play();
+      }
+
+      // 일정 간격으로 현재 재생 시간을 체크하면서 endTime에 도달하면 일시 중지
+      const checkEndTimeInterval = setInterval(() => {
+        if (el.currentTime >= endTime) {
+          controls.pause();
+          clearInterval(checkEndTimeInterval);
+        }
+      }, 100);
+
+      return undefined;
     },
     setPlaybackRate: (rate: number) => {
       const el = ref.current;
@@ -203,7 +255,7 @@ const useAudioControls = ({
     },
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const el = ref.current!;
     setState({
       paused: el?.paused,

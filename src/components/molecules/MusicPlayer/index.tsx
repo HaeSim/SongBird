@@ -20,7 +20,13 @@ import React from 'react';
 
 import useAudioControls from '@/hooks/useAudioControls';
 import useAudioSource from '@/hooks/useAudioSource';
+import useMediaSession from '@/hooks/useMediaSession';
 import theme from '@/styles/theme';
+import { AppConfig } from '@/utils/AppConfig';
+import {
+  getBrowserTypeByUserAgent,
+  getOSTypeByUserAgent,
+} from '@/utils/common';
 
 import {
   CoverImage,
@@ -36,7 +42,12 @@ interface IMusicPlayerProps {
 
 const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
   const { state: sourceState, data: sourceData } = useAudioSource(videoId);
-  const controls = useAudioControls({
+  const {
+    controls,
+    state: controlsState,
+    element: audioRefCurrent,
+    elementNode: audioElementNode,
+  } = useAudioControls({
     src: sourceData.url,
     // eslint-disable-next-line no-console
     setError: (error: string) => console.log(error),
@@ -47,12 +58,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
     // }));
     // formats: audioFormats,
   });
-  const {
-    controls: { play, pause, seek: seekTo },
-    state: controlsState,
-    element: audioRefCurrent,
-    elementNode: audioElementNode,
-  } = controls;
+  const { play, pause, seek: seekTo } = controls;
 
   const formatDuration = (durationValue: number) => {
     const minute = Math.floor(durationValue / 60);
@@ -64,6 +70,28 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
         : secondLeft.toFixed(0)
     }`;
   };
+
+  useMediaSession({
+    element: audioRefCurrent as HTMLAudioElement,
+    mediaMetadata: {
+      title: sourceData.title,
+      artist: sourceData.author,
+      album: `${AppConfig.site_name}`,
+      artwork:
+        sourceData?.images?.map((image) => ({
+          src: image.url,
+          sizes: `${image.width}x${image.height}`,
+        })) ?? [],
+    },
+    controls,
+  });
+
+  // duration이 2배로 나오는 문제가 있어서
+  // IOS 이거나 safari 브라우저일 경우 duration을 2로 나눠줌
+  const duration =
+    getOSTypeByUserAgent() === 'IOS' || getBrowserTypeByUserAgent() === 'Safari'
+      ? controlsState.duration / 2
+      : controlsState.duration;
 
   return (
     <Box
@@ -105,6 +133,9 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
                   variant="caption"
                   color="text.secondary"
                   fontWeight={500}
+                  noWrap
+                  display="block"
+                  maxWidth={200}
                 >
                   {sourceData && sourceData.author}
                 </Typography>
@@ -125,7 +156,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
               }}
               min={0}
               step={1}
-              max={controlsState.duration}
+              max={duration}
               sx={{
                 color:
                   theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
@@ -164,7 +195,7 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
             >
               <TinyText>{formatDuration(controlsState.time)}</TinyText>
               <TinyText>
-                -{formatDuration(controlsState.duration - controlsState.time)}
+                -{formatDuration(duration - controlsState.time)}
               </TinyText>
             </Box>
             <Box

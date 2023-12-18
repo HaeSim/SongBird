@@ -19,10 +19,11 @@ export default async function handler(
     const id = (videoId || '').replace(/[^A-Za-z0-9_-]/g, '');
 
     const info = await ytdl.getInfo(id);
-
+    // "mimeType": "audio/mp4; codecs=\"mp4a.40.2\"",
     const audioFormats: Record<string, string> = {};
     info.formats
       .filter((file) => file.mimeType && file.mimeType.startsWith('audio'))
+      .filter((file) => file.mimeType?.includes('mp4'))
       .forEach((file) => {
         if (file.mimeType) {
           const mimeTypeKey = file.mimeType.split(';')[0] as string;
@@ -31,7 +32,8 @@ export default async function handler(
       });
 
     const response = {
-      url: ytdl.chooseFormat(info.formats, { filter: 'audioonly' }).url,
+      info,
+      url: audioFormats['audio/mp4'],
       formats: audioFormats,
       author: info.videoDetails.author.name,
       title: info.videoDetails.title,
