@@ -41,7 +41,7 @@
       "@/public/*": ["./public/*"]
     }
   },
-  "exclude": ["./out/**/*", "./node_modules/**/*", "cypress/**/*.ts"],
+  // exclude : src/components/organisms/NotionPage/index.tsx
   "include": [
     "next-env.d.ts",
     "**/*.ts",
@@ -50,5 +50,11 @@
     "src/components/atoms/MenuToggle/index.styled.tsx",
     "src/components/atoms/MenuToggle/index.stories.tsx",
     ".storybook/preview.tsx"
+  ],
+  "exclude": [
+    "./out/**/*",
+    "./node_modules/**/*",
+    "cypress/**/*.ts",
+    "./src/components/organisms/NotionPage/index.tsx"
   ]
 }

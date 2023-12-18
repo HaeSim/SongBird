@@ -68,7 +68,7 @@ const Default: ILayoutComponent = ({ children }) => {
           alignItems: 'center',
           width: '100%',
           height: '100vh',
-          paddingTop: '32px',
+          padding: '32px 0',
         }}
       >
         <DrawerMenu
