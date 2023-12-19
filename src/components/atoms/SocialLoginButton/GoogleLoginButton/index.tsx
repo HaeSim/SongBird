@@ -4,9 +4,10 @@ import { SocialLoginButton, SocialLoginIcon } from '../index.styled';
 
 const GoogleLoginButton: React.FC<{
   onClick: () => void;
+  disabled: boolean;
   isLoading: boolean;
 }> = ({ ...props }) => {
-  const { isLoading, ...rest } = props;
+  const { disabled, isLoading, ...rest } = props;
 
   return (
     <SocialLoginButton
@@ -14,7 +15,7 @@ const GoogleLoginButton: React.FC<{
       backgroundColor="#fff"
       backgroundColorHover="rgba(225, 225, 225, 0.5)"
       fontColor="#000"
-      disabled={isLoading || detectInAppBrowser()}
+      disabled={disabled || detectInAppBrowser()}
       isLoading={isLoading}
       {...rest}
     >

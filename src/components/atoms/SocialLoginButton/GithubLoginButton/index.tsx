@@ -2,16 +2,17 @@ import { SocialLoginButton, SocialLoginIcon } from '../index.styled';
 
 const GithubLoginButton: React.FC<{
   onClick: () => void;
+  disabled: boolean;
   isLoading: boolean;
 }> = ({ ...props }) => {
-  const { isLoading, ...rest } = props;
+  const { disabled, isLoading, ...rest } = props;
   return (
     <SocialLoginButton
       type="button"
       backgroundColor="#24292f"
       backgroundColorHover="rgba(36, 41, 47, 0.8)"
       fontColor="#fff"
-      disabled={isLoading}
+      disabled={disabled}
       isLoading={isLoading}
       {...rest}
     >
