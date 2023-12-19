@@ -26,12 +26,6 @@ import { authOptions } from '../api/auth/[...nextauth]';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (!session) {
-    /*
-    {
-      message: '로그인이 필요합니다.',
-      type: 'error',
-    }
-    */
     const queryStringForToast = encodeURIComponent(
       JSON.stringify({
         message: '로그인이 필요합니다.',

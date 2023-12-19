@@ -107,26 +107,10 @@ const MyApp = (props: MyAppProps) => {
     }
   }, [router.pathname]);
 
-  /*
-  const queryStringForToast = encodeURIComponent(
-      JSON.stringify({
-        message: '로그인이 필요합니다.',
-        type: 'error',
-      })
-    );
-
-    return {
-      props: {},
-      redirect: {
-        destination: `/?toast=${queryStringForToast}`,
-        permanent: false,
-      },
-    }; */
   useEffect(() => {
     const toastQuery = router.query.toast as string;
 
     if (toastQuery) {
-      console.log('toastQuery', toastQuery);
       const { message, type } = JSON.parse(decodeURIComponent(toastQuery)) as {
         message: string;
         type: 'success' | 'error';
