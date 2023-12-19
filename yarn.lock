@@ -1397,6 +1397,26 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
+"@datadog/browser-core@5.5.1":
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-5.5.1.tgz#3b264cb2788141d3dc04ebfd065792c6ae5ed7c2"
+  integrity sha512-dOzCmh8JDDadSHlzErTt0pQuLZ0HKSRq3lWvL3ilTluc/DZ5akbea0RBpwbxZtog+xYVxHR7hS/EfQ9lt2N09w==
+
+"@datadog/browser-rum-core@5.5.1":
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-5.5.1.tgz#228c2038585fe95dbcc3a75e17d79de1879f6deb"
+  integrity sha512-8B5sRDvu/mcpiTNLVhFJ/+RxYY2fB/dzsFkDXgw/cze6wskhC3XmqcsOrCDPv0+6ORL7DgLHSp+KpJqqdLfVBw==
+  dependencies:
+    "@datadog/browser-core" "5.5.1"
+
+"@datadog/browser-rum@^5.5.1":
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-5.5.1.tgz#65e594c807b781e935ebcd7377f507ebfd39fbeb"
+  integrity sha512-DP84wO1Uov2iqpzmNVQmRe75unZCwJVDbQ1eWlH6GKqhnM7kZ9qetU7ljSZxDSYQHBv3VhKtWuIxcP4X22GNvA==
+  dependencies:
+    "@datadog/browser-core" "5.5.1"
+    "@datadog/browser-rum-core" "5.5.1"
+
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.7"
   resolved "https://registry.npmjs.org/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz"
