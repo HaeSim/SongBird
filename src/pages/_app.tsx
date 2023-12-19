@@ -19,6 +19,7 @@ import { type ReactElement, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import SessionCallback from '@/components/atoms/SessionCallback';
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
 import * as gtag from '@/lib/gtag';
@@ -192,6 +193,7 @@ const MyApp = (props: MyAppProps) => {
                 </Typography>
               </Backdrop>
               <Toaster />
+              <SessionCallback />
               <Analytics />
             </ThemeProvider>
           </CacheProvider>

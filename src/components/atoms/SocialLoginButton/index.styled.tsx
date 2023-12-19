@@ -4,7 +4,15 @@ import Image from 'next/image';
 import { Grow, Spin } from '@/styles/animation';
 import theme from '@/styles/theme';
 
-const SocialLoginButton = styled(Button)<{
+const SocialLoginButton = styled(Button, {
+  shouldForwardProp: (prop) =>
+    ![
+      'backgroundColor',
+      'backgroundColorHover',
+      'fontColor',
+      'isLoading',
+    ].includes(prop as string),
+})<{
   backgroundColor: string;
   backgroundColorHover: string;
   fontColor: string;
