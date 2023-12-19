@@ -10,13 +10,12 @@ import {
   Typography,
 } from '@mui/material';
 import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
 import { type ReactElement, useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
@@ -71,6 +70,8 @@ const MyApp = (props: MyAppProps) => {
   useEffect(() => {
     let backdropTimer: NodeJS.Timeout;
     const handleRouteChangeStart = () => {
+      clearTimeout(backdropTimer);
+      closeBackdrop();
       backdropTimer = setTimeout(() => {
         openBackdrop({
           message: '페이지 이동 중입니다. 잠시만 기다려주세요.',
@@ -105,6 +106,35 @@ const MyApp = (props: MyAppProps) => {
       navigateMenu(targetMenu.value);
     }
   }, [router.pathname]);
+
+  /*
+  const queryStringForToast = encodeURIComponent(
+      JSON.stringify({
+        message: '로그인이 필요합니다.',
+        type: 'error',
+      })
+    );
+
+    return {
+      props: {},
+      redirect: {
+        destination: `/?toast=${queryStringForToast}`,
+        permanent: false,
+      },
+    }; */
+  useEffect(() => {
+    const toastQuery = router.query.toast as string;
+
+    if (toastQuery) {
+      console.log('toastQuery', toastQuery);
+      const { message, type } = JSON.parse(decodeURIComponent(toastQuery)) as {
+        message: string;
+        type: 'success' | 'error';
+      };
+
+      toast[type](message);
+    }
+  }, [router.query]);
 
   return (
     <>
@@ -155,7 +185,6 @@ const MyApp = (props: MyAppProps) => {
               </Backdrop>
               <Toaster />
               <Analytics />
-              <SpeedInsights />
             </ThemeProvider>
           </CacheProvider>
         </QueryClientProvider>
