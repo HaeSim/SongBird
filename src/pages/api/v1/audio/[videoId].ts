@@ -18,7 +18,15 @@ export default async function handler(
     const videoId = req.query.videoId as string;
     const id = (videoId || '').replace(/[^A-Za-z0-9_-]/g, '');
 
-    const info = await ytdl.getInfo(id);
+    const info = await ytdl.getInfo(id, {
+      lang: 'ko',
+      requestOptions: {
+        headers: {
+          // cookie를 넣어주지 않으면, 국가별로 다른 정보를 가져온다.
+          cookie: req.headers.cookie || '',
+        },
+      },
+    });
     // "mimeType": "audio/mp4; codecs=\"mp4a.40.2\"",
     const audioFormats: Record<string, string> = {};
     info.formats
