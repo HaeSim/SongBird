@@ -19,6 +19,7 @@ const QuizDetailPage = () => {
       <MetaInfo
         title={`퀴즈 - ${quizId}`}
         description={`퀴즈 - ${quizId}의 상세 페이지입니다.`}
+        noSelection
       />
       <QuizPlayerProvider>
         <Box

@@ -33,7 +33,11 @@ const Quiz: NextPageWithLayout = () => {
 
   return (
     <>
-      <MetaInfo title="퀴즈" description="퀴즈를 선택하고, 풀어보세요!" />
+      <MetaInfo
+        title="퀴즈"
+        description="퀴즈를 선택하고, 풀어보세요!"
+        noSelection
+      />
       <Grid container spacing={2}>
         <Typography
           variant="h5"

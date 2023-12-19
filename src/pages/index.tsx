@@ -18,7 +18,7 @@ const Home: NextPageWithLayout = () => {
   }, []);
   return (
     <>
-      <MetaInfo title="홈" description={AppConfig.description} />
+      <MetaInfo title="홈" description={AppConfig.description} noSelection />
       <Toolbar />
       <Box
         component="section"

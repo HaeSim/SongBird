@@ -60,6 +60,7 @@ const Settings: NextPageWithLayout = () => {
       <MetaInfo
         title="설정"
         description="송버드 서비스의 설정을 변경할 수 있습니다."
+        noSelection
       />
       <Grid container spacing={2}>
         <Typography

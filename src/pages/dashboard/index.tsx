@@ -154,6 +154,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       <MetaInfo
         title="대시보드"
         description="유투브 재생목록을 선택하고, 퀴즈를 생성해보세요!"
+        noSelection
       />
       <Grid container spacing={2}>
         <Typography
