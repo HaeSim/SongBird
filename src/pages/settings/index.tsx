@@ -67,7 +67,7 @@ const Settings: NextPageWithLayout = () => {
           align="center"
           gutterBottom
           fontWeight={700}
-          marginLeft={2}
+          marginLeft={3}
         >
           설정 목록
         </Typography>

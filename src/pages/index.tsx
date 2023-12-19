@@ -1,4 +1,4 @@
-import { Box, Toolbar, Typography } from '@mui/material';
+import { Box, Toolbar, Typography, useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
@@ -42,7 +42,7 @@ const Home: NextPageWithLayout = () => {
           <text
             x="50%"
             y="50%"
-            fontSize="100"
+            fontSize={useMediaQuery(theme.breakpoints.down('sm')) ? 80 : 120}
             fontFamily="Arial"
             fill="url(#gradient)"
             textAnchor="middle"
@@ -54,7 +54,12 @@ const Home: NextPageWithLayout = () => {
         </svg>
 
         {/* subtitle */}
-        <Typography variant="h6" paragraph lineHeight={1.4} textAlign="center">
+        <Typography
+          variant={useMediaQuery(theme.breakpoints.down('sm')) ? 'h6' : 'h5'}
+          paragraph
+          lineHeight={1.4}
+          textAlign="center"
+        >
           Make your own music quiz
           <br />
           with YouTube playlist

@@ -161,7 +161,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           align="center"
           gutterBottom
           fontWeight={700}
-          marginLeft={2}
+          marginLeft={3}
         >
           재생 목록
           <Tooltip
@@ -197,7 +197,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           gutterBottom
           fontWeight={700}
           marginTop={2}
-          marginLeft={2}
+          marginLeft={3}
         >
           노래 목록
         </Typography>

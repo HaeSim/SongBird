@@ -40,7 +40,7 @@ const Quiz: NextPageWithLayout = () => {
           align="center"
           gutterBottom
           fontWeight={700}
-          marginLeft={2}
+          marginLeft={3}
         >
           퀴즈 목록
         </Typography>
