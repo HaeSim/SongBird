@@ -1,3 +1,4 @@
+import { datadogRum } from '@datadog/browser-rum';
 import {
   CacheProvider,
   type EmotionCache,
@@ -33,6 +34,23 @@ const clientSideEmotionCache = createEmotionCache();
 export interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
+
+datadogRum.init({
+  applicationId: process.env.NEXT_PUBLIC_DATADOG_APPLICATION_ID!,
+  clientToken: process.env.NEXT_PUBLIC_DATADOG_CLIENT_TOKEN!,
+  site: process.env.NEXT_PUBLIC_DATADOG_SITE!,
+  service: 'songbird',
+  env: process.env.NODE_ENV,
+  // Specify a version number to identify the deployed version of your application in Datadog
+  // version: '1.0.0',
+  sessionSampleRate: 100,
+  sessionReplaySampleRate: 100,
+  trackUserInteractions: true,
+  trackResources: true,
+  trackLongTasks: true,
+  defaultPrivacyLevel: 'mask-user-input',
+  enableExperimentalFeatures: ['feature_flags'],
+});
 
 const MyApp = (props: MyAppProps) => {
   const queryClient = new QueryClient();
@@ -120,6 +138,11 @@ const MyApp = (props: MyAppProps) => {
       router.replace({ query: {} });
     }
   }, [router.query]);
+
+  // startSessionReplayRecording
+  useEffect(() => {
+    datadogRum.startSessionReplayRecording();
+  }, []);
 
   return (
     <>
