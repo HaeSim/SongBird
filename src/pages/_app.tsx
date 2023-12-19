@@ -117,6 +117,7 @@ const MyApp = (props: MyAppProps) => {
       };
 
       toast[type](message);
+      router.replace({ query: {} });
     }
   }, [router.query]);
 
