@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
@@ -154,6 +155,7 @@ const MyApp = (props: MyAppProps) => {
               </Backdrop>
               <Toaster />
               <Analytics />
+              <SpeedInsights />
             </ThemeProvider>
           </CacheProvider>
         </QueryClientProvider>

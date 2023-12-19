@@ -36,6 +36,7 @@
     "@mui/material": "^5.13.6",
     "@next/bundle-analyzer": "^13.4.4",
     "@vercel/analytics": "^1.1.1",
+    "@vercel/speed-insights": "^1.0.2",
     "axios": "^1.4.0",
     "canvas-confetti": "^1.9.2",
     "clsx": "^1.2.1",
