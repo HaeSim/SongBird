@@ -1,4 +1,5 @@
 import createEmotionServer from '@emotion/server/create-instance';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { AppType } from 'next/app';
 import type { DocumentContext, DocumentProps } from 'next/document';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
@@ -38,6 +39,7 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
       <body>
         <Main />
         <NextScript />
+        <SpeedInsights />
       </body>
     </Html>
   );

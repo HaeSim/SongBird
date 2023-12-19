@@ -1,7 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import HelpIcon from '@mui/icons-material/Help';
 import { Fab, Grid, IconButton, Tooltip, Typography } from '@mui/material';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -18,6 +20,38 @@ import {
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
 import { saveQuizToDB } from '@/utils/indexDB';
+
+import { authOptions } from '../api/auth/[...nextauth]';
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    /*
+    {
+      message: '로그인이 필요합니다.',
+      type: 'error',
+    }
+    */
+    const queryStringForToast = encodeURIComponent(
+      JSON.stringify({
+        message: '로그인이 필요합니다.',
+        type: 'error',
+      })
+    );
+
+    return {
+      props: {},
+      redirect: {
+        destination: `/?toast=${queryStringForToast}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
 
 interface IDashboardProps {}
 
@@ -117,12 +151,6 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
     if (!router.isReady) return;
     if (status === 'loading') return;
 
-    if (!session) {
-      toast.error('로그인이 필요합니다.');
-      router.push('/');
-      return;
-    }
-
     if (session?.provider !== 'google') {
       toast('구글 계정으로 로그인 해주세요.', {
         icon: '🔑',
@@ -154,6 +182,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       <MetaInfo
         title="대시보드"
         description="유투브 재생목록을 선택하고, 퀴즈를 생성해보세요!"
+        noSelection
       />
       <Grid container spacing={2}>
         <Typography
@@ -161,7 +190,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           align="center"
           gutterBottom
           fontWeight={700}
-          marginLeft={2}
+          marginLeft={3}
         >
           재생 목록
           <Tooltip
@@ -197,7 +226,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
           gutterBottom
           fontWeight={700}
           marginTop={2}
-          marginLeft={2}
+          marginLeft={3}
         >
           노래 목록
         </Typography>

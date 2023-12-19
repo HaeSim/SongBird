@@ -7,12 +7,17 @@ import theme from '@/styles/theme';
 import type { IMetaInfoComponent } from '@/types/common/component';
 import { AppConfig, makePageTitle } from '@/utils/AppConfig';
 
-type IMetaProps = {
+export type IMetaProps = {
   title: string;
   description?: string;
+  noSelection?: boolean;
 };
 
-const MetaInfo: IMetaInfoComponent = ({ title, description }: IMetaProps) => {
+const MetaInfo: IMetaInfoComponent = ({
+  title,
+  description,
+  noSelection = false,
+}: IMetaProps) => {
   const router = useRouter();
   const getAppleTouchStartupImageLink = (width: number, height: number) => {
     return `/splashscreens/splash_${width}x${height}.png`;
@@ -71,6 +76,21 @@ const MetaInfo: IMetaInfoComponent = ({ title, description }: IMetaProps) => {
         {generateSplashscreenLinks()}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        {noSelection && (
+          <style>
+            {`
+              html,
+              body {
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+              -ms-user-select: none;
+              }
+            `}
+          </style>
+        )}
       </Head>
       <NextSeo
         title={makePageTitle(title)}

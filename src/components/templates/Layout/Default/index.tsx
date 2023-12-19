@@ -15,7 +15,6 @@ import React, { useState } from 'react';
 
 import DrawerMenu from '@/components/organisms/Drawer';
 import { useAppRouting } from '@/hooks/useAppRouting';
-import theme from '@/styles/theme';
 import type { ILayoutComponent } from '@/types/common/component';
 import { PAGES } from '@/utils/AppConfig';
 
@@ -33,7 +32,7 @@ const Default: ILayoutComponent = ({ children }) => {
         position="static"
         sx={{
           height: '64px',
-          backgroundColor: theme.palette.background.default,
+          backgroundColor: 'transparent',
           color: '#fff',
           boxShadow: '0 1px 2px 0 rgb(0 0 0 / 10%)',
         }}
@@ -69,7 +68,7 @@ const Default: ILayoutComponent = ({ children }) => {
           alignItems: 'center',
           width: '100%',
           height: '100vh',
-          padding: '32px 0',
+          padding: '32px 12px',
         }}
       >
         <DrawerMenu

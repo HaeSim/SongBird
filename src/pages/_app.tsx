@@ -15,12 +15,11 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { SessionProvider } from 'next-auth/react';
 import { type ReactElement, useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
-import { useAppRouting } from '@/hooks/useAppRouting';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
@@ -38,10 +37,13 @@ export interface MyAppProps extends AppProps {
 const MyApp = (props: MyAppProps) => {
   const queryClient = new QueryClient();
   const router = useRouter();
-
-  const { backdropVisible, backdropMessage } = useClientStore((state) => state);
-
-  const { currentMenu, navigateToMenu } = useAppRouting();
+  const {
+    backdropVisible,
+    backdropMessage,
+    openBackdrop,
+    closeBackdrop,
+    navigateMenu,
+  } = useClientStore((state) => state);
 
   const { emotionCache = clientSideEmotionCache, pageProps } = props;
   const Component = props.Component as NextPageWithLayout;
@@ -66,6 +68,34 @@ const MyApp = (props: MyAppProps) => {
   }, []);
 
   useEffect(() => {
+    let backdropTimer: NodeJS.Timeout;
+    const handleRouteChangeStart = () => {
+      clearTimeout(backdropTimer);
+      closeBackdrop();
+      backdropTimer = setTimeout(() => {
+        openBackdrop({
+          message: '페이지 이동 중입니다. 잠시만 기다려주세요.',
+        });
+      }, 1000);
+    };
+
+    const handleRouteChangeComplete = (url: URL) => {
+      clearTimeout(backdropTimer);
+      closeBackdrop();
+      gtag.pageview(url);
+    };
+
+    router.events.on('routeChangeStart', handleRouteChangeStart);
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+    return () => {
+      clearTimeout(backdropTimer);
+      router.events.off('routeChangeStart', handleRouteChangeStart);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+    };
+  }, []);
+
+  useEffect(() => {
     // 주소 변경 시 현재 메뉴를 업데이트하고 라우팅합니다.
     const currentPath = router.pathname;
     const targetMenu = Object.values(PAGES).find(
@@ -73,34 +103,38 @@ const MyApp = (props: MyAppProps) => {
     );
 
     if (targetMenu) {
-      navigateToMenu(targetMenu.value);
+      navigateMenu(targetMenu.value);
     }
   }, [router.pathname]);
 
-  // router events 중 routeChangeComplete 이벤트를 감지하여
-  // redirect 시 currentMenu를 업데이트합니다.
+  /*
+  const queryStringForToast = encodeURIComponent(
+      JSON.stringify({
+        message: '로그인이 필요합니다.',
+        type: 'error',
+      })
+    );
+
+    return {
+      props: {},
+      redirect: {
+        destination: `/?toast=${queryStringForToast}`,
+        permanent: false,
+      },
+    }; */
   useEffect(() => {
-    const handleRouteChange = (url: URL) => {
-      gtag.pageview(url);
-      const targetMenu = Object.values(PAGES).find(
-        (page) => page.path === (String(url) || '/')
-      );
+    const toastQuery = router.query.toast as string;
 
-      if (!targetMenu) {
-        return;
-      }
+    if (toastQuery) {
+      console.log('toastQuery', toastQuery);
+      const { message, type } = JSON.parse(decodeURIComponent(toastQuery)) as {
+        message: string;
+        type: 'success' | 'error';
+      };
 
-      if (targetMenu?.value !== currentMenu.value) {
-        navigateToMenu(targetMenu.value);
-      }
-    };
-
-    router.events.on('routeChangeComplete', handleRouteChange);
-
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
-    };
-  }, [router.events]);
+      toast[type](message);
+    }
+  }, [router.query]);
 
   return (
     <>

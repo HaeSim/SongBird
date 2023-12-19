@@ -117,7 +117,11 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                           </TableCell>
                         </>
                       )}
-                      <TableCell>
+                      <TableCell
+                        sx={{
+                          textAlign: 'center',
+                        }}
+                      >
                         <IconButton
                           onClick={() =>
                             handlePlayClick(item.snippet.resourceId.videoId)

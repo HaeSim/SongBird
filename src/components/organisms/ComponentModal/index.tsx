@@ -8,6 +8,7 @@ import React from 'react';
 
 import Puller from '@/components/atoms/Puller';
 import useClientStore from '@/store/client';
+import { SlideUpFadeIn } from '@/styles/animation';
 
 const ComponentModal: React.FC = () => {
   const { modal, modalVisible, closeModal } = useClientStore((state) => state);
@@ -61,6 +62,7 @@ const ComponentModal: React.FC = () => {
           maxWidth: 'lg',
           borderRadius: '8px',
           padding: '30px',
+          animation: `${SlideUpFadeIn} 500ms ease-in-out`,
         },
       }}
     >

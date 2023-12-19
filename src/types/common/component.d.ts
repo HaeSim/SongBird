@@ -4,12 +4,7 @@ export interface ILayoutProps {
   children: ReactNode;
 }
 
-export interface IMetaInfoComponent
-  extends React.FC<{
-    title: string;
-    description: string;
-    canonical?: string;
-  }> {}
+export interface IMetaInfoComponent extends React.FC<IMetaProps> {}
 
 // this is a common type definition file
 export interface ILayoutComponent

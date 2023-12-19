@@ -11,6 +11,7 @@ import React from 'react';
 
 import Puller from '@/components/atoms/Puller';
 import useClientStore from '@/store/client';
+import { SlideUpFadeIn } from '@/styles/animation';
 
 const MessageModal = () => {
   const { modal, modalVisible, closeModal } = useClientStore((state) => state);
@@ -140,6 +141,7 @@ const MessageModal = () => {
           width: '560px',
           borderRadius: '8px',
           padding: '20px',
+          animation: `${SlideUpFadeIn} 500ms ease-in-out`,
         },
       }}
     >

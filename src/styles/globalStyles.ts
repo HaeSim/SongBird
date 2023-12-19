@@ -8,12 +8,6 @@ const globalStyles = css`
     height: 100%;
     width: 100%;
     font-size: 16px;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     // no repeat background image
     background: linear-gradient(#11233d 0%, #11233d 50%, #3a4d68 100%) no-repeat
       center center fixed;
