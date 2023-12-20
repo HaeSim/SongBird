@@ -12,6 +12,7 @@ import MetaInfo from '@/components/atoms/MetaInfo';
 import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
 import PlaylistSidebar from '@/components/molecules/PlaylistSideBar';
 import Default from '@/components/templates/Layout/Default';
+import ChannelService from '@/lib/channeltalk';
 import useClientStore from '@/store/client';
 import {
   useGetPlaylistItemQuery,
@@ -151,6 +152,16 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
       });
     }
   }, [router.isReady, session]);
+
+  // 플로팅버튼과 중복되므로, 채널톡 버튼은 사용하지 않습니다.
+  useEffect(() => {
+    ChannelService.hideChannelButton();
+
+    return () => {
+      // 페이지 이탈시, 채널톡 버튼을 다시 보여줍니다.
+      ChannelService.showChannelButton();
+    };
+  }, []);
 
   if (session?.provider !== 'google') {
     return (

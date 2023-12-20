@@ -19,16 +19,17 @@ import { type ReactElement, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import ChanneltalkInit from '@/components/atoms/ChanneltalkInit';
 import SessionCallback from '@/components/atoms/SessionCallback';
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
+import ChannelService from '@/lib/channeltalk';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
 import createEmotionCache from '@/styles/createEmotionCache';
 import theme from '@/styles/theme';
 import { PAGES } from '@/utils/AppConfig';
 import type { NextPageWithLayout } from '@/utils/common';
-
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
@@ -95,13 +96,18 @@ const MyApp = (props: MyAppProps) => {
         openBackdrop({
           message: '페이지 이동 중입니다. 잠시만 기다려주세요.',
         });
-      }, 1000);
+      }, 700);
     };
 
     const handleRouteChangeComplete = (url: URL) => {
       clearTimeout(backdropTimer);
       closeBackdrop();
+
+      // GA
       gtag.pageview(url);
+
+      // Channeltalk hide
+      ChannelService.hideMessenger();
     };
 
     router.events.on('routeChangeStart', handleRouteChangeStart);
@@ -194,6 +200,7 @@ const MyApp = (props: MyAppProps) => {
               </Backdrop>
               <Toaster />
               <SessionCallback />
+              <ChanneltalkInit />
               <Analytics />
             </ThemeProvider>
           </CacheProvider>

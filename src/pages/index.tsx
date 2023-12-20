@@ -15,6 +15,16 @@ const Home: NextPageWithLayout = () => {
     snow({
       duration: 10000,
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-console
+    console.log(
+      "%c🚀 Join us at Haesim's Labs 🚀",
+      'font-weight: bold; font-size: 28px; color: #2ecc71; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5)'
+    );
+    // eslint-disable-next-line no-console
+    console.log(
+      "%c🌐 We're expanding our team! Front-End Engineers wanted. Apply at ChannelTalk(FAB) 🚀",
+      'border: 2px solid #2ecc71; background: #1e1e1e; padding: 15px; font-weight: bold; font-size: 18px; color: #fff; text-shadow: 1px 1px 0 #000;'
+    );
   }, []);
   return (
     <>
