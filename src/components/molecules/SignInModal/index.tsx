@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import GithubLoginButton from '@/components/atoms/SocialLoginButton/GithubLoginButton';
 import GoogleLoginButton from '@/components/atoms/SocialLoginButton/GoogleLoginButton';
+import TooltipWithClick from '@/components/atoms/TooltipWithClick';
 
 const SignInModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,11 +32,17 @@ const SignInModal: React.FC = () => {
       <Typography variant="h5" sx={{ textAlign: 'center' }} fontWeight="bold">
         로그인
       </Typography>
-      <GithubLoginButton
-        onClick={handleGithubLogin}
-        disabled={isLoading}
-        isLoading={provider === 'github' && isLoading}
-      />
+      <TooltipWithClick
+        title="깃허브 로그인은 현재 준비중입니다."
+        placement="top"
+        arrow
+      >
+        <GithubLoginButton
+          onClick={handleGithubLogin}
+          disabled
+          isLoading={provider === 'github' && isLoading}
+        />
+      </TooltipWithClick>
       <GoogleLoginButton
         onClick={handleGoogleLogin}
         disabled={isLoading}
