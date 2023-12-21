@@ -23,6 +23,7 @@ import ChanneltalkInit from '@/components/atoms/ChanneltalkInit';
 import SessionCallback from '@/components/atoms/SessionCallback';
 import ComponentModal from '@/components/organisms/ComponentModal';
 import MessageModal from '@/components/organisms/MessageModal';
+import QuizDatabaseProvider from '@/hooks/providers/QuizDatabaseProvider';
 import ChannelService from '@/lib/channeltalk';
 import * as gtag from '@/lib/gtag';
 import useClientStore from '@/store/client';
@@ -173,37 +174,39 @@ const MyApp = (props: MyAppProps) => {
       />
       <SessionProvider session={pageProps.session}>
         <QueryClientProvider client={queryClient}>
-          <CacheProvider value={emotionCache}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-              <ComponentModal />
-              <MessageModal />
-              <Backdrop
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  color: '#fff',
-                  zIndex: (tm) => tm.zIndex.drawer + 1,
-                }}
-                open={backdropVisible}
-              >
-                <CircularProgress color="inherit" />
-                <Typography
-                  variant="h6"
-                  align="center"
-                  fontWeight="bold"
-                  marginTop={2}
+          <QuizDatabaseProvider>
+            <CacheProvider value={emotionCache}>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+                <ComponentModal />
+                <MessageModal />
+                <Backdrop
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: '#fff',
+                    zIndex: (tm) => tm.zIndex.drawer + 1,
+                  }}
+                  open={backdropVisible}
                 >
-                  {backdropMessage}
-                </Typography>
-              </Backdrop>
-              <Toaster />
-              <SessionCallback />
-              <ChanneltalkInit />
-              <Analytics />
-            </ThemeProvider>
-          </CacheProvider>
+                  <CircularProgress color="inherit" />
+                  <Typography
+                    variant="h6"
+                    align="center"
+                    fontWeight="bold"
+                    marginTop={2}
+                  >
+                    {backdropMessage}
+                  </Typography>
+                </Backdrop>
+                <Toaster />
+                <SessionCallback />
+                <ChanneltalkInit />
+                <Analytics />
+              </ThemeProvider>
+            </CacheProvider>
+          </QuizDatabaseProvider>
         </QueryClientProvider>
       </SessionProvider>
     </>

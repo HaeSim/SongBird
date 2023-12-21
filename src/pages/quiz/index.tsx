@@ -1,35 +1,17 @@
 import { Grid, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
 import QuizList from '@/components/organisms/QuizList';
 import Default from '@/components/templates/Layout/Default';
+import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
-import { getQuizFromDB } from '@/utils/indexDB';
 
 const Quiz: NextPageWithLayout = () => {
   const router = useRouter();
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-
-  useEffect(() => {
-    async function fetchQuizzes() {
-      const quizList = await getQuizFromDB();
-      if (!quizList) {
-        return;
-      }
-
-      if (Array.isArray(quizList)) {
-        setQuizzes(quizList);
-        // Set the first quiz as selected by default
-      } else {
-        setQuizzes([quizList]);
-      }
-    }
-
-    fetchQuizzes();
-  }, []);
+  const { data: quizzes } = useQuizDatabase();
 
   return (
     <>
@@ -49,9 +31,8 @@ const Quiz: NextPageWithLayout = () => {
           퀴즈 목록
         </Typography>
 
-        {/* Organism - QuizList */}
         <QuizList
-          quizzes={quizzes}
+          quizzes={quizzes ?? []}
           onQuizSelect={(quiz) => {
             router.push(`/quiz/${quiz.id}`);
           }}

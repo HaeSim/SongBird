@@ -69,6 +69,7 @@ const Default: ILayoutComponent = ({ children }) => {
           width: '100%',
           height: '100vh',
           padding: '32px 12px',
+          overflowX: 'hidden',
         }}
       >
         <DrawerMenu
