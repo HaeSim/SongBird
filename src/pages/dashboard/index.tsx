@@ -1,17 +1,11 @@
-import {
-  Box,
-  Slide,
-  Tab,
-  Tabs,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Slide, Tab, Tabs, useMediaQuery } from '@mui/material';
 import type { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import { useState } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
 import DashBoardCreate from '@/components/organisms/DashBoardCreate';
+import DashBoardManage from '@/components/organisms/DashBoardManage';
 import Default from '@/components/templates/Layout/Default';
 import theme from '@/styles/theme';
 import type { NextPageWithLayout } from '@/utils/common';
@@ -91,7 +85,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
               : 'standard'
           }
         >
-          <Tab label="퀴즈 관리 (준비중)" disabled />
+          <Tab label="퀴즈 관리" />
           <Tab label="퀴즈 만들기" />
         </Tabs>
       </Box>
@@ -104,8 +98,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         unmountOnExit
       >
         <Box hidden={selectedTab !== 0} width="100%">
-          {/* @TODO: 퀴즈 관리 추가 */}
-          <Typography>준비중인 메뉴입니다.</Typography>
+          <DashBoardManage />
         </Box>
       </Slide>
 

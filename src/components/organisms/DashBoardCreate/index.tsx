@@ -7,18 +7,19 @@ import toast from 'react-hot-toast';
 
 import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
 import PlaylistSidebar from '@/components/molecules/PlaylistSideBar';
+import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 import ChannelService from '@/lib/channeltalk';
 import useClientStore from '@/store/client';
 import {
   useGetPlaylistItemQuery,
   useGetPlaylistQuery,
 } from '@/store/server/features/youtube/queries';
-import { saveQuizToDB } from '@/utils/indexDB';
 
 interface IDashBoardCreateProps {}
 
 const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
   const { data: session } = useSession();
+  const { saveQuizzes } = useQuizDatabase();
   const {
     backdropVisible,
     openBackdrop,
@@ -69,12 +70,13 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
       quizItems,
     };
 
-    await saveQuizToDB(quiz).then(() => {
+    await (async () => {
+      saveQuizzes([quiz]);
       setTimeout(() => {
         closeBackdrop();
         toast.success('퀴즈 생성 완료!');
-      }, 1000);
-    });
+      }, 200);
+    })();
   };
 
   const handleMakeQuiz = () => {

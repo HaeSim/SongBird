@@ -115,3 +115,33 @@ export const getOSTypeByUserAgent = (): string => {
 
   return osType;
 };
+
+/**
+ * @description 날짜를 받아서 포맷팅
+ * @param date 날짜 (ex: 2023-02-25T00:18:24Z)
+ * @param format 포맷팅 형식 (default: YYYY-MM-DD HH:mm)
+ * @returns string
+ * @example
+ * const formattedDate = formatDate(date, 'YYYY-MM-DD');
+ * console.log(formattedDate); // 2021-10-01
+ */
+export const formatDatetime = (
+  date: string,
+  format: string = 'YYYY-MM-DD HH:mm'
+): string => {
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const hours = d.getHours();
+  const minutes = d.getMinutes();
+
+  const formattedDate = format
+    .replace('YYYY', year.toString())
+    .replace('MM', month.toString().padStart(2, '0'))
+    .replace('DD', day.toString().padStart(2, '0'))
+    .replace('HH', hours.toString().padStart(2, '0'))
+    .replace('mm', minutes.toString().padStart(2, '0'));
+
+  return formattedDate;
+};
