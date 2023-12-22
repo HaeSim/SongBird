@@ -6,8 +6,8 @@ import React from 'react';
 import MetaInfo from '@/components/atoms/MetaInfo';
 import QuizController from '@/components/molecules/QuizController';
 import QuizDetail from '@/components/organisms/QuizDetail';
-import QuizPlayerProvider from '@/components/organisms/QuizPlayer/QuizPlayerProvider';
 import Default from '@/components/templates/Layout/Default';
+import QuizPlayerProvider from '@/hooks/providers/QuizPlayerProvider';
 import { generateGetLayout } from '@/utils/common';
 
 const QuizDetailPage = () => {

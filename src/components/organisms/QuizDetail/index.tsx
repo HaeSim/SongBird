@@ -5,7 +5,10 @@ import YouTube from 'react-youtube';
 
 import theme from '@/styles/theme';
 
-import { PlayerStates, useQuizPlayer } from '../QuizPlayer/QuizPlayerProvider';
+import {
+  PlayerStates,
+  useQuizPlayer,
+} from '../../../hooks/providers/QuizPlayerProvider';
 
 const QuizDetail = () => {
   const router = useRouter();
