@@ -26,9 +26,8 @@ const Settings: NextPageWithLayout = () => {
 
     try {
       await deleteAllQuizzes();
-      toast.success('퀴즈를 모두 삭제했습니다.');
     } catch (error) {
-      toast.error('퀴즈를 삭제하는데 실패했습니다.');
+      toast.error('🐦 퀴즈를 삭제하는데 실패했습니다.');
     } finally {
       closeBackdrop();
     }

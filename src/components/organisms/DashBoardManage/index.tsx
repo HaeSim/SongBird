@@ -53,6 +53,7 @@ const DashBoardManage: React.FC<IDashBoardManageProps> = () => {
       </Typography>
       {(quizzes?.length ?? 0) > 0 && (
         <SelectedQuizDetails
+          quizId={quizzes?.[selectedQuizIndex]?.id ?? ''}
           title={quizzes?.[selectedQuizIndex]?.name ?? ''}
           description={quizzes?.[selectedQuizIndex]?.description ?? ''}
           thumbnail={quizzes?.[selectedQuizIndex]?.thumbnail ?? ''}

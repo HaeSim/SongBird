@@ -63,6 +63,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                         key={column}
                         sx={{
                           textAlign: 'center',
+                          fontWeight: 700,
                         }}
                       >
                         {column}
@@ -89,16 +90,18 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                     // isMobile 이 false 일때, 모든 column 을 보이게 처리
                     <TableRow key={item.id}>
                       <TableCell
+                        size="small"
                         sx={{
                           textAlign: 'center',
                         }}
                       >
                         {index + 1}
                       </TableCell>
-                      <TableCell>{item.snippet.title}</TableCell>
+                      <TableCell size="small">{item.snippet.title}</TableCell>
                       {isMobile ? null : (
                         <>
                           <TableCell
+                            size="small"
                             sx={{
                               textAlign: 'center',
                             }}
@@ -107,6 +110,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                           </TableCell>
 
                           <TableCell
+                            size="small"
                             sx={{
                               textAlign: 'center',
                             }}
@@ -118,6 +122,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                         </>
                       )}
                       <TableCell
+                        size="small"
                         sx={{
                           textAlign: 'center',
                         }}

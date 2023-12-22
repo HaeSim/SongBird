@@ -1,4 +1,4 @@
-import { Box, Toolbar, Typography, useMediaQuery } from '@mui/material';
+import { Box, Button, Toolbar, Typography, useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
@@ -74,6 +74,18 @@ const Home: NextPageWithLayout = () => {
           <br />
           with YouTube playlist
         </Typography>
+
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          href="/dashboard"
+          sx={{
+            marginTop: '1rem',
+          }}
+        >
+          Create Quiz
+        </Button>
       </Box>
     </>
   );

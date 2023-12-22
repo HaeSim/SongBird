@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import toast from 'react-hot-toast';
 
 interface MyDB {
   quizList: Record<string, QuizData>;
@@ -17,7 +18,8 @@ interface IQuizDatabaseContext {
   refetch: () => Promise<void>;
   isLoading: boolean;
   isError: boolean;
-  saveQuizzes: (quizzes: QuizData[]) => Promise<void>;
+  saveQuiz: (quiz: QuizData) => Promise<void>;
+  updateQuiz: (quiz: Pick<QuizData, 'id'> & Partial<QuizData>) => Promise<void>;
   deleteAllQuizzes: () => Promise<void>;
   deleteQuiz: (quizId: string) => Promise<void>;
 }
@@ -69,8 +71,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
         await callback(store);
         await tx.done;
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Transaction error:', error);
+        toast.error('🐦 Database transaction error');
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -85,9 +86,30 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
     });
   };
 
-  const saveQuizzes = async (quizzes: QuizData[]) => {
+  const saveQuiz = async (quiz: QuizData) => {
     await withTransaction('readwrite', async (store) => {
-      await Promise.all(quizzes.map((quiz) => store.put!(quiz)));
+      await store.put!(quiz);
+      toast.success(`🐦 ${quiz.name} 퀴즈 저장 성공`);
+    });
+    await refetch();
+  };
+
+  const updateQuiz = async (quiz: Pick<QuizData, 'id'> & Partial<QuizData>) => {
+    await withTransaction('readwrite', async (store) => {
+      //  1. get quiz
+      const oldQuiz = await store.get(quiz.id);
+      if (!oldQuiz) {
+        throw new Error(`Quiz with id ${quiz.id} not found`);
+      }
+      //  2. update quiz
+      const updatedQuiz = {
+        ...oldQuiz,
+        ...quiz,
+        updatedAt: new Date().toISOString(),
+      };
+      //  3. put quiz
+      await store.put!(updatedQuiz);
+      toast.success(`🐦 ${quiz.name} 퀴즈 업데이트 완료`);
     });
     await refetch();
   };
@@ -95,6 +117,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const deleteAllQuizzes = async () => {
     await withTransaction('readwrite', async (store) => {
       await store.clear!();
+      toast.success('🐦 퀴즈 전체 삭제 완료');
     });
     await refetch();
   };
@@ -102,6 +125,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const deleteQuiz = async (quizId: string) => {
     await withTransaction('readwrite', async (store) => {
       await store.delete!(quizId);
+      toast.success('🐦 퀴즈 삭제 완료');
     });
     await refetch();
   };
@@ -120,6 +144,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
         setQuizDB(database);
       } catch (error) {
         setIsError(true);
+        toast.error('🐦 Database 로드 실패');
       } finally {
         setIsLoading(false);
       }
@@ -130,18 +155,16 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
 
   // event handlers
   const handleVersionChange = () => {
-    // eslint-disable-next-line no-console
-    console.log('Database version changed');
+    toast.success('🐦 Database version changed');
   };
 
   const handleAbort = () => {
-    // eslint-disable-next-line no-alert
-    alert('Database transaction aborted');
+    toast.error('🐦 Database transaction aborted');
   };
 
   const handleError = () => {
     // eslint-disable-next-line no-alert
-    alert('Database error');
+    toast.error('🐦 Database error');
   };
 
   useEffect(() => {
@@ -176,7 +199,8 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
       refetch,
       isLoading,
       isError,
-      saveQuizzes,
+      saveQuiz,
+      updateQuiz,
       deleteAllQuizzes,
       deleteQuiz,
     };

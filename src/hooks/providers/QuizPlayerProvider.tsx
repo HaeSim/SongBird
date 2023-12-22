@@ -100,8 +100,8 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
 
     await player.loadVideoById({
       videoId: quizItem?.id ?? '',
-      startSeconds: 0,
-      endSeconds: seconds,
+      startSeconds: quizItem?.startTime ?? 0,
+      endSeconds: (quizItem?.startTime ?? 0) + seconds,
       suggestedQuality: 'small',
     });
   };
