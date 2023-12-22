@@ -80,7 +80,7 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
       saveQuiz(quiz);
       setTimeout(() => {
         closeBackdrop();
-        toast.success('퀴즈 생성 완료!');
+        toast.success('🐦 퀴즈 생성 완료!');
       }, 200);
     })();
   };

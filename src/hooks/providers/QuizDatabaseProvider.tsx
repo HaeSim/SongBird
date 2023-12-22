@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import toast from 'react-hot-toast';
 
 interface MyDB {
   quizList: Record<string, QuizData>;
@@ -70,8 +71,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
         await callback(store);
         await tx.done;
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Transaction error:', error);
+        toast.error('🐦 Database transaction error');
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -89,6 +89,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const saveQuiz = async (quiz: QuizData) => {
     await withTransaction('readwrite', async (store) => {
       await store.put!(quiz);
+      toast.success(`🐦 ${quiz.name} 퀴즈 저장 성공`);
     });
     await refetch();
   };
@@ -108,6 +109,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
       };
       //  3. put quiz
       await store.put!(updatedQuiz);
+      toast.success(`🐦 ${quiz.name} 퀴즈 업데이트 완료`);
     });
     await refetch();
   };
@@ -115,6 +117,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const deleteAllQuizzes = async () => {
     await withTransaction('readwrite', async (store) => {
       await store.clear!();
+      toast.success('🐦 퀴즈 전체 삭제 완료');
     });
     await refetch();
   };
@@ -122,6 +125,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const deleteQuiz = async (quizId: string) => {
     await withTransaction('readwrite', async (store) => {
       await store.delete!(quizId);
+      toast.success('🐦 퀴즈 삭제 완료');
     });
     await refetch();
   };
@@ -140,6 +144,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
         setQuizDB(database);
       } catch (error) {
         setIsError(true);
+        toast.error('🐦 Database 로드 실패');
       } finally {
         setIsLoading(false);
       }
@@ -150,18 +155,16 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
 
   // event handlers
   const handleVersionChange = () => {
-    // eslint-disable-next-line no-console
-    console.log('Database version changed');
+    toast.success('🐦 Database version changed');
   };
 
   const handleAbort = () => {
-    // eslint-disable-next-line no-alert
-    alert('Database transaction aborted');
+    toast.error('🐦 Database transaction aborted');
   };
 
   const handleError = () => {
     // eslint-disable-next-line no-alert
-    alert('Database error');
+    toast.error('🐦 Database error');
   };
 
   useEffect(() => {
