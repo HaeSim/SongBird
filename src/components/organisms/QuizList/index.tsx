@@ -80,7 +80,11 @@ const QuizList: React.FC<IQuizListProps> = ({
                           // 우측 정렬
                           style={{ marginLeft: 'auto' }}
                           aria-label="delete"
-                          onClick={() => {
+                          onClick={(e) => {
+                            // 버블링 방지
+                            e.preventDefault();
+                            // 캡처링 방지
+                            e.stopPropagation();
                             // deleteQuizFromDB(quiz.id)}
                             openMessageModal({
                               title: '퀴즈 삭제',
