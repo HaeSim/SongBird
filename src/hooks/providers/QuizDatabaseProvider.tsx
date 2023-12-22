@@ -17,7 +17,8 @@ interface IQuizDatabaseContext {
   refetch: () => Promise<void>;
   isLoading: boolean;
   isError: boolean;
-  saveQuiz: (quizzes: QuizData) => Promise<void>;
+  saveQuiz: (quiz: QuizData) => Promise<void>;
+  updateQuiz: (quiz: Pick<QuizData, 'id'> & Partial<QuizData>) => Promise<void>;
   deleteAllQuizzes: () => Promise<void>;
   deleteQuiz: (quizId: string) => Promise<void>;
 }
@@ -85,9 +86,28 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
     });
   };
 
-  const saveQuiz = async (quizzes: QuizData) => {
+  const saveQuiz = async (quiz: QuizData) => {
     await withTransaction('readwrite', async (store) => {
-      await store.put!(quizzes);
+      await store.put!(quiz);
+    });
+    await refetch();
+  };
+
+  const updateQuiz = async (quiz: Pick<QuizData, 'id'> & Partial<QuizData>) => {
+    await withTransaction('readwrite', async (store) => {
+      //  1. get quiz
+      const oldQuiz = await store.get(quiz.id);
+      if (!oldQuiz) {
+        throw new Error(`Quiz with id ${quiz.id} not found`);
+      }
+      //  2. update quiz
+      const updatedQuiz = {
+        ...oldQuiz,
+        ...quiz,
+        updatedAt: new Date().toISOString(),
+      };
+      //  3. put quiz
+      await store.put!(updatedQuiz);
     });
     await refetch();
   };
@@ -177,6 +197,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
       isLoading,
       isError,
       saveQuiz,
+      updateQuiz,
       deleteAllQuizzes,
       deleteQuiz,
     };

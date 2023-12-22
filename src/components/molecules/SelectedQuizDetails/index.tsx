@@ -1,8 +1,7 @@
 import {
+  Box,
   Button,
   Card,
-  CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   Grid,
@@ -15,9 +14,12 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useRef } from 'react';
+
+import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 
 interface SelectedQuizDetailsProps {
+  quizId: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -25,15 +27,66 @@ interface SelectedQuizDetailsProps {
 }
 
 const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
+  quizId,
   title,
   description,
   thumbnail,
   quizItems,
 }) => {
-  const handleSave = () => {
-    // eslint-disable-next-line no-alert
-    alert('현재 준비중인 기능입니다.');
+  const COLUMN_NAMES = [
+    '제목(정답)',
+    '힌트',
+    '시작(초)',
+    '하이라이트(초)',
+    '종료(초)',
+  ];
+  const { updateQuiz } = useQuizDatabase();
+  const quizItemsRef = useRef<QuizItemData[]>([...quizItems]);
+  const [isChanged, setIsChanged] = React.useState<boolean>(false);
+
+  const onBlurHandler = (e: React.FocusEvent<HTMLTableCellElement>) => {
+    if (!quizItemsRef.current) return;
+
+    const target = e.currentTarget;
+    const targetId = target.id;
+    const targetIndex = parseInt(targetId.split('-')[1]!, 10);
+    const targetItemType = target.getAttribute('itemType');
+    const targetValue =
+      targetItemType === 'number'
+        ? parseInt(target.textContent!, 10)
+        : target.textContent;
+    const targetKey: keyof QuizItemData = targetId.split(
+      '-'
+    )[0]! as keyof QuizItemData;
+
+    if (!quizItemsRef.current[targetIndex]) return;
+
+    // 변경된 데이터를 quizItemsRef에 반영
+    quizItemsRef.current[targetIndex] = {
+      ...quizItemsRef.current[targetIndex]!,
+      [targetKey]: targetValue,
+    };
+
+    setIsChanged(
+      quizItemsRef.current[targetIndex]![targetKey] !==
+        quizItems[targetIndex]![targetKey]
+    );
   };
+
+  const handleSave = () => {
+    // 업데이트된 데이터를 감지하여 quizItemsRef를 통해 얻음
+    const updatedQuizItems = quizItemsRef.current;
+
+    // updateQuiz 함수를 통해 데이터베이스 업데이트
+    updateQuiz({
+      id: quizId,
+      name: title,
+      description,
+      thumbnail,
+      quizItems: updatedQuizItems,
+    });
+  };
+
   return (
     <Grid item xs={3} sx={{ minWidth: '100%', marginBottom: '64px' }}>
       <Paper
@@ -64,55 +117,113 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
               {description}
             </Typography>
           </CardContent>
-          <CardActionArea
-            style={{
+          <Box
+            sx={{
               display: 'flex',
               alignItems: 'center',
               flexWrap: 'nowrap',
               overflowX: 'auto',
+              marginLeft: 'auto',
+              marginRight: '1rem',
+              marginBottom: '1rem',
+              width: '6rem',
             }}
           >
-            {/* 저장하기 */}
-            <CardActions
-              style={{
-                marginLeft: 'auto',
+            <Button
+              sx={{
+                margin: 'auto',
               }}
+              variant="outlined"
+              disabled={!isChanged}
+              onClick={handleSave}
             >
-              <Button
-                variant="outlined"
-                size="small"
-                color="primary"
-                onClick={handleSave}
+              <Typography
+                variant="body1"
+                fontWeight={800}
+                {...(isChanged && { color: 'primary' })}
               >
                 저장하기
-              </Button>
-            </CardActions>
-          </CardActionArea>
+              </Typography>
+            </Button>
+          </Box>
         </Card>
 
-        {/* MUI Table */}
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Answer</TableCell>
-                <TableCell>Hint</TableCell>
-                <TableCell>Start Time</TableCell>
-                <TableCell>Highlight Time</TableCell>
-                <TableCell>End Time</TableCell>
+                {COLUMN_NAMES.map((column) => (
+                  <TableCell
+                    key={column}
+                    sx={{
+                      textAlign: 'center',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {column}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {quizItems.map((quizItem) => (
+              {quizItems.map((quizItem, index) => (
                 <TableRow key={quizItem.id}>
-                  <TableCell contentEditable>{quizItem.answer}</TableCell>
-                  <TableCell contentEditable>{quizItem.hint || '-'}</TableCell>
-                  <TableCell contentEditable>{quizItem.startTime}</TableCell>
-                  <TableCell contentEditable>
+                  <TableCell
+                    id={`answer-${index}`}
+                    size="small"
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={onBlurHandler}
+                  >
+                    {quizItem.answer}
+                  </TableCell>
+                  <TableCell
+                    size="small"
+                    id={`hint-${index}`}
+                    contentEditable
+                    suppressContentEditableWarning
+                    onBlur={onBlurHandler}
+                  >
+                    {quizItem.hint || ''}
+                  </TableCell>
+                  <TableCell
+                    size="small"
+                    id={`startTime-${index}`}
+                    itemType="number"
+                    contentEditable
+                    suppressContentEditableWarning
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                    onBlur={onBlurHandler}
+                  >
+                    {quizItem.startTime}
+                  </TableCell>
+                  <TableCell
+                    size="small"
+                    id={`highlightTime-${index}`}
+                    itemType="number"
+                    contentEditable
+                    suppressContentEditableWarning
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                    onBlur={onBlurHandler}
+                  >
                     {quizItem.highlightTime}
                   </TableCell>
-                  <TableCell contentEditable>
-                    {quizItem.endTime || '-'}
+                  <TableCell
+                    size="small"
+                    id={`endTime-${index}`}
+                    itemType="number"
+                    contentEditable
+                    suppressContentEditableWarning
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                    onBlur={onBlurHandler}
+                  >
+                    {quizItem.endTime || null}
                   </TableCell>
                 </TableRow>
               ))}
