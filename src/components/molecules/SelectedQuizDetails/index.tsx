@@ -40,7 +40,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
     '하이라이트(초)',
     '종료(초)',
   ];
-  const { updateQuiz } = useQuizDatabase();
+  const { updateQuiz, isLoading } = useQuizDatabase();
   const quizItemsRef = useRef<QuizItemData[]>([...quizItems]);
   const [isChanged, setIsChanged] = React.useState<boolean>(false);
 
@@ -134,7 +134,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                 margin: 'auto',
               }}
               variant="outlined"
-              disabled={!isChanged}
+              disabled={!isChanged || isLoading}
               onClick={handleSave}
             >
               <Typography
