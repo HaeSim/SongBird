@@ -2,7 +2,7 @@
 import { Box, Button } from '@mui/material';
 import React from 'react';
 
-import { useQuizPlayer } from '@/components/organisms/QuizPlayer/QuizPlayerProvider';
+import { useQuizPlayer } from '@/hooks/providers/QuizPlayerProvider';
 
 const QuizController = () => {
   const {

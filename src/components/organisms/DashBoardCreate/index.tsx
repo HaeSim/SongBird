@@ -46,16 +46,23 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
       message: '퀴즈 생성 중...',
     });
 
-    const quizItems: QuizItem[] = playlistItems.items.map((item) => ({
+    const quizItems: QuizItemData[] = playlistItems.items.map((item) => ({
       id: item.snippet.resourceId.videoId,
-      snippet: item.snippet,
+      answer: item.snippet.title,
+      hint: '',
+      image: {
+        url: item.snippet.thumbnails.high?.url ?? '',
+        width: item.snippet.thumbnails.high?.width ?? 0,
+        height: item.snippet.thumbnails.high?.height ?? 0,
+      },
       startTime: 0,
-      answerTime: 40,
+      highlightTime: 40,
+      endTime: null,
     }));
 
-    const quiz: Quiz = {
+    const quiz: QuizData = {
       id: selectedPlaylist,
-      title:
+      name:
         myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
           ?.snippet.title || '',
       description:
@@ -63,11 +70,10 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
           ?.snippet.description || '',
       thumbnail:
         myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
-          ?.snippet.thumbnails.default.url || '',
-      publishedAt:
-        myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
-          ?.snippet.publishedAt || '',
+          ?.snippet.thumbnails.high.url || '',
       quizItems,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     await (async () => {

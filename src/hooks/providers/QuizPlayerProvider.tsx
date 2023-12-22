@@ -3,7 +3,6 @@ import React, { createContext, useContext, useMemo, useState } from 'react';
 import type { YouTubePlayer } from 'react-youtube';
 
 import { fireworks, schoolPride } from '@/utils/confetti';
-import { getQuizFromDB } from '@/utils/indexDB';
 
 export enum PlayerStates {
   READY = 4,
@@ -17,11 +16,10 @@ export enum PlayerStates {
 
 interface IQuizPlayerContext {
   // 퀴즈 상태
-  quizList?: Quiz;
   currentQuizIndex: number;
   answerMode: boolean;
   // 퀴즈 상태를 관리하는 메소드
-  handleGetQuizList: (quizId: string) => void;
+  setQuizData: (quiz: QuizData) => void;
   handlePrevQuiz: () => void;
   handleNextQuiz: () => void;
 
@@ -52,7 +50,7 @@ interface IQuizPlayerProviderProps {
 const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
   children,
 }) => {
-  const [quizList, setQuizList] = useState<Quiz>();
+  const [quiz, setQuiz] = useState<QuizData>();
   const [currentQuizIndex, setCurrentQuizIndex] = useState<number>(0);
   const [answerMode, setAnswerMode] = useState<boolean>(false);
 
@@ -61,19 +59,13 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
     undefined
   );
 
-  const quiz = quizList?.quizItems[currentQuizIndex];
+  const quizItem = quiz?.quizItems[currentQuizIndex];
 
   // 퀴즈 리스트를 받아옴
-  const handleGetQuizList = async (quizId: string) => {
-    const quizFromDB = await getQuizFromDB(quizId);
-    if (!quizFromDB) {
-      return;
-    }
-    if (Array.isArray(quizFromDB)) {
-      setQuizList(quizFromDB[0]);
-    } else {
-      setQuizList(quizFromDB);
-    }
+  const setQuizData = async (_quiz: QuizData) => {
+    setQuiz(_quiz);
+    setCurrentQuizIndex(0);
+    setAnswerMode(false);
   };
 
   // 이전 문제
@@ -95,7 +87,7 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
     await player.pauseVideo();
     setAnswerMode(false);
     setCurrentQuizIndex((prev) => {
-      if (prev === (quizList?.quizItems.length ?? 0) - 1) {
+      if (prev === (quiz?.quizItems.length ?? 0) - 1) {
         return prev;
       }
       return prev + 1;
@@ -107,7 +99,7 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
     if (!player) return;
 
     await player.loadVideoById({
-      videoId: quiz?.id ?? '',
+      videoId: quizItem?.id ?? '',
       startSeconds: 0,
       endSeconds: seconds,
       suggestedQuality: 'small',
@@ -119,8 +111,8 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
     // 정답 재생
     if (!answerMode) {
       await player.loadVideoById({
-        videoId: quiz?.id ?? '',
-        startSeconds: quiz?.answerTime ?? 40,
+        videoId: quizItem?.id ?? '',
+        startSeconds: quizItem?.highlightTime ?? 40,
         // 끝까지
         suggestedQuality: 'small',
       });
@@ -167,11 +159,10 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
   const contextValue: IQuizPlayerContext = useMemo(() => {
     return {
       // 퀴즈 상태
-      quizList,
       currentQuizIndex,
       answerMode,
       // 퀴즈 상태를 관리하는 메소드
-      handleGetQuizList,
+      setQuizData,
       handlePrevQuiz,
       handleNextQuiz,
       handlePlayWithSeconds,
@@ -182,10 +173,9 @@ const QuizPlayerProvider: React.FC<IQuizPlayerProviderProps> = ({
       handleReady,
     };
   }, [
-    quizList,
     currentQuizIndex,
     answerMode,
-    handleGetQuizList,
+    setQuizData,
     handlePrevQuiz,
     handleNextQuiz,
     handlePlayWithSeconds,

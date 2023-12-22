@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import type { Audio as AudioType } from 'src/types/interfaces/youtube/ytdl';
 
 import { useGetAudioSourceQuery } from '@/store/server/features/youtube/queries';
+import type { Audio as AudioType } from '@/types/interfaces/youtube/ytdl';
 
 export enum STATE {
   IDLE = 'idle',
