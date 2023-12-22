@@ -1,5 +1,8 @@
 import {
+  Button,
   Card,
+  CardActionArea,
+  CardActions,
   CardContent,
   CardMedia,
   Grid,
@@ -27,6 +30,10 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
   thumbnail,
   quizItems,
 }) => {
+  const handleSave = () => {
+    // eslint-disable-next-line no-alert
+    alert('현재 준비중인 기능입니다.');
+  };
   return (
     <Grid item xs={3} sx={{ minWidth: '100%', marginBottom: '64px' }}>
       <Paper
@@ -44,8 +51,11 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
             image={thumbnail}
           />
           <CardContent>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom fontWeight={700}>
               {title}
+              <Typography variant="caption" color="textSecondary" ml={1}>
+                총 {quizItems.length}개의 문제
+              </Typography>
             </Typography>
             <Typography
               variant="body1"
@@ -54,6 +64,30 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
               {description}
             </Typography>
           </CardContent>
+          <CardActionArea
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'nowrap',
+              overflowX: 'auto',
+            }}
+          >
+            {/* 저장하기 */}
+            <CardActions
+              style={{
+                marginLeft: 'auto',
+              }}
+            >
+              <Button
+                variant="outlined"
+                size="small"
+                color="primary"
+                onClick={handleSave}
+              >
+                저장하기
+              </Button>
+            </CardActions>
+          </CardActionArea>
         </Card>
 
         {/* MUI Table */}
