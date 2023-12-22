@@ -9,17 +9,17 @@ import React, {
 } from 'react';
 
 interface MyDB {
-  quizList: Record<string, Quiz>;
+  quizList: Record<string, QuizData>;
 }
 
 interface IQuizDatabaseContext {
-  data: Quiz[] | undefined;
-  refetch: () => void;
+  data: QuizData[] | undefined;
+  refetch: () => Promise<void>;
   isLoading: boolean;
   isError: boolean;
-  saveQuizzes: (quizzes: Quiz[]) => void;
-  deleteAllQuizzes: () => void;
-  deleteQuiz: (quizId: string) => void;
+  saveQuizzes: (quizzes: QuizData[]) => Promise<void>;
+  deleteAllQuizzes: () => Promise<void>;
+  deleteQuiz: (quizId: string) => Promise<void>;
 }
 
 const QuizDatabaseContext = createContext<IQuizDatabaseContext | undefined>(
@@ -44,7 +44,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   children,
 }) => {
   const [quizDB, setQuizDB] = useState<IDBPDatabase<MyDB>>();
-  const [data, setData] = useState<Quiz[]>();
+  const [data, setData] = useState<QuizData[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -85,7 +85,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
     });
   };
 
-  const saveQuizzes = async (quizzes: Quiz[]) => {
+  const saveQuizzes = async (quizzes: QuizData[]) => {
     await withTransaction('readwrite', async (store) => {
       await Promise.all(quizzes.map((quiz) => store.put!(quiz)));
     });

@@ -9,7 +9,7 @@ import {
 import { formatDatetime } from '@/utils/common';
 
 interface QuizCardProps {
-  quiz: Quiz;
+  quiz: QuizData;
   cardActions: React.ReactNode;
 }
 
@@ -24,12 +24,12 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, cardActions }) => {
       <CardMedia
         component="img"
         height="168"
-        alt={quiz.title}
+        alt={quiz.name}
         image={quiz.thumbnail}
       />
       <CardContent>
         <Typography variant="subtitle1" fontWeight={600}>
-          {quiz.title}
+          {quiz.name}
           <Typography variant="caption" color="textSecondary">
             {' '}
             ({quiz.quizItems.length})
@@ -39,7 +39,7 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, cardActions }) => {
           {quiz.description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {formatDatetime(quiz.publishedAt)}에 게시됨
+          {formatDatetime(quiz.createdAt)}
         </Typography>
       </CardContent>
 

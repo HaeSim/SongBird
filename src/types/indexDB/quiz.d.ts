@@ -34,7 +34,7 @@ interface QuizData {
   name: string;
   description: string;
   thumbnail: string;
-  quizItems: QuizItem[];
+  quizItems: QuizItemData[];
   createdAt: string;
   updatedAt: string;
 }

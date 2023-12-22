@@ -4,14 +4,15 @@ import toast from 'react-hot-toast';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
 import Default from '@/components/templates/Layout/Default';
+import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 import useClientStore from '@/store/client';
 import type { NextPageWithLayout } from '@/utils/common';
 import { generateGetLayout } from '@/utils/common';
-import { deleteAllQuizzesFromDB } from '@/utils/indexDB';
 
 const Settings: NextPageWithLayout = () => {
   const { openBackdrop, closeBackdrop, openMessageModal, closeModal } =
     useClientStore((state) => state);
+  const { deleteAllQuizzes } = useQuizDatabase();
 
   const handleDeleteAllQuizzesFromDB = async () => {
     openBackdrop({
@@ -24,7 +25,7 @@ const Settings: NextPageWithLayout = () => {
     });
 
     try {
-      await deleteAllQuizzesFromDB();
+      await deleteAllQuizzes();
       toast.success('퀴즈를 모두 삭제했습니다.');
     } catch (error) {
       toast.error('퀴즈를 삭제하는데 실패했습니다.');

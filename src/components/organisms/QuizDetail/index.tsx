@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import YouTube from 'react-youtube';
 
+import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 import theme from '@/styles/theme';
 
 import {
@@ -12,25 +13,24 @@ import {
 
 const QuizDetail = () => {
   const router = useRouter();
-
+  const { data: quizzes } = useQuizDatabase();
   const {
-    quizList,
+    setQuizData,
     currentQuizIndex,
     answerMode,
     playerState,
-    handleGetQuizList,
     handleStateChange,
     handleReady,
   } = useQuizPlayer();
 
-  const totalQuizCount = quizList?.quizItems.length ?? 0;
+  const quiz = quizzes?.find((_quiz) => _quiz.id === router.query.quizId);
+
+  const totalQuizCount = quiz?.quizItems.length ?? 0;
 
   useEffect(() => {
-    if (!router.isReady) return;
-    if (!router.query.quizId) return;
-
-    handleGetQuizList(router.query.quizId as string);
-  }, [router.isReady, router.query.quizId]);
+    if (!quiz) return;
+    setQuizData(quiz);
+  }, [quiz]);
 
   return (
     <>
@@ -44,9 +44,7 @@ const QuizDetail = () => {
             : {}
         }
       >
-        {answerMode
-          ? quizList?.quizItems[currentQuizIndex]?.snippet.title
-          : quizList?.title}
+        {answerMode ? quiz?.quizItems[currentQuizIndex]?.answer : quiz?.name}
       </Typography>
       <Box
         sx={{
@@ -84,7 +82,7 @@ const QuizDetail = () => {
               opacity: answerMode ? 1 : 0,
               zIndex: 3,
             }}
-            videoId={quizList?.quizItems[currentQuizIndex]?.id ?? ''}
+            videoId={quiz?.quizItems[currentQuizIndex]?.id ?? ''}
             opts={{
               width: '100%',
               height: '100%',

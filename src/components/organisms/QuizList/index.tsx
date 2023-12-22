@@ -13,8 +13,8 @@ import QuizCard from '@/components/molecules/QuizCard';
 import useClientStore from '@/store/client';
 
 interface IQuizListProps {
-  quizzes: Quiz[];
-  onQuizSelect?: (quiz: Quiz) => void;
+  quizzes: QuizData[];
+  onQuizSelect?: (quiz: QuizData) => void;
   isLoading?: boolean;
   deleteHandler?: (quizId: string) => void;
 }
