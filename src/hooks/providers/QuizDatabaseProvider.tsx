@@ -110,7 +110,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
     setIsLoading(true);
     const openDatabase = async () => {
       try {
-        const database = await openDB<MyDB>('songbird', 1, {
+        const database = await openDB<MyDB>('songbird', 1.1, {
           upgrade(db) {
             if (!db.objectStoreNames.contains('quizList')) {
               db.createObjectStore('quizList', { keyPath: 'id' });
