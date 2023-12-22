@@ -67,7 +67,6 @@ const Default: ILayoutComponent = ({ children }) => {
           justifyContent: 'center',
           alignItems: 'center',
           width: '100%',
-          height: '100vh',
           padding: '32px 12px',
           overflowX: 'hidden',
         }}
