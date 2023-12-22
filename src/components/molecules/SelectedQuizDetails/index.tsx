@@ -190,6 +190,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                     size="small"
                     id={`startTime-${index}`}
                     itemType="number"
+                    inputMode="numeric"
                     contentEditable
                     suppressContentEditableWarning
                     sx={{
@@ -203,6 +204,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                     size="small"
                     id={`highlightTime-${index}`}
                     itemType="number"
+                    inputMode="numeric"
                     contentEditable
                     suppressContentEditableWarning
                     sx={{
@@ -216,6 +218,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                     size="small"
                     id={`endTime-${index}`}
                     itemType="number"
+                    inputMode="numeric"
                     contentEditable
                     suppressContentEditableWarning
                     sx={{
