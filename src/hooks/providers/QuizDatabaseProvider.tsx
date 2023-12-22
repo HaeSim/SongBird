@@ -17,7 +17,7 @@ interface IQuizDatabaseContext {
   refetch: () => Promise<void>;
   isLoading: boolean;
   isError: boolean;
-  saveQuizzes: (quizzes: QuizData[]) => Promise<void>;
+  saveQuiz: (quizzes: QuizData) => Promise<void>;
   deleteAllQuizzes: () => Promise<void>;
   deleteQuiz: (quizId: string) => Promise<void>;
 }
@@ -85,9 +85,9 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
     });
   };
 
-  const saveQuizzes = async (quizzes: QuizData[]) => {
+  const saveQuiz = async (quizzes: QuizData) => {
     await withTransaction('readwrite', async (store) => {
-      await Promise.all(quizzes.map((quiz) => store.put!(quiz)));
+      await store.put!(quizzes);
     });
     await refetch();
   };
@@ -176,7 +176,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
       refetch,
       isLoading,
       isError,
-      saveQuizzes,
+      saveQuiz,
       deleteAllQuizzes,
       deleteQuiz,
     };

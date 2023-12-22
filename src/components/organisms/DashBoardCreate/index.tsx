@@ -19,7 +19,7 @@ interface IDashBoardCreateProps {}
 
 const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
   const { data: session } = useSession();
-  const { saveQuizzes } = useQuizDatabase();
+  const { saveQuiz } = useQuizDatabase();
   const {
     backdropVisible,
     openBackdrop,
@@ -77,7 +77,7 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
     };
 
     await (async () => {
-      saveQuizzes([quiz]);
+      saveQuiz(quiz);
       setTimeout(() => {
         closeBackdrop();
         toast.success('퀴즈 생성 완료!');
