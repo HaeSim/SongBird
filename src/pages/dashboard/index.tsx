@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 interface IDashboardProps {}
 
 const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     event.preventDefault();

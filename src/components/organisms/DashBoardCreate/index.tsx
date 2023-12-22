@@ -49,13 +49,15 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
     const quizItems: QuizItemData[] = playlistItems.items.map((item) => ({
       id: item.snippet.resourceId.videoId,
       answer: item.snippet.title,
+      hint: '',
       image: {
-        url: item.snippet.thumbnails.default.url,
-        width: item.snippet.thumbnails.default.width,
-        height: item.snippet.thumbnails.default.height,
+        url: item.snippet.thumbnails.high?.url ?? '',
+        width: item.snippet.thumbnails.high?.width ?? 0,
+        height: item.snippet.thumbnails.high?.height ?? 0,
       },
       startTime: 0,
       highlightTime: 40,
+      endTime: null,
     }));
 
     const quiz: QuizData = {
@@ -68,7 +70,7 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
           ?.snippet.description || '',
       thumbnail:
         myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
-          ?.snippet.thumbnails.default.url || '',
+          ?.snippet.thumbnails.high.url || '',
       quizItems,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

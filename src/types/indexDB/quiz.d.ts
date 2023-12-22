@@ -14,10 +14,10 @@ interface QuizItemData {
   id: string;
   image: YoutubeThumbnail;
   answer: string;
-  hint?: string;
+  hint: string;
   startTime: number;
   highlightTime: number;
-  endTime?: number;
+  endTime: number | null;
 }
 
 /**
