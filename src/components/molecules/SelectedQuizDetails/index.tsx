@@ -16,7 +16,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 
 import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
@@ -163,6 +163,14 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
 
     setIsChanged(false);
   };
+
+  useEffect(() => {
+    quizItemsRef.current = [...quizItems];
+    quizInfoRef.current = {
+      name,
+      description,
+    };
+  }, [quizId, name, description, quizItems]);
 
   return (
     <Grid item xs={3} sx={{ minWidth: '100%', marginBottom: '64px' }}>

@@ -107,7 +107,7 @@ const Dashboard: NextPageWithLayout<IDashboardProps> = () => {
         direction="left"
         in={selectedTab === 1}
         mountOnEnter
-        unmountOnExit
+        // unmountOnExit
       >
         <Box hidden={selectedTab !== 1} width="100%">
           <DashBoardCreate />
