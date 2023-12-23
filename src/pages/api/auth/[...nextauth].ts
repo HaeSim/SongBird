@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
 import type { User } from 'next-auth';
@@ -43,7 +44,7 @@ const refreshAccessToken = async (token: {
       accessToken: access_token,
       accessTokenExpires: Date.now() + expires_in * 1000,
     };
-
+    console.info('newToken', newToken);
     return newToken;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -85,6 +86,9 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async jwt({ token, account, user }) {
+      console.info('jwt-token', token);
+      console.info('jwt-account', account);
+      console.info('jwt-user', user);
       // 초기 로그인시 User 정보를 가공해 반환
       if (account && user) {
         return {
@@ -124,6 +128,8 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async session({ session, token }) {
+      console.log('session-session', session);
+      console.log('session-token', token);
       if (!token.accessTokenExpires) {
         session.accessToken = token.accessToken;
         session.provider = token.provider;
