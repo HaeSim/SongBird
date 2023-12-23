@@ -97,7 +97,7 @@ export const authOptions = {
       }
 
       // Access Token이 만료되지 않았다면 그대로 반환
-      if (Date.now() < token.accessTokenExpires) {
+      if (!token.accessTokenExpires || Date.now() < token.accessTokenExpires) {
         return token;
       }
 
@@ -112,6 +112,11 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async session({ session, token }) {
+      if (!token.accessTokenExpires) {
+        session.accessToken = token.accessToken;
+        session.provider = token.provider;
+        return session;
+      }
       session.user = token.user as User;
       session.accessToken = token.accessToken;
       session.accessTokenExpires = token.accessTokenExpires;
