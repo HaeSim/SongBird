@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import SelectedQuizDetails from '@/components/molecules/SelectedQuizDetails';
 import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
@@ -15,6 +15,16 @@ const DashBoardManage: React.FC<IDashBoardManageProps> = () => {
   const handleDelete = (quizId: string) => {
     deleteQuiz(quizId);
   };
+
+  // 퀴즈 삭제시 선택된 퀴즈가 삭제되면 선택된 퀴즈를 초기화
+  // 마지막 퀴즈가 삭제되면 마지막 퀴즈를 선택
+  useEffect(() => {
+    if (!quizzes || quizzes.length === 0) return;
+
+    if (selectedQuizIndex >= quizzes.length) {
+      setSelectedQuizIndex(quizzes.length - 1);
+    }
+  }, [quizzes]);
 
   return (
     <Grid container spacing={2}>
