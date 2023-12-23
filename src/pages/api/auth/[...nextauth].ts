@@ -95,9 +95,21 @@ export const authOptions = {
           user,
         };
       }
+      // 기존 호환처리
+      if (!token.accessTokenExpires) {
+        if (account?.access_token) {
+          // eslint-disable-next-line
+          token.accessToken = account.access_token;
+        }
+        if (account?.provider) {
+          // eslint-disable-next-line
+          token.provider = account.provider;
+        }
+        return token;
+      }
 
       // Access Token이 만료되지 않았다면 그대로 반환
-      if (!token.accessTokenExpires || Date.now() < token.accessTokenExpires) {
+      if (Date.now() < token.accessTokenExpires) {
         return token;
       }
 
