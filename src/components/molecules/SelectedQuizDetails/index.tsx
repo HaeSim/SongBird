@@ -1,3 +1,4 @@
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {
   Box,
   Button,
@@ -5,6 +6,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -15,12 +17,16 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useRef } from 'react';
+import toast from 'react-hot-toast';
 
 import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
+import useClientStore from '@/store/client';
+
+import MusicPlayer from '../MusicPlayer';
 
 interface SelectedQuizDetailsProps {
   quizId: string;
-  title: string;
+  name: string;
   description: string;
   thumbnail: string;
   quizItems: QuizItemData[];
@@ -28,23 +34,88 @@ interface SelectedQuizDetailsProps {
 
 const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
   quizId,
-  title,
+  name,
   description,
   thumbnail,
   quizItems,
 }) => {
-  const COLUMN_NAMES = [
-    '제목(정답)',
-    '힌트',
-    '시작(초)',
-    '하이라이트(초)',
-    '종료(초)',
+  const COLUMNS_WITH_SUBHEADERS = [
+    {
+      name: '제목(정답)',
+      subheaders: [],
+    },
+    {
+      name: '시작',
+      subheaders: ['초', '재생'],
+    },
+    {
+      name: '하이라이트',
+      subheaders: ['초', '재생'],
+    },
   ];
+  const { openComponentModal } = useClientStore((state) => state);
   const { updateQuiz, isLoading } = useQuizDatabase();
   const quizItemsRef = useRef<QuizItemData[]>([...quizItems]);
+  const quizInfoRef = useRef<Pick<QuizData, 'name' | 'description'>>({
+    name,
+    description,
+  });
   const [isChanged, setIsChanged] = React.useState<boolean>(false);
 
-  const onBlurHandler = (e: React.FocusEvent<HTMLTableCellElement>) => {
+  const handlePlayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget;
+    const targetId = target.id;
+    const targetColumn = targetId.split('-')[0]!;
+    const targetIndex = parseInt(targetId.split('-')[1]!, 10);
+
+    let startTime: number;
+    switch (targetColumn) {
+      case 'startTimePreview':
+        // get by id (startTime)
+        startTime = quizItemsRef.current[targetIndex]?.startTime ?? 0;
+        break;
+      case 'highlightTimePreview':
+        startTime = quizItemsRef.current[targetIndex]?.highlightTime ?? 0;
+        break;
+      default:
+        startTime = 0;
+    }
+
+    const newVideoId = quizItems[targetIndex]?.id;
+    if (!newVideoId)
+      return toast.error('재생할 수 없습니다. 관리자에게 문의하세요');
+
+    return openComponentModal(
+      <MusicPlayer videoId={newVideoId} startTime={startTime} />
+    );
+  };
+
+  const onBlurQuizInfoHandler = (
+    e: React.FocusEvent<HTMLDivElement | HTMLImageElement>
+  ) => {
+    const target = e.currentTarget;
+    const targetId = target.id;
+    const targetValue = target.textContent;
+    const targetKey: keyof Pick<QuizData, 'name' | 'description'> =
+      targetId.split('-')[0]! as keyof Pick<QuizData, 'name' | 'description'>;
+
+    // quizInfoRef에 변경된 데이터를 반영
+    quizInfoRef.current = {
+      ...quizInfoRef.current,
+      [targetKey]: targetValue,
+    };
+
+    setIsChanged(
+      (prev) =>
+        prev ||
+        quizInfoRef.current[targetKey] !==
+          (targetKey === 'name' ? name : description)
+    );
+  };
+
+  const onBlurTableBodyHandler = (
+    e: React.FocusEvent<HTMLTableCellElement>
+  ) => {
     if (!quizItemsRef.current) return;
 
     const target = e.currentTarget;
@@ -67,24 +138,30 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
       [targetKey]: targetValue,
     };
 
-    setIsChanged(
-      quizItemsRef.current[targetIndex]![targetKey] !==
-        quizItems[targetIndex]![targetKey]
-    );
+    setIsChanged((prev) => {
+      return (
+        prev ||
+        quizItemsRef.current[targetIndex]![targetKey] !==
+          quizItems[targetIndex]![targetKey]
+      );
+    });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     // 업데이트된 데이터를 감지하여 quizItemsRef를 통해 얻음
+    const updatedQuizInfo = quizInfoRef.current;
     const updatedQuizItems = quizItemsRef.current;
 
     // updateQuiz 함수를 통해 데이터베이스 업데이트
-    updateQuiz({
+    await updateQuiz({
       id: quizId,
-      name: title,
-      description,
+      name: updatedQuizInfo.name,
+      description: updatedQuizInfo.description,
       thumbnail,
       quizItems: updatedQuizItems,
     });
+
+    setIsChanged(false);
   };
 
   return (
@@ -99,22 +176,43 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
         <Card>
           <CardMedia
             component="img"
-            alt={title}
+            alt={name}
             height="140"
             image={thumbnail}
           />
           <CardContent>
-            <Typography variant="h6" gutterBottom fontWeight={700}>
-              {title}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'nowrap',
+                overflowX: 'auto',
+              }}
+            >
+              <Typography
+                id={`name-${quizId}`}
+                variant="h6"
+                gutterBottom
+                fontWeight={700}
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={onBlurQuizInfoHandler}
+              >
+                {name}
+              </Typography>
               <Typography variant="caption" color="textSecondary" ml={1}>
                 총 {quizItems.length}개의 문제
               </Typography>
-            </Typography>
+            </Box>
             <Typography
+              id={`description-${quizId}`}
               variant="body1"
               color={description.length > 0 ? 'textPrimary' : 'textSecondary'}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={onBlurQuizInfoHandler}
             >
-              {description}
+              {description || ''}
             </Typography>
           </CardContent>
           <Box
@@ -152,17 +250,40 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
           <Table>
             <TableHead>
               <TableRow>
-                {COLUMN_NAMES.map((column) => (
-                  <TableCell
-                    key={column}
-                    sx={{
-                      textAlign: 'center',
-                      fontWeight: 700,
-                    }}
-                  >
-                    {column}
-                  </TableCell>
-                ))}
+                {COLUMNS_WITH_SUBHEADERS.map((column) => {
+                  return (
+                    <TableCell
+                      key={column.name}
+                      size="small"
+                      rowSpan={column.name === '제목(정답)' ? 2 : 1}
+                      colSpan={column.subheaders.length}
+                      sx={{
+                        textAlign: 'center',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {column.name}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+              <TableRow>
+                {COLUMNS_WITH_SUBHEADERS.map((column) => {
+                  return column.subheaders.map((subheader) => {
+                    return (
+                      <TableCell
+                        size="small"
+                        key={subheader}
+                        sx={{
+                          textAlign: 'center',
+                          fontWeight: 700,
+                        }}
+                      >
+                        {subheader}
+                      </TableCell>
+                    );
+                  });
+                })}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -173,18 +294,9 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                     size="small"
                     contentEditable
                     suppressContentEditableWarning
-                    onBlur={onBlurHandler}
+                    onBlur={onBlurTableBodyHandler}
                   >
                     {quizItem.answer}
-                  </TableCell>
-                  <TableCell
-                    size="small"
-                    id={`hint-${index}`}
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={onBlurHandler}
-                  >
-                    {quizItem.hint || ''}
                   </TableCell>
                   <TableCell
                     size="small"
@@ -196,9 +308,26 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                     sx={{
                       textAlign: 'center',
                     }}
-                    onBlur={onBlurHandler}
+                    onBlur={onBlurTableBodyHandler}
                   >
                     {quizItem.startTime}
+                  </TableCell>
+                  <TableCell
+                    size="small"
+                    sx={{
+                      textAlign: 'center',
+                    }}
+                  >
+                    <IconButton
+                      id={`startTimePreview-${index}`}
+                      onClick={handlePlayClick}
+                    >
+                      <PlayArrowIcon
+                        sx={{
+                          color: '#fff',
+                        }}
+                      />
+                    </IconButton>
                   </TableCell>
                   <TableCell
                     size="small"
@@ -210,23 +339,26 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                     sx={{
                       textAlign: 'center',
                     }}
-                    onBlur={onBlurHandler}
+                    onBlur={onBlurTableBodyHandler}
                   >
                     {quizItem.highlightTime}
                   </TableCell>
                   <TableCell
                     size="small"
-                    id={`endTime-${index}`}
-                    itemType="number"
-                    inputMode="numeric"
-                    contentEditable
-                    suppressContentEditableWarning
                     sx={{
                       textAlign: 'center',
                     }}
-                    onBlur={onBlurHandler}
                   >
-                    {quizItem.endTime || null}
+                    <IconButton
+                      id={`highlightTimePreview-${index}`}
+                      onClick={handlePlayClick}
+                    >
+                      <PlayArrowIcon
+                        sx={{
+                          color: '#fff',
+                        }}
+                      />
+                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}

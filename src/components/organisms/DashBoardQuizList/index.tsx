@@ -9,17 +9,17 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-import QuizCard from '@/components/molecules/QuizCard';
+import DashBoardQuizCard from '@/components/molecules/DashBoardQuizCard';
 import useClientStore from '@/store/client';
 
-interface IQuizListProps {
+interface IDashBoardQuizListProps {
   quizzes: QuizData[];
   onQuizSelect?: (quiz: QuizData) => void;
   isLoading?: boolean;
   deleteHandler?: (quizId: string) => void;
 }
 
-const QuizList: React.FC<IQuizListProps> = ({
+const DashBoardQuizList: React.FC<IDashBoardQuizListProps> = ({
   quizzes,
   onQuizSelect,
   isLoading = false,
@@ -71,7 +71,7 @@ const QuizList: React.FC<IQuizListProps> = ({
                   }}
                   onClick={() => onQuizSelect?.(quiz)}
                 >
-                  <QuizCard
+                  <DashBoardQuizCard
                     quiz={quiz}
                     cardActions={
                       deleteHandler && (
@@ -136,4 +136,4 @@ const QuizList: React.FC<IQuizListProps> = ({
   );
 };
 
-export default QuizList;
+export default DashBoardQuizList;

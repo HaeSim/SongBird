@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import MetaInfo from '@/components/atoms/MetaInfo';
-import QuizList from '@/components/organisms/QuizList';
+import QuizListVertical from '@/components/organisms/QuizListVertical';
 import Default from '@/components/templates/Layout/Default';
 import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 import type { NextPageWithLayout } from '@/utils/common';
@@ -30,8 +30,7 @@ const Quiz: NextPageWithLayout = () => {
         >
           퀴즈 목록
         </Typography>
-
-        <QuizList
+        <QuizListVertical
           quizzes={quizzes ?? []}
           onQuizSelect={(quiz) => {
             router.push(`/quiz/${quiz.id}`);

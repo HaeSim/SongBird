@@ -25,7 +25,7 @@ export default async function handler(
       'https://youtube.googleapis.com/youtube/v3/playlists',
       {
         params: {
-          part: 'snippet,contentDetails,status',
+          part: 'id,snippet,contentDetails,status',
           maxResults: 25,
           mine: true,
           key: process.env.YOUTUBE_API_KEY,

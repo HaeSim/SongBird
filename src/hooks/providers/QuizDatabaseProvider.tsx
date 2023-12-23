@@ -89,7 +89,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const saveQuiz = async (quiz: QuizData) => {
     await withTransaction('readwrite', async (store) => {
       await store.put!(quiz);
-      toast.success(`🐦 ${quiz.name} 퀴즈 저장 성공`);
+      toast.success(`🐦 ${quiz.name} 퀴즈 생성 성공`);
     });
     await refetch();
   };
@@ -109,7 +109,9 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
       };
       //  3. put quiz
       await store.put!(updatedQuiz);
-      toast.success(`🐦 ${quiz.name} 퀴즈 업데이트 완료`);
+      toast.success(`🐦 ${quiz.name} 퀴즈 업데이트 완료
+        퀴즈보러가기: /quiz/${quiz.id}
+      `);
     });
     await refetch();
   };
