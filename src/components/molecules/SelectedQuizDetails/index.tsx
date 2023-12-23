@@ -112,7 +112,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
       return toast.error('재생할 수 없습니다. 관리자에게 문의하세요');
 
     return openComponentModal(
-      <MusicPlayer videoId={newVideoId} startTime={startTime} />
+      <MusicPlayer videoId={newVideoId} startTime={startTime} preview />
     );
   };
 
