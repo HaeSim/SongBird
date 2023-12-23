@@ -117,7 +117,10 @@ export const authOptions = {
         return token;
       }
 
-      return refreshAccessToken(token);
+      if (token.refreshToken) {
+        return refreshAccessToken(token);
+      }
+      return token;
     },
     /**
      * Session Callback
