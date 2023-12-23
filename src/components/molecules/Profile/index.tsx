@@ -10,9 +10,6 @@ interface IProfileProps {}
 const Profile: FC<IProfileProps> = () => {
   const { data: session } = useSession();
 
-  // eslint-disable-next-line no-console
-  console.log('profile session', session);
-
   return (
     <Toolbar
       sx={{
