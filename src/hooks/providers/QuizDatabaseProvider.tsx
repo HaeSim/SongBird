@@ -89,7 +89,7 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
   const saveQuiz = async (quiz: QuizData) => {
     await withTransaction('readwrite', async (store) => {
       await store.put!(quiz);
-      toast.success(`🐦 ${quiz.name} 퀴즈 저장 성공`);
+      toast.success(`🐦 ${quiz.name} 퀴즈 생성 성공`);
     });
     await refetch();
   };

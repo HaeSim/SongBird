@@ -3,7 +3,6 @@ import HelpIcon from '@mui/icons-material/Help';
 import { Fab, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import PlaylistItemContent from '@/components/molecules/PlaylistItemContent';
 import PlaylistSidebar from '@/components/molecules/PlaylistSideBar';
@@ -77,10 +76,9 @@ const DashBoardCreate: React.FC<IDashBoardCreateProps> = () => {
     };
 
     await (async () => {
-      saveQuiz(quiz);
       setTimeout(() => {
+        saveQuiz(quiz);
         closeBackdrop();
-        toast.success('🐦 퀴즈 생성 완료!');
       }, 200);
     })();
   };

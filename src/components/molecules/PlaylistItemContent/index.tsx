@@ -55,9 +55,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
                   {COLUMN_NAMES.map((column) =>
                     // isMobile 이 true 일때, channel, published date 는 안보이게 처리
                     // isMobile 이 false 일때, 모든 column 을 보이게 처리
-                    (isMobile &&
-                      column !== 'Channel' &&
-                      column !== 'Published Date') ||
+                    (isMobile && column !== '채널' && column !== '게시 일자') ||
                     !isMobile ? (
                       <TableCell
                         key={column}
