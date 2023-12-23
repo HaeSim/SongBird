@@ -2,6 +2,8 @@ import { datadogRum } from '@datadog/browser-rum';
 import type { Session } from 'next-auth';
 
 const authenticatedCallback = (session: Session) => {
+  // eslint-disable-next-line no-console
+  console.log('session: ', session);
   const { user } = session;
   // console.log('authenticated', user);
   // datadong RUM을 위한 사용자 정보 설정
