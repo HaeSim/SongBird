@@ -39,11 +39,13 @@ import {
 interface IMusicPlayerProps {
   videoId: string;
   startTime?: number;
+  preview?: boolean;
 }
 
 const MusicPlayer: React.FC<IMusicPlayerProps> = ({
   videoId,
   startTime = 0,
+  preview = false,
 }) => {
   const { state: sourceState, data: sourceData } = useAudioSource(videoId);
   const {
@@ -104,21 +106,16 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({
     return () => {};
   }, [controlsState.paused]);
 
-  // 주기적으로 currentTime을 체크해서, controlsState.time과 동기화
+  // onTimeUpdate를 이용하여 주기적으로 currentTime을 체크해서, controlsState.time과 동기화
   useEffect(() => {
     // slider를 조작하고 있지 않을 때만
-    if (isSliderDragging) return;
+    if (!audioRefCurrent) return;
 
-    if (controlsState.time !== currentTime) {
-      setCurrentTime(controlsState.time);
-    }
-  }, [controlsState.time]);
-
-  useEffect(() => {
-    if (!videoId) return;
-    if (controlsState.duration === 0) return;
-    seekTo(startTime);
-  }, [videoId, startTime, controlsState.duration]);
+    audioRefCurrent.ontimeupdate = () => {
+      if (isSliderDragging) return;
+      setCurrentTime(audioRefCurrent.currentTime);
+    };
+  }, [audioRefCurrent, isSliderDragging]);
 
   // duration이 2배로 나오는 문제가 있어서
   // IOS 이거나 safari 브라우저일 경우 duration을 2로 나눠줌
@@ -127,6 +124,15 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({
       ? controlsState.duration / 2
       : controlsState.duration;
 
+  // audioRef를 이용하여, 로드가 완료되면 startTime으로 seek 후 재생
+  useEffect(() => {
+    if (!audioRefCurrent) return;
+
+    audioRefCurrent.onplay = () => {
+      audioRefCurrent.currentTime = startTime;
+      setCurrentTime(startTime);
+    };
+  }, [audioRefCurrent, startTime]);
   return (
     <Box
       sx={{
@@ -181,74 +187,80 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({
                 </Typography>
               </Box>
             </Box>
-            <Slider
-              aria-label="time-indicator"
-              size="small"
-              value={currentTime}
-              valueLabelDisplay="auto"
-              valueLabelFormat={formatDuration}
-              onMouseDown={() => {
-                setSliderDragging(true);
-              }}
-              onMouseUp={() => {
-                setSliderDragging(false);
-              }}
-              onChange={(_, value) => {
-                setSliderDragging(true);
-                setCurrentTime(value as number);
-              }}
-              onChangeCommitted={(_, value) => {
-                seekTo(value as number);
-                setSliderDragging(false);
-              }}
-              min={0}
-              step={1}
-              max={duration}
-              sx={{
-                color:
-                  theme.palette.mode === 'dark' ? '#fff' : 'rgba(0,0,0,0.87)',
-                height: 4,
-                '& .MuiSlider-thumb': {
-                  width: 8,
-                  height: 8,
-                  transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
-                  '&:before': {
-                    boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
-                  },
-                  '&:hover, &.Mui-focusVisible': {
-                    boxShadow: `0px 0px 0px 8px ${
+            {!preview && (
+              <>
+                <Slider
+                  aria-label="time-indicator"
+                  size="small"
+                  value={currentTime}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={formatDuration}
+                  onMouseDown={() => {
+                    setSliderDragging(true);
+                  }}
+                  onMouseUp={() => {
+                    setSliderDragging(false);
+                  }}
+                  onChange={(_, value) => {
+                    setSliderDragging(true);
+                    setCurrentTime(value as number);
+                  }}
+                  onChangeCommitted={(_, value) => {
+                    seekTo(value as number);
+                    setSliderDragging(false);
+                  }}
+                  min={0}
+                  step={1}
+                  max={duration}
+                  sx={{
+                    color:
                       theme.palette.mode === 'dark'
-                        ? 'rgb(255 255 255 / 16%)'
-                        : 'rgb(0 0 0 / 16%)'
-                    }`,
-                  },
-                  '&.Mui-active': {
-                    width: 20,
-                    height: 20,
-                  },
-                },
-                '& .MuiSlider-rail': {
-                  opacity: 0.28,
-                },
-              }}
-            />
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                mt: -2,
-              }}
-            >
-              <TinyText>{formatDuration(currentTime)}</TinyText>
-              <TinyText>-{formatDuration(duration - currentTime)}</TinyText>
-            </Box>
+                        ? '#fff'
+                        : 'rgba(0,0,0,0.87)',
+                    height: 4,
+                    '& .MuiSlider-thumb': {
+                      width: 8,
+                      height: 8,
+                      transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+                      '&:before': {
+                        boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
+                      },
+                      '&:hover, &.Mui-focusVisible': {
+                        boxShadow: `0px 0px 0px 8px ${
+                          theme.palette.mode === 'dark'
+                            ? 'rgb(255 255 255 / 16%)'
+                            : 'rgb(0 0 0 / 16%)'
+                        }`,
+                      },
+                      '&.Mui-active': {
+                        width: 20,
+                        height: 20,
+                      },
+                    },
+                    '& .MuiSlider-rail': {
+                      opacity: 0.28,
+                    },
+                  }}
+                />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    mt: -2,
+                  }}
+                >
+                  <TinyText>{formatDuration(currentTime)}</TinyText>
+                  <TinyText>-{formatDuration(duration - currentTime)}</TinyText>
+                </Box>
+              </>
+            )}
             <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mt: -1,
+                mt: preview ? 0 : -1,
               }}
             >
               <IconButton
