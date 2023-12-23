@@ -1,13 +1,18 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import type { IconButtonProps } from '@mui/material';
 import {
   Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   CardMedia,
+  Collapse,
   Grid,
   IconButton,
   Paper,
+  styled,
   Table,
   TableBody,
   TableCell,
@@ -16,7 +21,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
@@ -24,6 +29,20 @@ import useClientStore from '@/store/client';
 
 import MusicPlayer from '../MusicPlayer';
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
 interface SelectedQuizDetailsProps {
   quizId: string;
   name: string;
@@ -60,7 +79,14 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
     name,
     description,
   });
-  const [isChanged, setIsChanged] = React.useState<boolean>(false);
+  const [isChanged, setIsChanged] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
+
+  const handleExpandClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpanded(!expanded);
+  };
 
   const handlePlayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.currentTarget;
@@ -147,7 +173,9 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
     });
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     // 업데이트된 데이터를 감지하여 quizItemsRef를 통해 얻음
     const updatedQuizInfo = quizInfoRef.current;
     const updatedQuizItems = quizItemsRef.current;
@@ -164,13 +192,27 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
     setIsChanged(false);
   };
 
+  useEffect(() => {
+    quizItemsRef.current = [...quizItems];
+    quizInfoRef.current = {
+      name,
+      description,
+    };
+    setIsChanged(false);
+  }, [quizId, name, description, quizItems]);
+
+  useEffect(() => {
+    if (!quizId) return;
+    setExpanded(false);
+  }, [quizId]);
+
   return (
     <Grid item xs={3} sx={{ minWidth: '100%', marginBottom: '64px' }}>
       <Paper
         style={{
           minHeight: '100%',
           overflowY: 'auto',
-          backgroundColor: '#3a4d68',
+          // backgroundColor: '#3a4d68',
         }}
       >
         <Card>
@@ -214,157 +256,157 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
             >
               {description || ''}
             </Typography>
-          </CardContent>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'nowrap',
-              overflowX: 'auto',
-              marginLeft: 'auto',
-              marginRight: '1rem',
-              marginBottom: '1rem',
-              width: '6rem',
-            }}
-          >
-            <Button
+            <CardActions
               sx={{
-                margin: 'auto',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
-              variant="outlined"
-              disabled={!isChanged || isLoading}
-              onClick={handleSave}
             >
-              <Typography
-                variant="body1"
-                fontWeight={800}
-                {...(isChanged && { color: 'primary' })}
+              <Button
+                variant="outlined"
+                disabled={!isChanged || isLoading}
+                onClick={handleSave}
               >
                 저장하기
-              </Typography>
-            </Button>
-          </Box>
+              </Button>
+              <ExpandMore
+                expand={expanded}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
+                <ExpandMoreIcon />
+              </ExpandMore>
+            </CardActions>
+          </CardContent>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <TableContainer
+                sx={{
+                  borderRadius: '8px',
+                  backgroundColor: '#3a4d6805',
+                  th: {
+                    color: '#000',
+                  },
+                  td: {
+                    color: '#000',
+                  },
+                }}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {COLUMNS_WITH_SUBHEADERS.map((column) => {
+                        return (
+                          <TableCell
+                            key={column.name}
+                            size="small"
+                            rowSpan={column.name === '제목(정답)' ? 2 : 1}
+                            colSpan={column.subheaders.length}
+                            sx={{
+                              textAlign: 'center',
+                              fontWeight: 700,
+                            }}
+                          >
+                            {column.name}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                    <TableRow>
+                      {COLUMNS_WITH_SUBHEADERS.map((column) => {
+                        return column.subheaders.map((subheader) => {
+                          return (
+                            <TableCell
+                              size="small"
+                              key={subheader}
+                              sx={{
+                                textAlign: 'center',
+                                fontWeight: 500,
+                              }}
+                            >
+                              {subheader}
+                            </TableCell>
+                          );
+                        });
+                      })}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {quizItems.map((quizItem, index) => (
+                      <TableRow key={quizItem.id}>
+                        <TableCell
+                          id={`answer-${index}`}
+                          size="small"
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={onBlurTableBodyHandler}
+                        >
+                          {quizItem.answer}
+                        </TableCell>
+                        <TableCell
+                          size="small"
+                          id={`startTime-${index}`}
+                          itemType="number"
+                          inputMode="numeric"
+                          contentEditable
+                          suppressContentEditableWarning
+                          sx={{
+                            textAlign: 'center',
+                          }}
+                          onBlur={onBlurTableBodyHandler}
+                        >
+                          {quizItem.startTime}
+                        </TableCell>
+                        <TableCell
+                          size="small"
+                          sx={{
+                            textAlign: 'center',
+                          }}
+                        >
+                          <IconButton
+                            id={`startTimePreview-${index}`}
+                            onClick={handlePlayClick}
+                          >
+                            <PlayArrowIcon />
+                          </IconButton>
+                        </TableCell>
+                        <TableCell
+                          size="small"
+                          id={`highlightTime-${index}`}
+                          itemType="number"
+                          inputMode="numeric"
+                          contentEditable
+                          suppressContentEditableWarning
+                          sx={{
+                            textAlign: 'center',
+                          }}
+                          onBlur={onBlurTableBodyHandler}
+                        >
+                          {quizItem.highlightTime}
+                        </TableCell>
+                        <TableCell
+                          size="small"
+                          sx={{
+                            textAlign: 'center',
+                          }}
+                        >
+                          <IconButton
+                            id={`highlightTimePreview-${index}`}
+                            onClick={handlePlayClick}
+                          >
+                            <PlayArrowIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Collapse>
         </Card>
-
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {COLUMNS_WITH_SUBHEADERS.map((column) => {
-                  return (
-                    <TableCell
-                      key={column.name}
-                      size="small"
-                      rowSpan={column.name === '제목(정답)' ? 2 : 1}
-                      colSpan={column.subheaders.length}
-                      sx={{
-                        textAlign: 'center',
-                        fontWeight: 700,
-                      }}
-                    >
-                      {column.name}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-              <TableRow>
-                {COLUMNS_WITH_SUBHEADERS.map((column) => {
-                  return column.subheaders.map((subheader) => {
-                    return (
-                      <TableCell
-                        size="small"
-                        key={subheader}
-                        sx={{
-                          textAlign: 'center',
-                          fontWeight: 700,
-                        }}
-                      >
-                        {subheader}
-                      </TableCell>
-                    );
-                  });
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {quizItems.map((quizItem, index) => (
-                <TableRow key={quizItem.id}>
-                  <TableCell
-                    id={`answer-${index}`}
-                    size="small"
-                    contentEditable
-                    suppressContentEditableWarning
-                    onBlur={onBlurTableBodyHandler}
-                  >
-                    {quizItem.answer}
-                  </TableCell>
-                  <TableCell
-                    size="small"
-                    id={`startTime-${index}`}
-                    itemType="number"
-                    inputMode="numeric"
-                    contentEditable
-                    suppressContentEditableWarning
-                    sx={{
-                      textAlign: 'center',
-                    }}
-                    onBlur={onBlurTableBodyHandler}
-                  >
-                    {quizItem.startTime}
-                  </TableCell>
-                  <TableCell
-                    size="small"
-                    sx={{
-                      textAlign: 'center',
-                    }}
-                  >
-                    <IconButton
-                      id={`startTimePreview-${index}`}
-                      onClick={handlePlayClick}
-                    >
-                      <PlayArrowIcon
-                        sx={{
-                          color: '#fff',
-                        }}
-                      />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell
-                    size="small"
-                    id={`highlightTime-${index}`}
-                    itemType="number"
-                    inputMode="numeric"
-                    contentEditable
-                    suppressContentEditableWarning
-                    sx={{
-                      textAlign: 'center',
-                    }}
-                    onBlur={onBlurTableBodyHandler}
-                  >
-                    {quizItem.highlightTime}
-                  </TableCell>
-                  <TableCell
-                    size="small"
-                    sx={{
-                      textAlign: 'center',
-                    }}
-                  >
-                    <IconButton
-                      id={`highlightTimePreview-${index}`}
-                      onClick={handlePlayClick}
-                    >
-                      <PlayArrowIcon
-                        sx={{
-                          color: '#fff',
-                        }}
-                      />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
       </Paper>
     </Grid>
   );
