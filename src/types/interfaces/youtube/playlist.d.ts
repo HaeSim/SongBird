@@ -29,7 +29,7 @@ interface YoutubeContentDetails {
   itemCount: number;
 }
 
-interface YoutubePlaylistItemStatus {
+interface YoutubePlaylistStatus {
   privacyStatus: 'public' | 'private' | 'unlisted';
 }
 

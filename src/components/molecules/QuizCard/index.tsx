@@ -36,10 +36,10 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, cardActions }) => {
           </Typography>
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {quiz.description}
+          {quiz.description || '설명이 없습니다.'}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {formatDatetime(quiz.createdAt)}
+          {formatDatetime(quiz.createdAt)}에 생성됨
         </Typography>
       </CardContent>
 

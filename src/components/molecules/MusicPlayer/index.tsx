@@ -38,9 +38,13 @@ import {
 
 interface IMusicPlayerProps {
   videoId: string;
+  startTime?: number;
 }
 
-const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
+const MusicPlayer: React.FC<IMusicPlayerProps> = ({
+  videoId,
+  startTime = 0,
+}) => {
   const { state: sourceState, data: sourceData } = useAudioSource(videoId);
   const {
     controls,
@@ -109,6 +113,12 @@ const MusicPlayer: React.FC<IMusicPlayerProps> = ({ videoId }) => {
       setCurrentTime(controlsState.time);
     }
   }, [controlsState.time]);
+
+  useEffect(() => {
+    if (!videoId) return;
+    if (controlsState.duration === 0) return;
+    seekTo(startTime);
+  }, [videoId, startTime, controlsState.duration]);
 
   // duration이 2배로 나오는 문제가 있어서
   // IOS 이거나 safari 브라우저일 경우 duration을 2로 나눠줌

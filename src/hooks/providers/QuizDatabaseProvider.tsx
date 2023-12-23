@@ -109,7 +109,9 @@ const QuizDatabaseProvider: React.FC<IQuizDatabaseProviderProps> = ({
       };
       //  3. put quiz
       await store.put!(updatedQuiz);
-      toast.success(`🐦 ${quiz.name} 퀴즈 업데이트 완료`);
+      toast.success(`🐦 ${quiz.name} 퀴즈 업데이트 완료
+        퀴즈보러가기: /quiz/${quiz.id}
+      `);
     });
     await refetch();
   };

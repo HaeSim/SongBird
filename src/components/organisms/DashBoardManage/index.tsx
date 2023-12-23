@@ -54,7 +54,7 @@ const DashBoardManage: React.FC<IDashBoardManageProps> = () => {
       {(quizzes?.length ?? 0) > 0 && (
         <SelectedQuizDetails
           quizId={quizzes?.[selectedQuizIndex]?.id ?? ''}
-          title={quizzes?.[selectedQuizIndex]?.name ?? ''}
+          name={quizzes?.[selectedQuizIndex]?.name ?? ''}
           description={quizzes?.[selectedQuizIndex]?.description ?? ''}
           thumbnail={quizzes?.[selectedQuizIndex]?.thumbnail ?? ''}
           quizItems={quizzes?.[selectedQuizIndex]?.quizItems ?? []}

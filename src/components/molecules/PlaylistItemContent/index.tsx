@@ -29,7 +29,7 @@ const PlaylistItemContent: React.FC<IMainContentProps> = ({
   isLoading,
 }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const COLUMN_NAMES = ['No', 'Title', 'Channel', 'Published Date', 'Play'];
+  const COLUMN_NAMES = ['No', '제목', '채널', '게시 일자', '재생'];
 
   const { openComponentModal } = useClientStore((state) => state);
 

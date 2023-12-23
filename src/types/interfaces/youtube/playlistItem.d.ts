@@ -27,11 +27,20 @@ interface YoutubeSnippet {
   videoOwnerChannelTitle: string;
 }
 
+interface YoutubePlaylistItemStatus {
+  privacyStatus: 'public' | 'private' | 'unlisted';
+}
+
 interface YoutubePlaylistItem {
   etag: string;
   id: string;
   kind: string;
   snippet: YoutubeSnippet;
+  contentDetails: {
+    videoId: string;
+    videoPublishedAt: string;
+  };
+  status: YoutubePlaylistItemStatus;
 }
 
 interface YoutubePlaylistItemResponse {
