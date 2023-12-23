@@ -4,7 +4,7 @@ import { useState } from 'react';
 import SelectedQuizDetails from '@/components/molecules/SelectedQuizDetails';
 import { useQuizDatabase } from '@/hooks/providers/QuizDatabaseProvider';
 
-import QuizList from '../QuizList';
+import DashBoardQuizList from '../DashBoardQuizList';
 
 interface IDashBoardManageProps {}
 
@@ -27,7 +27,7 @@ const DashBoardManage: React.FC<IDashBoardManageProps> = () => {
       >
         저장된 퀴즈
       </Typography>
-      <QuizList
+      <DashBoardQuizList
         quizzes={quizzes ?? []}
         deleteHandler={handleDelete}
         onQuizSelect={(quiz) => {

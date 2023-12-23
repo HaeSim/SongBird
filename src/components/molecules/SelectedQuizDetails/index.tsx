@@ -62,9 +62,26 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
   });
   const [isChanged, setIsChanged] = React.useState<boolean>(false);
 
-  const handlePlayClick = (index: number, startTime = 0) => {
-    const newVideoId = quizItems[index]?.id;
+  const handlePlayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.currentTarget;
+    const targetId = target.id;
+    const targetColumn = targetId.split('-')[0]!;
+    const targetIndex = parseInt(targetId.split('-')[1]!, 10);
 
+    let startTime: number;
+    switch (targetColumn) {
+      case 'startTimePreview':
+        // get by id (startTime)
+        startTime = quizItemsRef.current[targetIndex]?.startTime ?? 0;
+        break;
+      case 'highlightTimePreview':
+        startTime = quizItemsRef.current[targetIndex]?.highlightTime ?? 0;
+        break;
+      default:
+        startTime = 0;
+    }
+
+    const newVideoId = quizItems[targetIndex]?.id;
     if (!newVideoId)
       return toast.error('재생할 수 없습니다. 관리자에게 문의하세요');
 
@@ -297,13 +314,13 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                   </TableCell>
                   <TableCell
                     size="small"
-                    id={`startTimePreview-${index}`}
                     sx={{
                       textAlign: 'center',
                     }}
                   >
                     <IconButton
-                      onClick={() => handlePlayClick(index, quizItem.startTime)}
+                      id={`startTimePreview-${index}`}
+                      onClick={handlePlayClick}
                     >
                       <PlayArrowIcon
                         sx={{
@@ -328,15 +345,13 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                   </TableCell>
                   <TableCell
                     size="small"
-                    id={`startTimePreview-${index}`}
                     sx={{
                       textAlign: 'center',
                     }}
                   >
                     <IconButton
-                      onClick={() =>
-                        handlePlayClick(index, quizItem.highlightTime)
-                      }
+                      id={`highlightTimePreview-${index}`}
+                      onClick={handlePlayClick}
                     >
                       <PlayArrowIcon
                         sx={{
