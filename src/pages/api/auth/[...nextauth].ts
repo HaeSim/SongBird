@@ -19,8 +19,6 @@ const refreshAccessToken = async (token: {
   const { refreshToken } = token;
 
   try {
-    // url : https://oauth2.googleapis.com/token
-    // params : client_id, client_secret, refresh_token, grant_type
     const response = await axios.post(
       'https://oauth2.googleapis.com/token',
       {
@@ -85,6 +83,9 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async jwt({ token, account, user }) {
+      console.log('jwt-token:', token);
+      console.log('jwt-account:', account);
+      console.log('jwt-user:', user);
       // 초기 로그인시 User 정보를 가공해 반환
       if (account && user) {
         return {
@@ -96,6 +97,7 @@ export const authOptions = {
         };
       }
       // 기존 호환처리
+      console.log('check expires:', token.accessTokenExpires);
       if (!token.accessTokenExpires) {
         if (account?.access_token) {
           // eslint-disable-next-line
@@ -109,10 +111,17 @@ export const authOptions = {
       }
 
       // Access Token이 만료되지 않았다면 그대로 반환
+      console.log(
+        'check:',
+        Date.now(),
+        token.accessTokenExpires,
+        Date.now() < token.accessTokenExpires
+      );
       if (Date.now() < token.accessTokenExpires) {
         return token;
       }
 
+      console.log('check refresh:', token.refreshToken);
       if (token.refreshToken) {
         return refreshAccessToken(token);
       }
@@ -127,6 +136,9 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async session({ session, token }) {
+      console.log('session-token:', token);
+
+      console.log('check expires:', token.accessTokenExpires);
       if (!token.accessTokenExpires) {
         session.accessToken = token.accessToken;
         session.provider = token.provider;
