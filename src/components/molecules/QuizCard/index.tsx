@@ -17,13 +17,13 @@ const QuizCard: React.FC<QuizCardProps> = ({ quiz, cardActions }) => {
   return (
     <Card
       sx={{
-        width: 275,
+        width: 300,
         marginBottom: '8px',
       }}
     >
       <CardMedia
         component="img"
-        height="168"
+        height="200"
         alt={quiz.name}
         image={quiz.thumbnail}
       />

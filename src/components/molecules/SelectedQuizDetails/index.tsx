@@ -72,8 +72,10 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
       subheaders: ['초', '재생'],
     },
   ];
-  const { openComponentModal } = useClientStore((state) => state);
-  const { updateQuiz, isLoading } = useQuizDatabase();
+  const { openComponentModal, openMessageModal, closeModal } = useClientStore(
+    (state) => state
+  );
+  const { updateQuiz, isLoading, deleteQuiz } = useQuizDatabase();
   const quizItemsRef = useRef<QuizItemData[]>([...quizItems]);
   const quizInfoRef = useRef<Pick<QuizData, 'name' | 'description'>>({
     name,
@@ -173,6 +175,54 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
     });
   };
 
+  /*
+  const handleMakeQuiz = () => {
+    openMessageModal({
+      title: '퀴즈 생성',
+      message: [
+        `${
+          myPlaylist?.items.find((playlist) => playlist.id === selectedPlaylist)
+            ?.snippet.title
+        } 재생목록을 가지고`,
+        '퀴즈를 생성하시겠습니까?',
+      ],
+      options: [
+        { label: '취소', callback: closeModal, variant: 'outlined' },
+        {
+          label: '퀴즈 생성',
+          callback: () => {
+            closeModal();
+            makeQuiz();
+          },
+          variant: 'contained',
+          color: 'error',
+        },
+      ],
+    });
+  };
+  */
+  const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    openMessageModal({
+      title: '퀴즈 삭제',
+      message: [`${name} 퀴즈를 삭제하시겠습니까?`],
+      options: [
+        { label: '취소', callback: closeModal, variant: 'outlined' },
+        {
+          label: '삭제',
+          callback: async () => {
+            closeModal();
+            await deleteQuiz(quizId);
+          },
+          variant: 'contained',
+          color: 'error',
+        },
+      ],
+    });
+  };
+
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -207,7 +257,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
   }, [quizId]);
 
   return (
-    <Grid item xs={3} sx={{ minWidth: '100%', marginBottom: '64px' }}>
+    <Grid item xs={3} sx={{ minWidth: '100%' }}>
       <Paper
         style={{
           minHeight: '100%',
@@ -263,13 +313,23 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                 alignItems: 'center',
               }}
             >
-              <Button
-                variant="outlined"
-                disabled={!isChanged || isLoading}
-                onClick={handleSave}
-              >
-                저장하기
-              </Button>
+              <Box display="flex" gap={1}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  disabled={isLoading}
+                  onClick={handleDelete}
+                >
+                  삭제하기
+                </Button>
+                <Button
+                  variant="outlined"
+                  disabled={!isChanged || isLoading}
+                  onClick={handleSave}
+                >
+                  저장하기
+                </Button>
+              </Box>
               <ExpandMore
                 expand={expanded}
                 onClick={handleExpandClick}
@@ -307,6 +367,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                             sx={{
                               textAlign: 'center',
                               fontWeight: 700,
+                              padding: 0,
                             }}
                           >
                             {column.name}
@@ -324,6 +385,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                               sx={{
                                 textAlign: 'center',
                                 fontWeight: 500,
+                                padding: 0,
                               }}
                             >
                               {subheader}
@@ -342,6 +404,9 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                           contentEditable
                           suppressContentEditableWarning
                           onBlur={onBlurTableBodyHandler}
+                          sx={{
+                            padding: '4px',
+                          }}
                         >
                           {quizItem.answer}
                         </TableCell>
@@ -354,6 +419,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                           suppressContentEditableWarning
                           sx={{
                             textAlign: 'center',
+                            padding: '4px',
                           }}
                           onBlur={onBlurTableBodyHandler}
                         >
@@ -363,6 +429,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                           size="small"
                           sx={{
                             textAlign: 'center',
+                            padding: '4px',
                           }}
                         >
                           <IconButton
@@ -381,6 +448,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                           suppressContentEditableWarning
                           sx={{
                             textAlign: 'center',
+                            padding: 0,
                           }}
                           onBlur={onBlurTableBodyHandler}
                         >
@@ -390,6 +458,7 @@ const SelectedQuizDetails: React.FC<SelectedQuizDetailsProps> = ({
                           size="small"
                           sx={{
                             textAlign: 'center',
+                            padding: 0,
                           }}
                         >
                           <IconButton
