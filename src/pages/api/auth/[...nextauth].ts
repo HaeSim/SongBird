@@ -71,7 +71,7 @@ export const authOptions = {
         params: {
           scope:
             'openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/userinfo.email',
-          prompt: 'select_account',
+          prompt: 'consent', // consent | select_account | none
           access_type: 'offline',
           response_type: 'code',
         },
