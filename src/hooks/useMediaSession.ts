@@ -73,17 +73,43 @@ const useMediaSession = ({
     if (!element || !('mediaSession' in navigator)) return;
     // duration이 2배로 나오는 문제가 있어서
     // IOS 이거나 safari 브라우저일 경우 duration을 2로 나눠줌
-    const duration =
-      getOSTypeByUserAgent() === 'IOS' ||
-      getBrowserTypeByUserAgent() === 'Safari'
-        ? element.duration / 2
-        : element.duration;
-    navigator.mediaSession.setPositionState({
-      duration: Math.ceil(duration || 0),
-      playbackRate: element.playbackRate,
-      position: Math.floor(element.currentTime || 0),
-    });
-  }, [element?.duration, element?.playbackRate, element?.currentTime]);
+
+    const setMediaSessionState = () => {
+      const duration =
+        getOSTypeByUserAgent() === 'IOS' ||
+        getBrowserTypeByUserAgent() === 'Safari'
+          ? element.duration / 2
+          : element.duration;
+
+      navigator.mediaSession.setPositionState({
+        duration: Math.ceil(duration || 0),
+        playbackRate: element.playbackRate,
+        position: Math.floor(element.currentTime || 0),
+      });
+    };
+
+    setMediaSessionState();
+
+    // 추가적으로 element가 변경될 때마다 상태를 갱신할 수 있도록 설정
+    const elementChangeHandler = () => {
+      setMediaSessionState();
+    };
+
+    // element 변경 시 이벤트 리스너 등록
+    element?.addEventListener(
+      'yourElementChangeEventType',
+      elementChangeHandler
+    );
+
+    // cleanup 함수에서 이벤트 리스너 제거
+    // eslint-disable-next-line consistent-return
+    return () => {
+      element?.removeEventListener(
+        'yourElementChangeEventType',
+        elementChangeHandler
+      );
+    };
+  }, [element]);
 };
 
 export default useMediaSession;
