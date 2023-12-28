@@ -16,7 +16,7 @@ export const AppConfig: AppConfigType = {
   description: '나의 유튜브 재생목록으로 노래퀴즈를 만들어보세요!',
   imageUrl: '/images/og_songbird.png',
   locale: 'ko',
-  canonical: 'https://songbird.hae-sim.com',
+  canonical: 'https://app.songbirdquiz.com',
   base_url: '/api/v1',
 };
 

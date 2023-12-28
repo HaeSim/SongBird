@@ -71,7 +71,7 @@ export const authOptions = {
         params: {
           scope:
             'openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/userinfo.email',
-          prompt: 'consent', // consent | select_account | none
+          prompt: 'select_account', // consent | select_account | none
           access_type: 'offline',
           response_type: 'code',
         },
@@ -83,9 +83,6 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async jwt({ token, account, user }) {
-      console.log('jwt-token:', token);
-      console.log('jwt-account:', account);
-      console.log('jwt-user:', user);
       // 초기 로그인시 User 정보를 가공해 반환
       if (account && user) {
         return {
@@ -96,32 +93,12 @@ export const authOptions = {
           user,
         };
       }
-      // 기존 호환처리
-      console.log('check expires:', token.accessTokenExpires);
-      if (!token.accessTokenExpires) {
-        if (account?.access_token) {
-          // eslint-disable-next-line
-          token.accessToken = account.access_token;
-        }
-        if (account?.provider) {
-          // eslint-disable-next-line
-          token.provider = account.provider;
-        }
-        return token;
-      }
 
       // Access Token이 만료되지 않았다면 그대로 반환
-      console.log(
-        'check:',
-        Date.now(),
-        token.accessTokenExpires,
-        Date.now() < token.accessTokenExpires
-      );
       if (Date.now() < token.accessTokenExpires) {
         return token;
       }
 
-      console.log('check refresh:', token.refreshToken);
       if (token.refreshToken) {
         return refreshAccessToken(token);
       }
@@ -136,14 +113,6 @@ export const authOptions = {
     // eslint-disable-next-line
     // @ts-ignore
     async session({ session, token }) {
-      console.log('session-token:', token);
-
-      console.log('check expires:', token.accessTokenExpires);
-      if (!token.accessTokenExpires) {
-        session.accessToken = token.accessToken;
-        session.provider = token.provider;
-        return session;
-      }
       session.user = token.user as User;
       session.accessToken = token.accessToken;
       session.accessTokenExpires = token.accessTokenExpires;

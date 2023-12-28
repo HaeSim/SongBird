@@ -20,11 +20,11 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
         <link rel="manifest" href="/manifest.json" />
         <meta
           name="google-site-verification"
-          content="D_33eP4BLfaRtfbiJn9c_B-TVqwSYKltFjw49oQNhUs"
+          content="0L5dYfv5MwemhrJ0OCzNAXlUCsDBpawAM2FUSszm6hw"
         />
         <meta
           name="naver-site-verification"
-          content="90102d4558aaa1d7ad23e58b1bdadbb6d7923673"
+          content="0bca27f4d430970e4200aa6f0d9c7efbb4a1f321"
         />
 
         <meta name="emotion-insertion-point" content="" />
