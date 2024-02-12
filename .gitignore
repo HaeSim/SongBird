@@ -57,3 +57,6 @@ public/sw.js
 .env
 .env.dev
 .env.prod
+
+# omt
+.omt.yaml
